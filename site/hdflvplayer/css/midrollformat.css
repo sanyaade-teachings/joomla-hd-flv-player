@@ -1,0 +1,31 @@
+/*
+ * @version $ID midrollformat.css 1.5,  2011-Mar-11 $
+ * @package	Joomla.Framework
+ * @subpackage  HDFLV Player
+ * @component   com_hdflvplayer
+ * @author      contus support interactive
+ * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
+ */
+.midroll {
+  color: #FFFFFF;
+  font-family:Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  display: block;
+  text-shadow: #6374AB 20px -12px 2px;
+  }
+.heading{
+color:#ffffff;
+font-size:14px;
+font-weight:bold;
+ text-decoration:underline;
+}
+.webaddress
+{
+ color: #F8FCC9;
+  font-family:Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  display: block;
+   }

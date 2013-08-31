@@ -1,0 +1,54 @@
+/*
+ * @version $ID scrollbar_demo.css 1.5,  2011-Mar-11 $
+ * @package	Joomla.Framework
+ * @subpackage  HDFLV Player
+ * @component   com_hdflvplayer
+ * @author      contus support interactive
+ * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
+ */
+
+ div#scrollbar {
+    display:block; /* initially display:none; to hide from incapable */
+}
+
+div#wn	{
+    position:relative;
+    height:100px;
+    overflow:hidden;
+}
+
+
+
+div#scrollbar {
+    position:relative;
+    width:10px; height:113px;
+    font-size:1px;  /* so no gap or misplacement due to image vertical alignment */
+}
+div#track {
+    position:absolute; left:3px; top:8px;
+    width:10px; height:105px;
+    cursor:pointer;
+
+}
+div#dragBar {
+    position:absolute;
+    left:4px; top:1px;
+    width:1px; height:20px;
+    background-color:#6B7073;
+}
+div#up { position:absolute; left:0; top:0px; }
+div#down { position:absolute; left:0; bottom:0; }
+
+/* for safari, to prevent selection problem  */
+div#scrollbar, div#track, div#dragBar, div#up, div#down {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+}
+
+
+/* so no gap or misplacement due to image vertical alignment
+font-size:1px in scrollbar has same effect (less likely to be removed, resulting in support issues) */
+div#scrollbar img {
+    display:block;
+} 

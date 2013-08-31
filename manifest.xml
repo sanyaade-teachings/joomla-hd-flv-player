@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="component" version="1.5" method="upgrade">
+    <name>HDFLVPlayer</name>
+    <version>1.6</version>
+    <creationDate>Nov 18 2011</creationDate>
+    <description>A Component for HD FLV Player</description>
+    <license>GNU/GPL http://www.gnu.org/copyleft/gpl.html</license>
+    <author>Apptha</author>
+    <copyright>(C) 2011 Contus </copyright>
+    <authorEmail>support@apptha.com</authorEmail>
+    <authorUrl>http://www.apptha.com</authorUrl>
+    <description>Thank you for installing com_hdflvplayer by hdflvplayer.net, the powerful Video Player Component To Play  Online Videos.</description>
+    <installfile>hdflvplayerinstall.php</installfile>
+    <uninstallfile>uninstall.hdflvplayer.php</uninstallfile>
+     <installfile>com_subinstall.php</installfile>
+    <uninstallfile>com_subinstall.php</uninstallfile>
+    <subinstall>
+        <install type="plugin"  folder="content" name="hdflvplayer" publish="true">
+            HD FLV Player Plugin
+        </install>
+        <install type="module"  client="site"  name="mod_hdflvplayer">
+            HD FLV Player Module
+        </install>
+    </subinstall>
+     <languages>
+        <language tag="en-GB" client="site">languages/en-GB/en-GB.com_hdflvplayer.ini</language>
+        <language tag="en-GB">languages/en-GB/en-GB.mod_hdflvplayer.ini</language>
+        <language tag="en-GB">languages/en-GB/en-GB.com_hdflvplayer.sys.ini</language>
+    </languages>
+    <files folder="site">
+        <filename>index.html</filename>
+        <filename>router.php</filename>
+        <filename>hdflvplayer.php</filename>
+        <filename>controller.php</filename>
+        <folder>models/</folder>
+        <folder>views/</folder>
+        <folder>images/</folder>
+        <folder>hdflvplayer/</folder>
+        <folder>css</folder>
+    </files>
+    <administration>
+        <menu img="components/com_hdflvplayer/images/icon.png">HDFLVPlayer</menu>
+        <submenu>
+            <menu img="components/com_hdflvplayer/images/membervideos.png" task="uploadvideos">Videos</menu>
+            <menu img="components/com_hdflvplayer/images/playersettings.png" task="playersettings">Settings</menu>
+            <menu img="components/com_hdflvplayer/images/iconcategory.png" task="playlistname">Playlist Name</menu>
+            <menu img="components/com_hdflvplayer/images/checklist.png" task="checklist">Checklist</menu>
+            <menu img="components/com_hdflvplayer/images/language-settings.png" task="languagesetup">Language Settings</menu>
+            <menu img="components/com_hdflvplayer/images/ads.png" task="ads">Ads</menu>
+            <menu img="components/com_hdflvplayer/images/googleadsense.png" task="addgoogle">Google AdSense</menu>
+        </submenu>
+        <files folder="admin">
+            <filename>index.html</filename>
+            <filename>toolbar.hdflvplayer.html.php</filename>
+            <filename>toolbar.hdflvplayer.php</filename>
+            <filename>admin.hdflvplayer.php</filename>
+            <filename>hdflvplayerController.php</filename>
+            <filename>upload.php</filename>
+            <filename>upload_script.js</filename>
+            <filename>config.xml</filename>
+            <folder>css/</folder>
+            <folder>js/</folder>
+            <folder>images/</folder>
+            <folder>models/</folder>
+            <folder>views/</folder>
+            <folder>tables/</folder>
+            <folder>assets/</folder>
+          <folder>elements</folder>
+        </files>
+         <languages folder="admin">
+            <language tag="en-GB">en-GB.com_hdflvplayer.ini</language>
+            <language tag="en-GB">en-GB.com_hdflvplayer.sys.ini</language>
+        </languages>
+    </administration>
+  
+</install>

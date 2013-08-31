@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 1.5//DTD plugin 1.0//EN" "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
+<install version="1.5" type="plugin" group="content" method="upgrade">
+    <name>HD FLV Player Plugin</name>
+    <creationDate>Nov 18 2011</creationDate>
+    <author>Apptha</author>
+    <authorEmail>support@apptha.com</authorEmail>
+    <authorUrl>http://www.apptha.com</authorUrl>
+    <copyright>(C) 2011</copyright>
+    <license>GNU/GPL http://www.gnu.org/copyleft/gpl.html</license>
+    <version>1.6</version>
+    <description>A plugin for HD FLV Player.</description>
+  <scriptfile>install.hdflvplayer.php</scriptfile>
+    <files>
+        <filename plugin="hdflvplayer">hdflvplayer.php</filename>
+        <filename>readme.txt</filename>
+    </files>
+    <config>
+<fields name="params">
+    
+</fields>
+</config>
+</install>
+
