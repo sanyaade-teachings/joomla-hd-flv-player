@@ -17,12 +17,10 @@ class JFormFieldPlaylistname extends JFormField
 
    protected $type = 'playlistname';
 
-   	//Function to send player parameter fetchElement function.
     function getInput() {
         return $this->fetchElement($this->element['name'], $this->value, $this->element, $this->name);
     }
 
-    //Function to get playlist name details from the database.
     function fetchElement($name, $value, &$node, $control_name)
     {
         $db =& JFactory::getDBO();

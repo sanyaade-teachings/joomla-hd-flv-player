@@ -15,8 +15,7 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
 class hdflvplayerModeleditplaylistname extends JModel {
-	
-	//Function to get data for edit playlist name.
+
     function editplaylistmodel() {
         $db = & JFactory::getDBO();
         $rs_editplaylistname = & JTable::getInstance('hdflvplayername', 'Table');
@@ -27,14 +26,12 @@ class hdflvplayerModeleditplaylistname extends JModel {
         return $rs_editplaylistname;
         // To call html function class name: HTML_player function name:editUpload
     }
-	
-    //Function to get data for creating new playlist name.
+
     function playlistnameadd() {
         $rs_addplaylist = & JTable::getInstance('hdflvplayername', 'Table');
         return $rs_addplaylist;
     }
-	
-    //Function to save the playlist name.
+
     function saveplaylistname($task) {
         $option = 'com_hdflvplayer';
         global $mainframe;
@@ -68,8 +65,7 @@ class hdflvplayerModeleditplaylistname extends JModel {
 
 
     }
-	
-    //Function to remove the selected playlist name from the list.
+
     function removeplaylistname() {
         $option = 'com_hdflvplayer';
         global $mainframe;
@@ -82,7 +78,7 @@ class hdflvplayerModeleditplaylistname extends JModel {
         // JError::raiseError(403, 'You are not authorized to view this');
         }
         $cids = implode(',', $cid);
-        $query = "DELETE FROM #__hdflvplayername WHERE id IN ( $cids )";
+        $query = "DELETE FROM #__hdflvplayername WHERE id IN ( $cids ) and id != 1";
         $qryRes=$db->setQuery($query);
         //echo $qryRes;
         
@@ -94,7 +90,7 @@ class hdflvplayerModeleditplaylistname extends JModel {
         // page redirec
         $link='index.php?option=' . $option . '&task=playlistname';
           $app =& JFactory::getApplication();
-            $app->redirect($link, 'Deleted');
+            $app->redirect($link, 'Saved');
         
     }
 

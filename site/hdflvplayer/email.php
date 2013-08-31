@@ -8,15 +8,14 @@
  * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
  * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
  */
-
-$to = JRequest::getVar("to");
-$from = JRequest::getVar("from");
-$url = JRequest::getVar("url");
+$to = $_POST["to"];
+$from = $_POST["from"];
+$url = $_POST["url"];
 $subject = "You have received a video!";
-$headers = "From: "."<" . JRequest::getVar("from") .">\r\n";
-$headers .= "Reply-To: " . JRequest::getVar("from") . "\r\n";
-$headers .= "Return-path: " . JRequest::getVar("from");
-$message = JRequest::getVar("note") . "\n\n";
+$headers = "From: "."<" . $_POST["from"] .">\r\n";
+$headers .= "Reply-To: " . $_POST["from"] . "\r\n";
+$headers .= "Return-path: " . $_POST["from"];
+$message = $_POST["note"] . "\n\n";
 $message .= "Video URL: " . $url;
 if(mail($to, $subject, $message, $headers))
 {

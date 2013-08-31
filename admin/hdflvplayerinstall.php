@@ -94,18 +94,9 @@ function check_column($table, $newcolumn, $newcolumnafter, $newcolumntype = "int
     return true;
 }
 
-//$installer->install($this->parent->getPath('source') . '/extensions/mod_hdflvplayer');
 $db = &JFactory::getDBO();
-if (version_compare(JVERSION, '1.6.0', 'ge')) {
-    $query = ' SELECT * FROM ' . $db->nameQuote('#__extensions') . 'where type="component" and element="com_hdflvplayer" LIMIT 1;';
-    $db->setQuery($query);
-} else {
-    $db->setQuery("SELECT id FROM #__components WHERE parent = 0 and option='com_hdflvplayer'  LIMIT 1");
-    $db->setQuery($query);
-}
-//$db = &JFactory::getDBO();
-//$query = ' SELECT * FROM ' . $db->nameQuote('#__extensions') . 'where type="component" and element="com_hdflvplayer" LIMIT 1;';
-//$db->setQuery($query);
+$query = ' SELECT * FROM ' . $db->nameQuote('#__extensions') . 'where type="component" and element="com_hdflvplayer" LIMIT 1;';
+$db->setQuery($query);
 $result = $db->loadResult();
 
 if (!$result) {
@@ -123,12 +114,6 @@ if (!$result) {
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;");
     $db->query();
-
-
-    $db->setQuery("INSERT INTO `#__hdflvaddgoogle` (`id`, `code`, `showoption`, `closeadd`, `reopenadd`, `publish`, `ropen`, `showaddc`, `showaddm`, `showaddp`) VALUES
-    (1, '', 1, 5, '0', 0, 5, 0, '0', '0');");
-    $db->query();
-
 
     $db->setQuery("CREATE TABLE IF NOT EXISTS `#__hdflvplayerads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -198,6 +183,10 @@ if (!$result) {
   `published` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
+    $db->query();
+
+    $db->setQuery("INSERT INTO `#__hdflvplayername` (`id`, `name`, `published`) VALUES
+(1, 'None', 1);");
     $db->query();
 
     $db->setQuery("CREATE TABLE IF NOT EXISTS `#__hdflvplayersettings` (
@@ -489,50 +478,27 @@ if (!$result) {
  * MODULE INSTALLATION SECTION
  * ---------------------------------------------------------------------------------------------
  * ********************************************************************************************* */
-
+$installer = & new JInstaller();
 $installer->install($this->parent->getPath('source') . '/extensions/mod_hdflvplayer');
-$db = & JFactory::getDBO();
-$query = 'UPDATE  #__modules ' .
-        'SET published=1, ordering=0 ' .
-        'WHERE module = "mod_hdflvplayer"';
-$db->setQuery($query);
-$db->query();
 
 /* * *********************************************************************************************
  * ---------------------------------------------------------------------------------------------
  * PLUGIN INSTALLATION SECTION
  * ---------------------------------------------------------------------------------------------
  * ********************************************************************************************* */
-
+$installer = new JInstaller();
 $installer->install($this->parent->getPath('source') . '/extensions/plugin_demo');
-$db = & JFactory::getDBO();
-  if (version_compare(JVERSION, '1.6.0', 'ge')) {
-$query = 'UPDATE  #__extensions ' .
-        'SET enabled =1' .
-        'WHERE element = "hdflvplayer"';
-$db->setQuery($query);
-$db->query();
-  }
- else {
-$query = 'UPDATE  #__plugins ' .
-        'SET published=1,folder="content"' .
-        'WHERE element = "hdflvplayer"';
-$db->setQuery($query);
-$db->query();
- }
 ?>
-
 <div style="float: left;">
-    <a href="http://www.apptha.com/category/extension/Joomla/HD-FLV-Player" target="_blank">
-        <img src="components/com_hdflvplayer/assets/platoon.png" alt="Joomla! HDFLV Player" align="left" />
+    <a href="http://www.hdflvplayer.net/">
+        <img src="components/com_hdflvplayer/assets/logo.png" alt="Joomla! HDFLV Player" align="left" />
     </a>
 </div>
 <div style="float:right;">
-    <a href="http://www.apptha.com" target="_blank">
-        <img src="components/com_hdflvplayer/assets/contus.jpg" alt="contus products" align="right" style="padding-right:10px;width:110px;"/>
+    <a href="http://www.contussupport.com/">
+        <img src="components/com_hdflvplayer/assets/contus.png" alt="contus products" align="right" />
     </a>
 </div>
-
 <br>
 <br>
 <h2 align="center">HDFLV Player Installation Status</h2>
@@ -556,7 +522,7 @@ $db->query();
             <td class="key" colspan="2"><?php echo JText::_('Component'); ?></td>
             <td style="text-align: center;">
                 <?php
-//check installed components
+                //check installed components
                 $db = &JFactory::getDBO();
                 $db->setQuery("SELECT id FROM #__hdflvplayersettings LIMIT 1");
                 $id = $db->loadResult();
@@ -573,17 +539,12 @@ $db->query();
             </td>
         </tr>
         <tr class="row1">
-            <td class="key" colspan="2"><?php echo 'HDFLVPlayer -' . JText::_('Module'); ?></td>
+            <td class="key" colspan="2"><?php echo 'HDFLVPlayer ' . JText::_('Module'); ?></td>
             <td style="text-align: center;">
                 <?php
                 //check installed modules
                 $db = &JFactory::getDBO();
-//                $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'module' AND element = 'mod_hdflvplayer' LIMIT 1");
-                if (version_compare(JVERSION, '1.6.0', 'ge')) {
-                    $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'module' AND element = 'mod_hdflvplayer' LIMIT 1");
-                } else {
-                    $db->setQuery("SELECT id FROM #__modules WHERE module = 'mod_hdflvplayer' LIMIT 1");
-                }
+                $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'module' AND element = 'mod_hdflvplayer' LIMIT 1");
                 $id = $db->loadResult();
                 if ($id) {
                     if ($upgra == 'upgrade') {
@@ -602,18 +563,13 @@ $db->query();
             <th colspan="3"><?php echo JText::_('Plugins'); ?></th>
         </tr>
         <tr class="row0">
-            <td class="key" colspan="2"><?php echo 'HDFLVPlayer -' . JText::_('Plugins'); ?></td>
+            <td class="key" colspan="2"><?php echo 'HDFLVPlayer'; ?></td>
 
             <td style="text-align: center;">
                 <?php
                 //check installed plugin
                 $db = &JFactory::getDBO();
-                if (version_compare(JVERSION, '1.6.0', 'ge')) {
-                    $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'plugin' AND element = 'hdflvplayer' AND folder = 'content' LIMIT 1");
-                } else {
-                    $db->setQuery("SELECT id FROM #__plugins WHERE name = 'HD FLV Player Plugin' LIMIT 1");
-                }
-//                $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'plugin' AND element = 'hdflvplayer' AND folder = 'content' LIMIT 1");
+                $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'plugin' AND element = 'hdflvplayer' AND folder = 'content' LIMIT 1");
                 $id = $db->loadResult();
                 if ($id) {
                     if ($upgra == 'upgrade') {

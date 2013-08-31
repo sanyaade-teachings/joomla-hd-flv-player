@@ -6,21 +6,16 @@
  * @copyright Copyright (C) 2010-2011 Contus Support
  * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
  */
-
 // no direct access
 defined('_JEXEC') or die('Restricted access');
-
 $videolist1 = $this->videolist;
-$lists['order']='';
-$lists['playlistid']='';
-$ordering = ($lists['order'] == 'ordering');
-$playlistid=($lists['playlistid']);
-$groupname=isset($groupname)?$groupname:'';
+error_reporting(E_NOTICE || E_WARNING ||E_ALL);
+//$ordering = ($lists['order'] == 'ordering');
+//$playlistid=($lists['playlistid']);
+
 $baseurl=JURI::base();
 $thumbpath1=JURI::base()."components/com_hdflvplayer";
 JHTML::_('behavior.tooltip');
-
-
 $toolTipArray = array('className' => 'custom2', 'showDelay'=>'0', 'hideDelay'=>'500',
    'fixed'=>'true' , 'onShow'=>"function(tip) {tip.effect('opacity',{duration: 500, wait: false}).start(0,1)}"
     , 'onHide'=>"function(tip) {tip.effect('opacity',
@@ -29,13 +24,11 @@ JHTML::_('behavior.tooltip', '.hasTip2', $toolTipArray);  // class="hasTip2" tit
 $filename = 'testtooltip.js'; // used for class="hasTip3" titles
 $path = 'templates/rhuk_milkyway/js/';
 JHTML::script($filename, $path, true); // MooTools will load if it is not already loaded
+JHTML::_('script', JURI::base()."components/com_hdflvplayer/js/jquery-1.3.2.min.js", false, true);
+JHTML::_('script', JURI::base()."components/com_hdflvplayer/js/jquery-ui-1.7.1.custom.min.js", false, true);
+JHTML::_('script', JURI::base()."components/com_hdflvplayer/js/selectuser.js", false, true);
+JHTML::_('stylesheet',$thumbpath1."/css/styles123.css", array(), true);
 ?>
-<script type="text/javascript" src="<?php echo $thumbpath1.'/js/videoformvalid_1.js';?>"></script>
-<script type="text/javascript" src="<?php echo $thumbpath1.'/js/jquery-1.3.2.min.js';?>"></script>
-<script type="text/javascript" src="<?php echo $thumbpath1.'/js/jquery-ui-1.7.1.custom.min.js';?>"></script>
-<script type="text/javascript" src="<?php echo $thumbpath1.'/js/selectuser.js';?>"></script>
-<link rel='stylesheet' href='<?php echo $thumbpath1."/css/styles123.css";?>' type='text/css' media='all' />
-
 <script type="text/javascript">
     // When the document is ready set up our sortable with it's inherant function(s)
     var dragdr = jQuery.noConflict();
@@ -75,10 +68,10 @@ JHTML::script($filename, $path, true); // MooTools will load if it is not alread
     <table>
         <tr>
             <td align="left" width="100%">
-                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_FILTER'); ?>
+                Filter:
                 <input type="text" name="search" id="search" value="<?php if (isset($videolist1['lists']['search'])) echo $videolist1['lists']['search'];?>"  onchange="document.adminForm.submit();" />
-                <button onClick="this.form.submit();"><?php echo JText::_( 'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_GO' ); ?></button>
-                <button onClick="document.getElementById('search').value='';"><?php  echo JText::_( 'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_RESET' ); ?></button>
+                <button onClick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
+                <button onClick="document.getElementById('search').value='';"><?php  echo JText::_( 'Reset' ); ?></button>
 
             </td>
 
@@ -88,7 +81,7 @@ JHTML::script($filename, $path, true); // MooTools will load if it is not alread
         <thead>
 
             <th>
-                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_SORTING'); ?>
+                Sorting
             </th>
             <th>
                 <input type="checkbox" name="toggle"
@@ -97,62 +90,62 @@ JHTML::script($filename, $path, true); // MooTools will load if it is not alread
 
             </th>
             <th>
-                <?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_TITLE', 'title', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+                <?php echo JHTML::_('grid.sort',  'Title', 'title', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
 
             </th>
             <th>
-                <?php echo JText::_( 'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_DEFAULT' ); ?>
+                <?php echo JText::_( 'Default' ); ?>
 
             </th>
 
 
             <th>
-                <?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_PLAYLISTNAME', 'playlistid', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+                <?php echo JHTML::_('grid.sort',  'Playlist Name', 'playlistid', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
 
             </th>
 
             <th>
-                <?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_VIEWED', 'times_viewed', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+                <?php echo JHTML::_('grid.sort',  'Viewed', 'times_viewed', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
 
             </th>
             <th>
-                <?php echo JText::_( 'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_STREAMERNAME' ); ?>
+                <?php echo JText::_( 'Streamer Name' ); ?>
 
             </th>
             <th>
-                <?php echo JText::_( 'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_STREAMERPATH' ); ?>
+                <?php echo JText::_( 'Streamer Path' ); ?>
 
             </th>
             <th>
-                <?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_VIDEOLINK', 'videourl', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+                <?php echo JHTML::_('grid.sort',  'Video Link', 'videourl', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
 
             </th>
             <th>
-                <?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_THUMBLINK', 'thumburl', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+                <?php echo JHTML::_('grid.sort',  'Thumb Link', 'thumburl', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
 
             </th>
             <th>
-                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_POSTROLL_ADS'); ?>
+                Postroll Ads
 
             </th>
             <th>
-                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_PREROLL_ADS'); ?>
+                Preroll Ads
             </th>
                <th>
-                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_MIDROLL_ADS'); ?>
+                Midroll Ads
             </th>
             <th>
-                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_ACCESS_LEVEL'); ?>
+                Access Level
             </th>
             <th>
-                <?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_ORDER', 'ordering', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+                <?php echo JHTML::_('grid.sort',  'Order', 'ordering', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
 
             </th>
             <th>
-            <?php echo JText::_('COM_HDFLVPLAYER_PUBLISHED'); ?>
+            Published
             </th>
             <th>
-                <?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_ID', 'Id', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+                <?php echo JHTML::_('grid.sort',  'Id', 'Id', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
 
             </th>
         </thead>
@@ -176,8 +169,7 @@ $imagepath=JURI::base()."components/com_hdflvplayer/images";
                             $row_showupload = &$videolist1['rs_showupload'][$i];
                             $checked = JHTML::_('grid.id', $i, $row_showupload->id );
                             $published = JHTML::_('grid.published', $row_showupload, $i );
-                            $row_showupload->groupname=isset($row_showupload->groupname)?$row_showupload->groupname:'';
-                            $access = JHTML::_('grid.access', $row_showupload, $row_showupload->groupname );
+                            $access = JHTML::_('grid.access', $row_showupload, $i );
                             $link= JRoute::_( 'index.php?option=com_hdflvplayer&task=editvideoupload&cid[]='. $row_showupload->id);
                             $str1=explode('administrator',JURI::base());
                             $videopath=$str1[0]."components/com_hdflvplayer/videos/";
@@ -197,11 +189,7 @@ $imagepath=JURI::base()."components/com_hdflvplayer/images";
                     </td>
                     <td>
                         <p class="content" style="padding:6px;">  <?php if ( $row_showupload->home == 1 ) : ?>
-                        <?php  if (version_compare(JVERSION, '1.6.0', 'ge')) {?>
                             <img src="templates/hathor/images/menu/icon-16-default.png" alt="<?php echo JText::_( 'Default' ); ?>" />
-                            <?php } else {?>
-                             <img src="templates/khepri/images/menu/icon-16-default.png" alt="<?php echo JText::_( 'Default' ); ?>" />
-                             <?php  }?>
                             <?php else : ?>
                             &nbsp;
                         <?php endif; ?></p>
@@ -211,7 +199,7 @@ $imagepath=JURI::base()."components/com_hdflvplayer/images";
                         <p class="content" style="padding:6px;">
                             <?php
                             $showname="";
-                            ($row_showupload->name==""?$showname="-":$showname=$row_showupload->name);
+                            ($row_showupload->name==""?$showname="None":$showname=$row_showupload->name);
 
                             echo  $newtext = wordwrap($showname, 15, "\n", true);
 

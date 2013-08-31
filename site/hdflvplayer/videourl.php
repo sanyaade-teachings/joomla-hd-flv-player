@@ -680,8 +680,8 @@ function http_test_existance($url, $timeout = 10) {
 
 
 $video = new videourl();
-if(JRequest::getVar('url'))
-{$vurl=JRequest::getVar('url');
+if(isset($_GET['url']))
+{$vurl=$_GET['url'];
 $video->getVideoType($vurl);
 if ($video->url AND $video->type != '') {
               $vidurl=$video->catchURL();
@@ -694,9 +694,9 @@ $vidurl[1] = str_replace("&","$",$vidurl[1]);
 $vidurl[2] = str_replace("&","$",$vidurl[2]);
 print("&location1=".$vidurl[0]."&location2=".$vidurl[1]."&location3=".$vidurl[2]);
 }
-elseif(JRequest::getVar('imageurl'))
+elseif(isset($_GET['imageurl']))
 {
-    $vurl=JRequest::getVar('imageurl');
+    $vurl=$_GET['imageurl'];
 $video->getVideoType($vurl);
 
 $imgurl =$video->imgURL($vurl);

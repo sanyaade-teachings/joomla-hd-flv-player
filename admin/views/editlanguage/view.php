@@ -20,12 +20,11 @@ jimport( 'joomla.application.component.view');
 
 class hdflvplayerVieweditlanguage extends JView
 {
-	//Editlanguage view display method.
 	function editlanguage()
 	{
         JSubMenuHelper::addEntry(JText::_('Videos'), 'index.php?option=com_hdflvplayer&task=uploadvideos',false);
         JSubMenuHelper::addEntry(JText::_('Settings'), 'index.php?option=com_hdflvplayer&task=playersettings',false);
-        JSubMenuHelper::addEntry(JText::_('Playlist Name'), 'index.php?option=com_hdflvplayer&task=playlistname',false);
+        JSubMenuHelper::addEntry(JText::_('Playlist Name '), 'index.php?option=com_hdflvplayer&task=playlistname',false);
         JSubMenuHelper::addEntry(JText::_('Checklist '), 'index.php?option=com_hdflvplayer&task=checklist',false);
         JSubMenuHelper::addEntry(JText::_('Language Settings '), 'index.php?option=com_hdflvplayer&task=languagesetup',true);
         JSubMenuHelper::addEntry(JText::_('Ads '), 'index.php?option=com_hdflvplayer&task=ads',false);

@@ -10,7 +10,7 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
 $currentDirectory = (dirname(__FILE__)).'\images\uploads';
-$file = (dirname(__FILE__)).'/index.html';
+$file = (dirname(__FILE__)).'\index.html';
 $newfile = (dirname(__FILE__)).'\images\uploads\index.html';
 if(!is_dir($currentDirectory))
 {
@@ -21,7 +21,7 @@ if(!is_dir($currentDirectory))
 }
 }
 $currentDirectory = (dirname(__FILE__) . DS . '..' . DS . '..' . DS . '..' . DS . 'components' . DS . 'com_hdflvplayer' . DS . 'videos');
-$newfile = $currentDirectory .'/index.html';
+$newfile = $currentDirectory . DS . 'index.html';
 if (!is_dir($currentDirectory)) {
     if (!mkdir($currentDirectory, 0777))
         echo 'failed to create folder';

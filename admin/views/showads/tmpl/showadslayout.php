@@ -23,10 +23,10 @@ $path = $basepath[0] . "administrator/components/com_hdflvplayer/images/uploads/
 $path1 = $basepath[0] . "components/com_hdflvplayer/videos/"
 ?>
 
-                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_FILTER');?>
+                Filter:
                 <input type="text" name="search" id="search" value="<?php if (isset($videolist1['lists']['search'])) echo $videolist1['lists']['search'];?>"  onchange="document.adminForm.submit();" />
-                <button onClick="this.form.submit();"><?php echo JText::_( 'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_GO' ); ?></button>
-                <button onClick="document.getElementById('search').value='';"><?php  echo JText::_( 'COM_HDFLVPLAYER_VIEW_UPLOADVIDEOS_TMPL_RESET' ); ?></button>
+                <button onClick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
+                <button onClick="document.getElementById('search').value='';"><?php  echo JText::_( 'Reset' ); ?></button>
 
     <table class="adminlist">
         <thead>
@@ -37,23 +37,23 @@ $path1 = $basepath[0] . "components/com_hdflvplayer/videos/"
                            value="" onClick="checkAll(<?php echo count($rs_showads['rs_showads']); ?>);" />
                 </th>
                 <th width="5%">
-<?php echo JHTML::_('grid.sort',  'COM_HDFLVPLAYER_VIEW_SHOWADS_TMPL_ADS_NAME', 'adsname', @$rs_showads['lists']['order_Dir'], @$rs_showads['lists']['order'] ); ?>
+<?php echo JHTML::_('grid.sort',  'adsname', 'adsname', @$rs_showads['lists']['order_Dir'], @$rs_showads['lists']['order'] ); ?>
 
                 </th>
                 <th width="5%">
-                    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_SHOWADS_TMPL_ADS_VIDEO_PATH');?>
+                    Ads video path
                 </th>
                 <th width="5%">
-                    <?php echo JText::_('COM_HDFLVPLAYER_PUBLISHED');?>
+                    Published
                 </th>
                 <th width="5%">
-<?php echo JHTML::_('grid.sort', 'COM_HDFLVPLAYER_ID', 'Id', @$rs_showads['lists']['order_Dir'], @$rs_showads['lists']['order']); ?>
+<?php echo JHTML::_('grid.sort', 'Id', 'Id', @$rs_showads['lists']['order_Dir'], @$rs_showads['lists']['order']); ?>
                 </th>
                 <th width="5%">
-                  <?php echo JText::_('COM_HDFLVPLAYER_VIEW_SHOWADS_TMPL_AD_VISITS');?>
+                    Click Hits
                 </th>
                 <th width="5%">
-                    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_SHOWADS_TMPL_IMPRESSION_HITS');?>
+                    Impression Hits
                 </th>
             </tr>
         </thead>

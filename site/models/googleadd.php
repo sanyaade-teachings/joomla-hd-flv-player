@@ -17,7 +17,11 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModelgoogleadd extends JModel
 {
-	//Function to get google ads from database.
+	/**
+	 * Gets the greeting
+	 * 
+	 * @return string The greeting to be displayed to the user
+	 */
 	function googlescript()
 	{
             global $db;

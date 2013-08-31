@@ -16,7 +16,11 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModeladdview extends JModel
 {
-    //Function to get view count for video.
+    /**
+     * Gets the greeting
+     *
+     * @return string The greeting to be displayed to the user
+     */
     function getviewcount()
     {
     $thumbid1="";

@@ -17,7 +17,11 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModelplayer extends JModel
 {
-    //Function to get video and its related content.
+    /**
+     * Gets the greeting
+     *
+     * @return string The greeting to be displayed to the user
+     */
     function showhdplayer()
     {
 
@@ -47,7 +51,7 @@ class hdflvplayerModelplayer extends JModel
 
         $compid1="";
 
-        if(JRequest::getVar('compid'))
+        if(isset($_GET['compid']))
         {
             $compid1=JRequest::getvar('compid','','get','int');
             $playlistid=$compid1;
@@ -65,14 +69,10 @@ class hdflvplayerModelplayer extends JModel
 
         if($playid)
         {
-        	$none = 1;
             if($playlistid!="")
             $query_all_count="select * from #__hdflvplayerupload  where published='1' and playlistid=$playlistid and id not in ($playid) order by ordering asc ";
             else
-            {
-            	
             $query_all_count="select * from #__hdflvplayerupload  where published='1' and  id not in ($playid) order by ordering asc ";
-            }
         }
         else
         { if($playlistid!="")
@@ -82,31 +82,25 @@ class hdflvplayerModelplayer extends JModel
                 $query_all_count="select * from #__hdflvplayerupload  where published='1' order by ordering asc ";
             }
         }
-		
+
 
         $db->setQuery($query_all_count);
         $rs_count = $db->loadObjectList();
         $length=1;
         $start=0;
+
+
         if($rs_count>0)
         {
             if($none==0)
-            {
-            	
-            	$total=count($rs_count)-1;
-            	//$total=count($rs_count);
-            }
+            $total=count($rs_count)-1;
             else
-            {
-            	$total=count($rs_count);
-            }
+            $total=count($rs_count);
         }
         else
-        {
-        	$total=0;
-        }
-		$total;
-		
+        $total=0;
+
+
         $pageno = 1;
 
         $page=JRequest::getvar('page','','get','int');
@@ -208,9 +202,9 @@ class hdflvplayerModelplayer extends JModel
 
 
 
-            //$query="update #__hdflvplayerupload SET times_viewed=1+times_viewed where id=$playid";
-            //$db->setQuery($query );
-            //$db->query();
+            $query="update #__hdflvplayerupload SET times_viewed=1+times_viewed where id=$playid";
+            $db->setQuery($query );
+            $db->query();
             $playid = $rows[0]->id;
         }
 
@@ -265,7 +259,6 @@ class hdflvplayerModelplayer extends JModel
         $insert_data_array = array('playerpath' => $playerpath,'baseurl'=>$baseurl,'thumbid'=>$thumbid,'rs_playlist'=>$rs_playlist,'length'=>$length,'total'=>$total,'closeadd'=>"",'showoption'=>"",'reopenadd'=>"",'ropen'=>"",'publish'=>"",'showaddc'=>"",'rs_playlistname'=>$rs_playlistname,'rs_title'=>$rs_title);
 
         $settingsrows = array_merge($settingsrows, $insert_data_array);
-        //print_r($settingsrows);
         return $settingsrows;
 
 

@@ -13,7 +13,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModelshowlanguage extends JModel {
 
-	//Function to display the language setting details.
+
 	function showlanguagemodel()
     {
         
@@ -26,7 +26,6 @@ class hdflvplayerModelshowlanguage extends JModel {
 
 	}
 
-	//Function to save the language setting details.
     function savelanguagesetup($task)
     {
         global $option,$mainframe;

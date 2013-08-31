@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE install PUBLIC "-//Joomla! 1.5//DTD plugin 1.0//EN" "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<install version="1.5" type="plugin" group="content" method="upgrade">
+<extension version="1.6" type="plugin" group="content" method="upgrade">
     <name>HD FLV Player Plugin</name>
-    <creationDate>Nov 18 2011</creationDate>
-    <author>Apptha</author>
-    <authorEmail>support@apptha.com</authorEmail>
-    <authorUrl>http://www.apptha.com</authorUrl>
+    <creationDate>Feb 28 2011</creationDate>
+    <author>Contus Support Interactive</author>
+    <authorEmail>support@hdflvplayer.net</authorEmail>
+    <authorUrl>url</authorUrl>
     <copyright>(C) 2011</copyright>
     <license>GNU/GPL http://www.gnu.org/copyleft/gpl.html</license>
-    <version>1.6</version>
-    <description>A plugin for HD FLV Player.</description>
-  <scriptfile>install.hdflvplayer.php</scriptfile>
+    <version>1.5</version>
+    <description>
+        <![CDATA[ <p>Plugin Steps</p>
+<p>1. Install the joomla_hdflvplayer_plugin_demo.<br />
+  2. In the plugin manager under extensions menu Hdflvplayer Plugin can be found.<br />
+  3. Just publish it.<br />
+  4. In any articles plugin can be used...<br />
+  5. The attributes includes </p>
+<p> * videoid<br />
+  * Height<br />
+  * Width<br />
+  * Autoplay<br />
+  * Playlist</p>
+<p>6. Any one of the above attributes can be included...Mandatory is videoid<br />
+  7. Below are the formats for plugin</p>
+<p> <br />
+  1.[hdplay videoid=1 height=300 width=400 autoplay=true playlist=summer]<br />
+  2.[hdplay videoid=1]<br />
+  3.[hdplay videoid=2 height=300] <br />
+  4.[hdplay videoid=4 width=700] <br />
+  5.[hdplay videoid=3 autoplay=true] <br />
+  6.[hdplay videoid=3 playlist=summer] </p>
+<p>Different combinations can be used as mentioned above<br />
+</p>]]>
+</description>
     <files>
         <filename plugin="hdflvplayer">hdflvplayer.php</filename>
         <filename>readme.txt</filename>
@@ -20,5 +42,5 @@
     
 </fields>
 </config>
-</install>
+</extension>
 

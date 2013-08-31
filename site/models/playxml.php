@@ -18,7 +18,11 @@ jimport('joomla.application.component.modellist');
 jimport( 'joomla.html.parameter' );
 class hdflvplayerModelplayxml extends JModel
 {
-    //Function to get video details based on playlist name.
+    /**
+     * Gets the greeting
+     *
+     * @return string The greeting to be displayed to the user
+     */
     function playgetrecords()
     {
 
@@ -37,6 +41,9 @@ class hdflvplayerModelplayxml extends JModel
         $home_bol="false";
         $playlistrandom="false";
 
+
+
+
         //Playlist id for modules..If playlist is chosen then videos should display accordingly
 
         $moduleid=JRequest::getvar('mid','','get','int');
@@ -54,6 +61,7 @@ class hdflvplayerModelplayxml extends JModel
             //$protected=($rs_settings[0]->protect_url==1)?$protected="true":$protected="false";
             $hddefault=($rs_settings[0]->hddefault);
         }
+
 
         if($moduleid!=0)
         {
@@ -150,8 +158,6 @@ class hdflvplayerModelplayxml extends JModel
     }
 
     //function showxml($rs_video,$video,$postrollads,$prerollads,$streamername,$previewimage,$hdvideo,$timage,$hd_bol,$id,$title,$playlistautoplay,$moduleid)
-    
-    //Function to display the video content based on playlistname.
     function showxml($rs_video,$playlistautoplay,$protected,$description_ovisible)
     {
 
@@ -246,7 +252,7 @@ $db->setQuery($query_ads);
                 ($rows->targeturl=="")?$targeturl="":$targeturl=$rows->targeturl;
                 ($rows->postrollads=="1")?$postrollid=$rows->postrollid:$postrollid=0;
                 ($rows->prerollads=="1")?$prerollid=$rows->prerollid:$prerollid=0;
-              
+
 
                 $session =& JFactory::getSession();
                 $user =& JFactory::getUser();
@@ -254,10 +260,6 @@ $db->setQuery($query_ads);
 
 
                    $access="";
-             if(version_compare(JVERSION,'1.6.0','ge'))
-        			{
-        				
-        			
                 if($rows->access > 1)//||($rows->access==2))
                 $access="false";
                 else
@@ -268,19 +270,6 @@ $db->setQuery($query_ads);
                     if($memberid!=0)
                     $access="true";
                 }
-        			}
-        			else {
-        			if($rows->access >= 1)//||($rows->access==2))
-                $access="false";
-                else
-                $access="true";
-
-                if($rows->access >= 1)//||($rows->access==2))
-                {
-                    if($memberid!=0)
-                    $access="true";
-                }
-        			}
 
                 $islive="false";
                 if($streamername!="")
@@ -292,7 +281,7 @@ $db->setQuery($query_ads);
                 {
                 echo '" allow_download="'.$download;
                 }
-                echo '" preroll_id="'.$prerollid.'" postroll_id="'.$postrollid.'" postroll="'.$postrollads.'" midroll="true" preroll="'.$prerollads.'" streamer="'.$streamername.'" Preview="'.$previewimage.'" hdpath="'.$hdvideo.'" thu_image="'.$timage.'" id="'.$rows->id.'" hd="'.$hd_bol.'" >';
+                echo '" preroll_id="'.$prerollid.'" postroll_id="'.$postrollid.'" postroll="'.$postrollads.'" midroll="false" preroll="'.$prerollads.'" streamer="'.$streamername.'" Preview="'.$previewimage.'" hdpath="'.$hdvideo.'" thu_image="'.$timage.'" id="'.$rows->id.'" hd="'.$hd_bol.'" >';
               //  echo '<mainvideo member="'.$access.'" category="'.$rows->name.'" url="'.$video.'" isLive ="'.$islive.'" allow_download="'.$download.'" preroll_id="'.$prerollid.'" midroll="'.$midrollads.'" postroll_id="'.$postrollid.'" postroll="'.$postrollads.'" preroll="'.$prerollads.'" streamer="'.$streamername.'" Preview="'.$previewimage.'" hdpath="'.$hdvideo.'" thu_image="'.$timage.'" id="'.$rows->id.'" hd="'.$hd_bol.'" >';
                 echo '<title>';
                 echo '<![CDATA['.$rows->title.']]>';

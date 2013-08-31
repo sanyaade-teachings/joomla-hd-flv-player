@@ -15,7 +15,11 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModelplayerbase extends JModel
 {
-    //Function to get the player skin
+    /**
+     * Gets the greeting
+     *
+     * @return string The greeting to be displayed to the user
+     */
     function playerskin()
     {
         //$playerpath = JURI::base().'components/com_hdflvplayer/hdflvplayer/hdplayer.swf';
@@ -23,8 +27,7 @@ class hdflvplayerModelplayerbase extends JModel
         $this->showplayer($playerpath);
        
     }
-	
-    //Function to display the player
+
     function showplayer($playerpath)
     {
         

@@ -13,13 +13,13 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModelsavevideoupload extends JModel {
 
-	//Function to save the upload video to database.
+
     function savevideouploadmodel($task)
     {
         $option = 'com_hdflvplayer';
 
         global $mainframe;
-        $fileoption=JRequest::getVar('fileoption');
+        $fileoption=$_POST['fileoption'];
         $db =& JFactory::getDBO();
         $rs_saveupload =& JTable::getInstance('hdflvplayerupload', 'Table');
         $cid = JRequest::getVar( 'cid', array(0), '', 'array' );
@@ -53,10 +53,10 @@ class hdflvplayerModelsavevideoupload extends JModel {
             exit();
         }
         // chd for fileoption which is given thru radio button
-        if(JRequest::getVar('fileoption')=="File")
+        if($_POST['fileoption']=="File")
         {
             // chd for new function
-            if(JRequest::getVar('newupload')==0)
+            if($_POST['newupload']==0)
             {
                 $file_size_videos = $_FILES['ffmpeg_videos']['size'];
                 $file_size_thumbimages = $_FILES['ffmpeg_thumbimages']['size'];
@@ -65,21 +65,21 @@ class hdflvplayerModelsavevideoupload extends JModel {
                 $bol_newedit="new";
             }
             // chd for edit function
-            if(JRequest::getVar('newupload')==1)
+            if($_POST['newupload']==1)
             {
-                if(JRequest::getVar('fvideos')==1)
+                if($_POST['fvideos']==1)
                 $file_size_videos = $_FILES['ffmpeg_videos']['size'];
                 else
                 $file_size_videos=0;
-                if(JRequest::getVar('fthumb')==1)
+                if($_POST['fthumb']==1)
                 $file_size_thumbimages = $_FILES['ffmpeg_thumbimages']['size'];
                 else
                 $file_size_thumbimages=0;
-                if(JRequest::getVar('fpreview')==1)
+                if($_POST['fpreview']==1)
                 $file_size_fpreview = $_FILES['ffmpeg_previewimages']['size'];
                 else
                 $file_size_fpreview=0;
-                if(JRequest::getVar('fhd')==1)
+                if($_POST['fhd']==1)
                 $file_size_fhd = $_FILES['ffmpeg_hd']['size'];
                 else
                 $file_size_fhd=0;
@@ -112,16 +112,16 @@ class hdflvplayerModelsavevideoupload extends JModel {
         $streamer_option="";
         $streamer_path="";
 
-        $streamer_option=JRequest::getVar('streameroption-value');
+        $streamer_option=$_POST['streameroption-value'];
         if($fileoption=='Url')
         {
-            $videourl=JRequest::getVar('videourl-value');
-            $thumburl=JRequest::getVar('thumburl-value');
-            $previewurl=JRequest::getVar('previewurl-value');
-            $hdurl=JRequest::getVar('hdurl-value');
+            $videourl=$_POST['videourl-value'];
+            $thumburl=$_POST['thumburl-value'];
+            $previewurl=$_POST['previewurl-value'];
+            $hdurl=$_POST['hdurl-value'];
 
-            ($streamer_option=="rtmp")?$streamer_path=JRequest::getVar('streamerpath_value'):$streamer_path="";
-            ($streamer_option=="rtmp")?$islive=JRequest::getVar('islive-value'):$islive=0;
+            ($streamer_option=="rtmp")?$streamer_path=$_POST['streamerpath-value']:$streamer_path="";
+            ($streamer_option=="rtmp")?$islive=$_POST['islive-value']:$islive=0;
 
 
             $query="update #__hdflvplayerupload SET islive=$islive,streameroption= '$streamer_option',streamerpath='$streamer_path', filepath='$fileoption',videourl='$videourl',thumburl='$thumburl',previewurl='$previewurl',hdurl='$hdurl' where id=$rs_saveupload->id";
@@ -133,7 +133,7 @@ class hdflvplayerModelsavevideoupload extends JModel {
 
         if($fileoption=="Youtube")
         {
-            $videourl=JRequest::getVar('videourl-value');
+            $videourl=$_POST['videourl-value'];
 
             // $locationyoutube = $this->getyoutube($videourl);
           /*  $url1=strstr($videourl,"http://");
@@ -164,16 +164,6 @@ class hdflvplayerModelsavevideoupload extends JModel {
             $location1="";
             $location2="";
             $location3="";
-            $location[1]=isset($location[1])?$location[1]:'';
-            $location[2]=isset($location[2])?$location[2]:'';
-            $location[3]=isset($location[3])?$location[3]:'';
-            $location[4]=isset($location[4])?$location[4]:'';
-            $img[1]=isset($img[1])?$img[1]:'';
-            $location=isset($location)?$location:'';
-            $location1=isset($location1)?$location1:'';
-             $location2=isset($location2)?$location2:'';
-             $location3=isset($location3)?$location3:'';
-             $img=isset($img)?$img:'';
 
             $location=explode('&' ,$videoshareurl_location);
             $location1=explode('location1=',$location[1]);
@@ -211,24 +201,20 @@ class hdflvplayerModelsavevideoupload extends JModel {
         if($fileoption=="File")   // Checked for file option
         {
 
-            $normal_video=JRequest::getVar('normalvideoform-value');
+            $normal_video=$_POST['normalvideoform-value'];
             $video_name=explode("uploads/", $normal_video);
-            $video_name[1] = isset ($video_name[1])?$video_name[1]:"";
             $file_video=$video_name[1];
-            $hd_video=JRequest::getVar('hdvideoform-value');
+            $hd_video=$_POST['hdvideoform-value'];
             $hd_name=explode("uploads/", $hd_video);
-            $hd_name[1]=isset($hd_name[1])?$hd_name[1]:"";
             $file_hvideo=$hd_name[1];
-            $thumb_video=JRequest::getVar('thumbimageform-value');
+            $thumb_video=$_POST['thumbimageform-value'];
             $thumb_name=explode("uploads/", $thumb_video);
-            $thumb_name[1]=isset($thumb_name[1])?$thumb_name[1]:"";
             $file_timage=$thumb_name[1];
-            $preview_video=JRequest::getVar('previewimageform-value');
+            $preview_video=$_POST['previewimageform-value'];
             $preview_name=explode("uploads/", $preview_video);
-            $preview_name[1]=isset($preview_name[1])?$preview_name[1]:"";
             $file_pimage=$preview_name[1];
-            $filepath=JRequest::getVar('fileoption');
-            $this->fn_savedb_flashenable($option,$idval,$file_video,$file_timage,$file_pimage,$file_hvideo,JRequest::getVar('newupload'),$filepath);
+            $filepath=$_POST['fileoption'];
+            $this->fn_savedb_flashenable($option,$idval,$file_video,$file_timage,$file_pimage,$file_hvideo,$_POST['newupload'],$filepath);
             if($file_video!='')
             $this->unlinkuploadedfiles($file_video);
             if($file_hvideo!='')
@@ -241,7 +227,7 @@ class hdflvplayerModelsavevideoupload extends JModel {
 
         if($fileoption=="FFmpeg")
         {
-            $ffmpeg_video=JRequest::getVar('ffmpegform-value');
+            $ffmpeg_video=$_POST['ffmpegform-value'];
             $video_name=explode("uploads/", $ffmpeg_video);
             $file_video=$video_name[1];
             $target_path1=FVPATH."/images/uploads/".$file_video;
@@ -309,22 +295,21 @@ class hdflvplayerModelsavevideoupload extends JModel {
         JFactory::getApplication()->redirect($link, $msg);
     }
 
-    //Function to delete the uploded file.
     function unlinkuploadedfiles($unlink_file_name)
     {
-    	$targetpath1=FVPATH."/images/uploads/$$unlink_file_name";
+        $targetpath1=FVPATH."/images/uploads/$$unlink_file_name";
         if (file_exists($targetpath1))
         {
             unlink($targetpath1);
         }
     }
 
-	//Function to validate extensions and size of uploaded file.
+
     function fn_ffmpegdisable_validation($option,$idval,$task,$bol_newedit,$file_size_videos,$file_size_thumbimages,$file_size_fpreview,$file_size_fhd)
     {
         $option = 'com_hdflvplayer';
         global $mainframe;
-        if(isset($_FILES['ffmpeg_videos']['name'])!='')
+        if($_FILES['ffmpeg_videos']['name']!='')
         {
             $file_type = $_FILES['ffmpeg_videos']['type'];
             $file_name=$_FILES['ffmpeg_videos']['name'];
@@ -342,7 +327,7 @@ class hdflvplayerModelsavevideoupload extends JModel {
                 }
             }
         }
-        if(isset($_FILES['ffmpeg_hd']['name'])!="")
+        if($_FILES['ffmpeg_hd']['name']!="")
         {
             $file_type = $_FILES['ffmpeg_hd']['type'];
             $file_name=$_FILES['ffmpeg_hd']['name'];
@@ -359,7 +344,7 @@ class hdflvplayerModelsavevideoupload extends JModel {
                 }
             }
         }
-        if(isset($_FILES['ffmpeg_previewimages']['name'])!="")
+        if($_FILES['ffmpeg_previewimages']['name']!="")
         {
             $file_type = $_FILES['ffmpeg_previewimages']['type'];
             $file_name=$_FILES['ffmpeg_previewimages']['name'];
@@ -376,7 +361,7 @@ class hdflvplayerModelsavevideoupload extends JModel {
                 }
             }
         }
-        if(isset($_FILES['ffmpeg_thumbimages']['name'])!="")
+        if($_FILES['ffmpeg_thumbimages']['name']!="")
         {
             $file_type = $_FILES['ffmpeg_thumbimages']['type'];
             $file_name=$_FILES['ffmpeg_thumbimages']['name'];
@@ -419,8 +404,7 @@ class hdflvplayerModelsavevideoupload extends JModel {
         }
 
     }
-	
-    //Function to extract the extension from the uploaded file.
+
     function findexts ($filename)
     {
         $filename = strtolower($filename) ;
@@ -430,7 +414,6 @@ class hdflvplayerModelsavevideoupload extends JModel {
         return $exts;
     }
 
-    //Function to move the uploaded file content
     function fn_savedb_flashenable($option,$idval,$file_video,$file_timage,$file_pimage,$file_hvideo,$newupload,$filepath)
     {
         //echo $file_video."".$file_hvideo."".$file_timage."".$file_pimage;
@@ -505,8 +488,6 @@ class hdflvplayerModelsavevideoupload extends JModel {
         $db->setQuery( $query );
         $db->query();
     }
-    
-    //Function to get the video format.
     function ezffmpeg_vdofile_infos( $src_filepath,$ffmpeg_path )
     {
         $EZFFMPEG_BIN_PATH=$ffmpeg_path;
@@ -522,8 +503,7 @@ class hdflvplayerModelsavevideoupload extends JModel {
         }
         return($return_array);
     }
-	
-    //Function to search the value in array content.
+
     function ezffmpeg_array_search($needle, $array_lines)
     {
         $return_val = false;
@@ -537,8 +517,6 @@ class hdflvplayerModelsavevideoupload extends JModel {
         }
         return($return_val);
     }
-    
-    //Function to read the file content.
     function ezffmpeg_exec ($commandline)
     {
         $read = '';
@@ -550,5 +528,8 @@ class hdflvplayerModelsavevideoupload extends JModel {
         pclose($handle);
         return($read);
     }
+
+
+
 }
 ?>

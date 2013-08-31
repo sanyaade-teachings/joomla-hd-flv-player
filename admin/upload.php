@@ -22,17 +22,17 @@ $errormsg[13] = "<b>Upload Failed:</b> Please check post_max_size in php.ini set
 
 
 
-if (JRequest::getVar('error')) {
-    $error = JRequest::getVar('error');
+if (isset($_GET['error'])) {
+    $error = $_GET['error'];
 }
 
-if (JRequest::getVar('processing')) {
-    $pro = JRequest::getVar('processing');
+if (isset($_GET['processing'])) {
+    $pro = $_GET['processing'];
 }
 
-if (JRequest::getVar('mode'))
+if (isset($_POST['mode']))
 {
-    $exttype = JRequest::getVar('mode');
+    $exttype = $_POST['mode'];
     if ($exttype == 'video')
     $allowedExtensions = array("mp3","MP3","flv", "FLV", "mp4", "MP4" , "m4v", "M4V", "M4A", "m4a", "MOV", "mov", "mp4v", "Mp4v", "F4V", "f4v");
     elseif($exttype == 'image')

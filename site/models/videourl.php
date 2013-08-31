@@ -17,7 +17,11 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModelvideourl extends JModel
 {
-    //Function to get video url.
+    /**
+     * Gets the greeting
+     *
+     * @return string The greeting to be displayed to the user
+     */
     function getallvideourl()
     {
 
@@ -26,8 +30,7 @@ class hdflvplayerModelvideourl extends JModel
         exit();
 
     }
-	
-    //Function to display the video url.
+
     function showallurl()
     {
         //$video = new hdflvplayerModelvideourl();
@@ -97,9 +100,10 @@ class hdflvplayerModelvideourl extends JModel
 
     }
 
-	//Function to check whether the URL exists
-    function page_exists($url)
-    {
+
+
+
+    function page_exists($url){
 
         $c = curl_init();
 
@@ -126,14 +130,23 @@ class hdflvplayerModelvideourl extends JModel
     } // END page_exists() FUNCTION
 
 
+
+    // THIS FUNCTION CATCHES FLV URL
+
+    // INPUT: $url REPRESENTING THE URL
+
+
+
+
+
     // THIS FUNCTION CATCHES FLV URL
 
     // INPUT: $url REPRESENTING THE URL
 
     // OUTPUT: TRUE OR FALSE
 
-    function getVideoType($location, $add = 0)
-    {
+    function getVideoType($location, $add = 0){
+
 
         if(preg_match('/www\.youtube\.com\/watch\?v=[^&]+/', $location, $vresult)) {
 
@@ -168,10 +181,15 @@ class hdflvplayerModelvideourl extends JModel
         $this->type = $type;
 
 
+
+
+
+
+
     } // END getVideoType() FUNCTION
 
 
-	//Function to get image URL of the video.
+
     function imgURL()
     {
 
@@ -215,16 +233,23 @@ class hdflvplayerModelvideourl extends JModel
     } // END getType() FUNCTION
 
 
+
+
+
+
     // THIS FUNCTION CATCHES FLV URL
 
     // INPUT: $url REPRESENTING THE VIDEO PAGE URL
 
     // OUTPUT: ARRAY CONTAINING $location AND $type
 
-    function catchData()
-    {
+    function catchData(){
+
+
 
         $newInfo = trim($this->file_get_contents_curl($this->url));
+
+
 
         switch ($this->type) {
 
@@ -428,9 +453,7 @@ class hdflvplayerModelvideourl extends JModel
 
     } // END catchData() FUNCTION
 
-    //Function to check secure connection.
-    function http_test_existance($url, $timeout = 10) 
-    {
+    function http_test_existance($url, $timeout = 10) {
         $timeout = (int)round($timeout/2+0.00000000001);
         $return = array();
 
@@ -513,10 +536,14 @@ class hdflvplayerModelvideourl extends JModel
         //$return['_response'] = $response;
         //$return['_request'] = $head;
 
+
+
         return $return;
     }
 
-	//Function to get file content from server response.
+
+
+
     function file_get_contents_curl($url) {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -527,14 +554,17 @@ class hdflvplayerModelvideourl extends JModel
         return $data;
     }
 
+
+
+
+
     // THIS FUNCTION CATCHES FLV URL
 
     // INPUT: $url REPRESENTING THE VIDEO PAGE URL
 
     // OUTPUT: ARRAY CONTAINING $location AND $type
 
-    function catchURL()
-    {
+    function catchURL(){
         $url = $this->url;
         $vid_location=array();
         $newInfo = trim($this->file_get_contents_curl($url));
@@ -602,13 +632,23 @@ class hdflvplayerModelvideourl extends JModel
                 $vid_location[2] = $uri;
 
 
+
+
+
+
                 break;
 
             case "bliptv":
 
                 preg_match('/http:\/\/(.*?)blip\.tv\/file\/get\/(.*?)\.flv/', $newInfo, $result);
 
+
+
+
+
                 $vid_location[0] = urldecode($result[0]);
+
+
 
                 break;
 
@@ -627,6 +667,8 @@ class hdflvplayerModelvideourl extends JModel
                 $vid_location[0] = 'http://media1.break.com/dnet/media/'.$resultb.'/'.$resulta.'.flv';
 
 
+
+
                 break;
 
             case "metacafe":
@@ -637,13 +679,20 @@ class hdflvplayerModelvideourl extends JModel
                 $vid_location[0] = urldecode(str_replace('&gdaKey', '?__gda__', $result[0]));
 
 
+
                 break;
 
             case "google":
 
+
+
                 preg_match('/http:\/\/(.*?)googlevideo.com\/videoplayback%3F[^\\\\]+/', $newInfo, $result);
 
+
+
                 $vid_location[0] = urldecode($result[0]);
+
+
 
                 break;
             case "dailymotion":
@@ -656,11 +705,17 @@ class hdflvplayerModelvideourl extends JModel
 
                 break;
 
+
         }
+
 
         return $vid_location;
 
+
+
     } // END catchURL() FUNCTION
+
+
 
 }
 ?>

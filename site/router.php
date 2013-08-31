@@ -24,7 +24,6 @@ function hdflvplayerBuildRoute( &$query )
         $segments[] = $query['id'];
         unset( $query['id'] );
     }
-    
     if (isset($query['page'])) {
         $segments[] = $query['page'];
         unset( $query['page'] );

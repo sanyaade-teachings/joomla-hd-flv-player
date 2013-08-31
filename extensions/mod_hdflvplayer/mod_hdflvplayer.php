@@ -6,7 +6,6 @@
  * @copyright	Copyright (C) 2011 - 2012 Contus Support Interactive Pvt., Limited. All rights reserved.
  * @license	GNU/GPL, see LICENSE.php
  */
-
 ini_set('display_errors',1);
 defined('_JEXEC') or die('Restricted access');
 require_once (dirname(__FILE__).DS.'helper.php');

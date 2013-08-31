@@ -17,7 +17,11 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModellanguagexml extends JModel
 {
-		//Function to get the player language settings from the database.
+	/**
+	 * Gets the greeting
+	 * 
+	 * @return string The greeting to be displayed to the user
+	 */
         function getlanguage()
         {
 

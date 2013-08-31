@@ -17,12 +17,11 @@ class JFormFieldVideonames extends JFormField
 {
     protected $type = 'Videonames';
 
-    //Function to send player parameter fetchElement function.
     function getInput() {
         return $this->fetchElement($this->element['name'], $this->value, $this->element, $this->name);
     }
 
-	//Function to get video details from the database.
+
     function fetchElement($name, $value, &$node, $control_name)
     {
         global $mainframe;
@@ -37,13 +36,13 @@ class JFormFieldVideonames extends JFormField
         $db->setQuery( $query );
         $options = $db->loadObjectList();
         $moduleid="";
-        if(JRequest::getVar('id'))
+        if(isset($_GET['id']))
         {
-            $moduleid=JRequest::getVar('id');
+            $moduleid=$_GET['id'];
         }
-        if(JRequest::getVar('cid'))
+        if(isset($_GET['cid']))
         {
-            $moduleid1=JRequest::getVar('cid');
+            $moduleid1=$_GET['cid'];
             $moduleid=$moduleid1[0];
         }
         if($moduleid!="")
@@ -58,7 +57,6 @@ class JFormFieldVideonames extends JFormField
                 if (strstr($str,'videocat'))
                 {
                     $fileidarr = explode("=",$str);
-                    $fileidarr[7] = isset($fileidarr[7])?$fileidarr[7]:"";
                     $videocat=substr($fileidarr[7],0,1);
                 }
             }

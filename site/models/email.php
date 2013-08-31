@@ -14,15 +14,19 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModelemail extends JModel
 {
-		//Function to send email.
+	/**
+	 * Gets the greeting
+	 * 
+	 * @return string The greeting to be displayed to the user
+	 */
         function getemail()
         {
         
 
-            $to = JRequest::getVar("to");
-            $from = JRequest::getVar("from");
-            
-            $url = JRequest::getVar("url");
+            $to = $_POST["to"];
+            $from = $_POST["from"];
+            //$url = $_POST["url"];
+            $url = $_POST["url"];
 
             $subject = "You have received a video!";
 
@@ -36,19 +40,19 @@ class hdflvplayerModelemail extends JModel
 
             // header information not including sendTo and Subject
             // these all go in one variable.  First, include From:
-            $headers = "From: "."<" . JRequest::getVar("from") .">\r\n";
+            $headers = "From: "."<" . $_POST["from"] .">\r\n";
             // next include a replyto
-            $headers1 .= "Reply-To: " . JRequest::getVar("from") . "\r\n";
+            $headers1 .= "Reply-To: " . $_POST["from"] . "\r\n";
             // often email servers won't allow emails to be sent to
             // domains other than their own.  The return path here will
             // often lift that restriction so, for instance, you could send
             // email to a hotmail account. (hosting provider settings may vary)
             // technically bounced email is supposed to go to the return-path email
-            $headers .= "Return-path: " . JRequest::getVar("from");
+            $headers .= "Return-path: " . $_POST["from"];
 
             // now we can add the content of the message to a body variable
 
-            $message = JRequest::getVar("note") . "\n\n";
+            $message = $_POST["note"] . "\n\n";
             $message .= "Video URL: " . $url;
 
 
@@ -58,7 +62,7 @@ class hdflvplayerModelemail extends JModel
             if(mail($to, $subject, $message, $headers))
             {
                 echo "output=sent";
-                $headers = "From: "."<" . JRequest::getVar("to") .">\r\n";
+                $headers = "From: "."<" . $_POST["to"] .">\r\n";
                 $message="Thank You ";
                 mail($from, $subject, $message, $headers);
             } else {

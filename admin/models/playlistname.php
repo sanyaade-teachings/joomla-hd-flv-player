@@ -9,11 +9,10 @@
 //No direct acesss
 defined('_JEXEC') or die();
 
-jimport( 'joomla.application.component.model' );
+jimport('joomla.application.component.model');
 
 class hdflvplayerModelplaylistname extends JModel {
 
-	//Default function to execute for pagination.
     function __construct()
 	{
 		parent::__construct();
@@ -28,23 +27,16 @@ class hdflvplayerModelplaylistname extends JModel {
 
 	}
 
-	//Function to get data for listing playlist name.
+
 	function playlistnamemodel()
     {
             global $option, $mainframe;
             $app = & JFactory::getApplication();
-            
             // table ordering
             // Default id desc order
             $filter_order     = $app->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'id', 'cmd' );
             $filter_order_Dir = $app->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', 'asc', 'word' );
             $filter_name	= $app->getUserStateFromRequest( $option.'filter_name','filter_name','','string' );
-            
-    		if ($filter_order != "id" && $filter_order != "name") 
-    		{
-	            $filter_order = "id";
-	            $filter_order_Dir = "asc";
-        	}
             // search filter
             $search=$app->getUserStateFromRequest( $option.'search','search','','string' );
             $db =& JFactory::getDBO();
@@ -52,8 +44,7 @@ class hdflvplayerModelplaylistname extends JModel {
             $db->setQuery( $query);
             $rs_showplaylistname1 = $db->loadObjectList();
             jimport('joomla.html.pagination');
-            
-            $pageNav = new JPagination(count($rs_showplaylistname1),  $this->getState('limitstart'), $this->getState('limit'));
+            $pageNav = new JPagination($rs_showplaylistname1,  $this->getState('limitstart'), $this->getState('limit'));
             $where="";
             $query = "SELECT * from #__hdflvplayername";
             $db->setQuery( $query );
@@ -98,5 +89,7 @@ class hdflvplayerModelplaylistname extends JModel {
             return $showarray1;
 
 	}
+  
+
 }
 ?>

@@ -25,13 +25,13 @@ $checklist = $this->checklist;
             <tr>
                 <th width="1%">#</th>
                 <th width="5%">
-                    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_FILENAME');?>
+                    Name of the file/folder
                 </th>
                 <th width="8%">
-                    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_CHECKED');?>
+                    To be checked
                 </th>
                 <th width="6%">
-                    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_STATUS');?>
+                    Status
                 </th>
 
             </tr>
@@ -60,12 +60,12 @@ $checklist = $this->checklist;
                         if($checklist['allow_status']==1)
                         {
                             $color="#339900";
-                            $checklist['allow_status']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_SUCCESS");
+                            $checklist['allow_status']="Success";
                         }
                         else
                         {
                             $color="#FF0000";
-                            $checklist['allow_status']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_ALLOW_STATUS");
+                            $checklist['allow_status']="Failure (allow_url_fopen should be turned On )";
                         }
                         ?>
             <td style="font-weight:bold;color:<?php echo $color ;?>">
@@ -90,12 +90,12 @@ $checklist = $this->checklist;
                         if($checklist['allow_fileuploads']==1)
                         {
                             $color="#339900";
-                            $checklist['allow_fileuploads']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_SUCCESS");
+                            $checklist['allow_fileuploads']="Success";
                         }
                         else
                         {
                             $color="#FF0000";
-                            $checklist['allow_fileuploads']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_FILE_UPLOAD");
+                            $checklist['allow_fileuploads']="Failure (file_uploads should be turned On );";
                         }
                         ?>
             <td style="font-weight:bold;color:<?php echo $color ;?>">
@@ -122,12 +122,12 @@ $checklist = $this->checklist;
             if($checklist['per_video']==1)
             {
                 $color="#339900";
-                $checklist['per_video']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_SUCCESS");
+                $checklist['per_video']="Success";
             }
             else
             {
                 $color="#FF0000";
-                $checklist['per_video']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_FOLDER_PERMISSION"). $path1.JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_FOLDER_PERMISSION_WRITABLE");
+                $checklist['per_video']="Failure (Please make $path1 to writable  )";
             }
             ?>
 
@@ -153,12 +153,12 @@ $checklist = $this->checklist;
                         if($checklist['per_upload']==1)
                         {
                             $color="#339900";
-                            $checklist['per_upload']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_SUCCESS");
+                            $checklist['per_upload']="Success";
                         }
                         else
                         {
                             $color="#FF0000";
-                            $checklist['per_upload']= JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_FOLDER_PERMISSION"). $path.JText::_("COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_FOLDER_PERMISSION_WRITABLE");
+                            $checklist['per_upload']="Failure (Please make $path to writable )";
                         }
                         ?>
 
@@ -195,7 +195,15 @@ $checklist = $this->checklist;
         <table class="">
             <tr>
                 <td>
-                    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_CHECKLIST_TMPL_CHECKLIST_NOTE');?>
+                    <strong>Note :</strong>  Most of the hosting company limit
+                    the upload file size. So, if you have trouble
+                    in uploading large files please consult with
+                    your hosting provider to increase the upload
+                    limit.  Alternatively you can upload files
+                    through FTP and Choose URL to provide the
+                    video path url.
+
+                    Ex :http://www.yourdomain.com/videos/videoname.mp4
 
                 </td>
             </tr>

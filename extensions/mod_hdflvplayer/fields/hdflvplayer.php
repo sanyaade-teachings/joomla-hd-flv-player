@@ -8,21 +8,19 @@
  */
 
 // Check to ensure this file is included in Joomla!
-defined( '_JEXEC' ) or die( 'Restricted access' );
-jimport( 'joomla.html.html' );
-jimport( 'joomla.form.formfield' );
+defined('_JEXEC') or die('Restricted access');
+jimport('joomla.html.html');
+jimport('joomla.form.formfield');
 
 class JFormFieldHdflvplayer extends JFormField
 {
 
     protected $type = 'hdflvplayer';
 
- 	//Function to send player parameter fetchElement function.
- 	function getInput() {
+ function getInput() {
         return $this->fetchElement($this->element['name'], $this->value, $this->element, $this->name);
     }
-	
-    //Function to get playlist name details from the database.
+    
     function fetchElement($name, $value, &$node, $control_name)
     {
         $db =& JFactory::getDBO();
@@ -38,18 +36,18 @@ class JFormFieldHdflvplayer extends JFormField
         $options = $db->loadObjectList();
         $moduleid="";
 
-        if(JRequest::getVar('id'))
+        if(isset($_GET['id']))
         {
-            $moduleid=JRequest::getVar('id');
+            $moduleid=$_GET['id'];
         }
-        if(JRequest::getVar('cid'))
+        if(isset($_GET['cid']))
         {
-            $moduleid1=JRequest::getVar('cid');
+            $moduleid1=$_GET['cid'];
             $moduleid=$moduleid1[0];
         }
         if($moduleid!="")
         {
-
+            
             $qry="Select * from #__modules where id=$moduleid";
             $db->setQuery( $qry );
             $rs_params = $db->loadObjectList();
@@ -57,23 +55,23 @@ class JFormFieldHdflvplayer extends JFormField
             for($k=0;$k<count($no);$k++)
             {
                 $str =$no[$k];
-
+                
                 if (strstr($str,'videocat'))
-                {
+                {  
                     $fileidarr = explode(":",$str);
                      $videocat=substr($fileidarr[8],1,1);
-
-
+                   
+                   
                 }
             }
            $style="display:block;";
             if($videocat=="1")
             {
-
+                
                 echo '<script>
            function hidelbl()
            {
-
+              
             document.getElementById("jformparamsplaylistidplaylistid").style.display="none";
             document.getElementById("jform_params_playlistid-lbl").style.display="none";
             document.getElementById("jformparamsvideoidvideoid").style.display="block";
@@ -84,13 +82,11 @@ window.onload = hidelbl;
             }
             else
             {
-
+               
                 echo '<script>
            function hidelbl() {
-           document.getElementById("jformparamsplaylistidplaylistid").style.display="none";
-            document.getElementById("jform_params_playlistid-lbl").style.display="none";
-            document.getElementById("jformparamsvideoidvideoid").style.display="block";
-            document.getElementById("jform_params_videoid-lbl").style.display="block";
+            document.getElementById("jformparamsvideoidvideoid").style.display="none";
+            document.getElementById("jform_params_videoid-lbl").style.display="none";
 }
 window.onload = hidelbl;
 </script>';
@@ -101,7 +97,6 @@ window.onload = hidelbl;
         {
             echo '<script>
             function hidelbl() {
-
             document.getElementById("jformparamsvideoidvideoid").style.display="none";
             document.getElementById("jform_params_videoid-lbl").style.display="none";
         }

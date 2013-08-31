@@ -17,8 +17,7 @@ jimport('joomla.application.component.model');
 // midroll, postroll, preroll ads model
 
 class hdflvplayerModeladdads extends JModel {
-	
-	//Function to get data from hdflvplayerads table.
+
     function addadsmodel() {
         $rs_ads = & JTable::getInstance('hdflvplayerads', 'Table');
         $add = array('rs_ads' => $rs_ads);

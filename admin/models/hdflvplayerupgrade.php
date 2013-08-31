@@ -13,7 +13,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
-	//Execute when upgrade the HDFLV Player.
+
     function upgrade()
     {
 
@@ -67,8 +67,7 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
 
     }
-	
-    //Function to create hdflvplayerupload table.
+
     function create__hdflvplayerupload($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -130,8 +129,9 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         return $msg;
     }
-	
-    //Function to create hdflvplayername table.
+
+
+
     function create__hdflvplayername($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -166,7 +166,8 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
         return $msg;
     }
 
-	//Function to create hdflvplayersettings table.
+
+
     function create__hdflvplayersettings($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -246,8 +247,7 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         return $msg;
     }
-	
-    //Function to create hdflvplayerlanguage table.
+
     function create__hdflvplayerlanguage($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -314,7 +314,7 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
         return $msg;
     }
 
-	//Function to create hdflvplayerads table.
+
     function create__hdflvplayerads($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -355,7 +355,6 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
         return $msg;
     }
 
-    //Function to create hdflvaddgoogle table.
     function create__hdflvplayeraddgoogle($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -395,8 +394,7 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         return $msg;
     }
-	
-    //Function to check the exists of table.
+
     function check_table($table)
     {
         $db		=& JFactory::getDBO();
@@ -417,8 +415,6 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         return $msg;
     }
-    
-    //Function to insert default value for hdflvplayersettings table.
     function load_data_hdflvplayersettings()
     {
         $db		=& JFactory::getDBO();
@@ -451,7 +447,7 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
         return $msg;
     }
 
-	//Function to insert default value for hdflvplayerlanguage table.
+
     function load_data_hdflvplayerlanguage()
     {
         $db		=& JFactory::getDBO();
@@ -480,8 +476,7 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         return $msg;
     }
-	
-    //Function to upgrade the hdflvplayersettings table.
+
     function upgrade_hdflvplayersettings()
     {
         $msg 	= "";
@@ -538,8 +533,6 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         return $msg;
     }
-    
-    //Function to upgrade the hdflvplayerupload table.
     function upgrade_hdflvplayerupload()
     {
         $msg 	= "";
@@ -571,7 +564,6 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
         return $msg;
     }
 
-    //Function to upgrade the hdflvplayerlanguage table.
     function upgrade_hdflvplayerlanguage()
     {
         $msg 	= "";
@@ -589,7 +581,6 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
         return $msg;
     }
 
-    //Function to upgrade the hdflvplayerads table.
     function upgrade_hdflvplayerads()
     {
         $msg 	= "";
@@ -611,7 +602,6 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
         return $msg;
     }
 
-    //Function to upgrade the columns in all tables.
     function check_column($table, $newcolumn, $newcolumnafter, $newcolumntype = "int(11) 				NOT NULL default '0'")
     {
 
@@ -661,9 +651,8 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         return true;
     }
-	
-    //Function to insert default values to hdflvaddgoogle table.
-	function load_data_hdflvplayergoogleads()
+
+function load_data_hdflvplayergoogleads()
     {
         $db		=& JFactory::getDBO();
         $msg 	= '';
@@ -679,7 +668,7 @@ class hdflvplayerModelhdflvplayerupgrade extends JModel {
 
         if ((strlen(trim($msg)) == 0) && ((int)$result == 0)) {
             $query = "INSERT INTO `#__hdflvaddgoogle` (`id`, `code`, `showoption`, `closeadd`, `reopenadd`, `publish`, `ropen`, `showaddc`, `showaddm`, `showaddp`) VALUES
-		(1, '', '', '', '', '', '', '', '', '');"
+(1, '', '', '', '', '', '', '', '', '');"
             ;
 
             $db->setQuery($query);

@@ -20,8 +20,7 @@ jimport('joomla.application.component.model');
  */
 
 class hdflvplayerModeleditads extends JModel {
-	
-	//Function to get data from database when edit the ads.
+
     function editadsmodel() {
         $db = & JFactory::getDBO();
         $rs_edit = & JTable::getInstance('hdflvplayerads', 'Table');
@@ -53,7 +52,7 @@ class hdflvplayerModeleditads extends JModel {
         // Page Redirect
         $link='index.php?option=com_hdflvplayer&task=ads';
         $app =& JFactory::getApplication();
-            $app->redirect($link, 'Deleted');
+            $app->redirect($link, 'Saved');
 
         
     }

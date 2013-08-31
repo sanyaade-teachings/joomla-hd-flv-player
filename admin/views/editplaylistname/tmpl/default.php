@@ -10,10 +10,10 @@
 /*
  * Description : create play list
  */
+
 // no direct access
 defined('_JEXEC') or die('Restricted access');
 $rs_edit = $this->editplaylist;
-
 $editor = & JFactory::getEditor();
 ?>
 <script type="text/javascript">
@@ -34,22 +34,7 @@ $editor = & JFactory::getEditor();
     return;
 
 }
-    function submitbutton(pressbutton) {
 
-
-        if (pressbutton == "saveplaylistname" || pressbutton=="applyplaylistname")
-        {
-            var bol_file1=(document.getElementById('name').value);
-            if(bol_file1=="")
-                {
-                   alert( "Enter the Playlist Name");
-                    return;
-                }
-        }
-        submitform( pressbutton );
-        return;
-
-    }
 </script>
 
 <form action="index.php?option=com_hdflvplayer&task=playlistname" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
@@ -57,15 +42,16 @@ $editor = & JFactory::getEditor();
     <div class="width-60 fltlft">
 
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_EDITPLAYLISTNAME_TMPL_PLAYLIST_NAME');?></legend>
+            <legend>Playlist Name</legend>
             <table class="adminlist">
-                <tr><td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_EDITPLAYLISTNAME_TMPL_PLAYLIST_NAME');?></td><td><input type="text"  name="name"  id="name" style="width:300px" maxlength="250" value="<?php echo $rs_edit->name; ?>"/></td>
+                <tr><td class="key">Playlist Name</td><td><input type="text"  name="name"  id="name" style="width:300px" maxlength="250" value="<?php echo $rs_edit->name; ?>"/></td>
                 </tr>
                 <tr>
-                    <td class="key"><?php echo JText::_('COM_HDFLVPLAYER_PUBLISHED');?></td>
+                    <td class="key">Published</td>
                     <td>
-                        <input type="radio" style="float:none;" name="published"  value="0" <?php echo ($rs_edit->published == '0')?'checked=checked':""; ?> /><?php echo JText::_('COM_HDFLVPLAYER_NO');?>
-                        <input type="radio" style="float:none;" name="published" value="1" <?php if(!JRequest::getVar('cid')) echo 'checked'; ?> <?php echo ($rs_edit->published == '1')?"checked":"";?> /><?php echo JText::_('COM_HDFLVPLAYER_YES');?>
+                        <input type="radio" style="float:none;" name="published" checked value="0" <?php if ($rs_edit->published == '0') ?> />No
+                        <input type="radio" style="float:none;" name="published"  value="1" <?php if ($rs_edit->published == '1')
+     echo 'checked'; ?> />Yes
                     </td>
                 </tr>
             </table>

@@ -54,7 +54,7 @@ class hdflvplayerController extends JController {
         $view->playget();
     }
 
-	// midroll ads for player
+// midroll ads for player
      function midrollxml() {
         $view = & $this->getView('midrollxml');
         if ($model = & $this->getModel('midrollxml')) {
@@ -106,7 +106,7 @@ class hdflvplayerController extends JController {
         $view->emailplayer();
     }
 
-	//googleadds for player
+//googleadds for player
     function googleadd() {
         $view = & $this->getView('googleadd');
         if ($model = & $this->getModel('googleadd')) {
@@ -115,7 +115,7 @@ class hdflvplayerController extends JController {
         $view->googlescript();
     }
 
-	// lanugagexml for player
+// lanugagexml for player
     function languagexml() {
         $view = & $this->getView('language');
         if ($model = & $this->getModel('languagexml')) {
@@ -124,7 +124,7 @@ class hdflvplayerController extends JController {
         $view->language();
     }
 
-	// Google Adds counts
+// Google Adds counts
     function addview() {
         $view = & $this->getView('addcount');
         if ($model = & $this->getModel('addview')) {
@@ -133,7 +133,7 @@ class hdflvplayerController extends JController {
         $view->getaddview();
     }
 
-	// viewed Ad's for player
+// viewed Ad's for player
     function impressionclicks() {
         $view = & $this->getView('impressionclicks');
         if ($model = & $this->getModel('impressionclicks')) {

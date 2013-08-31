@@ -107,9 +107,9 @@ if(count($rs_lang)>0)
     echo'<furl>';
     echo '<![CDATA['.$rs_lang[0]->furl.']]>';
     echo '</furl>';
-    echo '<adindicator><![CDATA[Your selection will follow this sponsors message in - seconds]]>';
+    echo '<adindicator><![CDATA[Your selection will follow this sponsorss message in - seconds]]>';
     echo '</adindicator>';
-    echo '<Skip><![CDATA[Skip this Ad]]></Skip>';
+    echo '<Skip><![CDATA[Skip this Video]]></Skip>';
     echo '<errormessage><![CDATA['.$rs_lang[0]->errormessage.']]></errormessage>';
     echo '<buttonname><![CDATA['.$rs_lang[0]->btnname.']]></buttonname>';
     echo '</language>';

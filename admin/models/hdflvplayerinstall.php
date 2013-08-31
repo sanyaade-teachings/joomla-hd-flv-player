@@ -13,7 +13,7 @@ jimport('joomla.application.component.modelist');
 
 class hdflvplayerModelhdflvplayerinstall extends JModelist {
 
-	//Execute when installing extention.
+
     function install()
     {
         
@@ -60,8 +60,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
             $app->redirect($link, 'Saved');
 
     }
-	
-    //Function to create hdflvplayerupload tables.
+
     function create__hdflvplayerupload($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -126,7 +125,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
     }
 
 
-	//Function to create hdflvplayername tables.
+
     function create__hdflvplayername($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -162,7 +161,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
     }
 
 
-	//Function to create hdflvplayersettings tables.
+
     function create__hdflvplayersettings($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -246,8 +245,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
 
         return $msg;
     }
-	
-    //Function to create hdflvplayerlanguage tables.
+
     function create__hdflvplayerlanguage($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -314,7 +312,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
         return $msg;
     }
 
-	//Function to create hdflvplayerads tables.
+
     function create__hdflvplayerads($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -358,8 +356,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
 
         return $msg;
     }
-	
-    //Function to create hdflvaddgoogle tables.
+
     function create__hdflvplayeraddgoogle($drop = false)
     {
         $db		=& JFactory::getDBO();
@@ -399,8 +396,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
 
         return $msg;
     }
-	
-    //Check tables exists when install extension.
+
     function check_table($table)
     {
         $db		=& JFactory::getDBO();
@@ -421,8 +417,6 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
 
         return $msg;
     }
-    
-    //Function to insert default values to hdflvplayersettings table.
     function load_data_hdflvplayersettings()
     {
         $db		=& JFactory::getDBO();
@@ -460,7 +454,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
         return $msg;
     }
 
-	//Function to insert default values to hdflvplayerlanguage table.
+
     function load_data_hdflvplayerlanguage()
     {
         $db		=& JFactory::getDBO();
@@ -490,7 +484,7 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
         return $msg;
     }
 
-	//Function to insert default values to hdflvaddgoogle table.
+
      function load_data_hdflvplayergoogleads()
     {
         $db		=& JFactory::getDBO();
@@ -520,34 +514,36 @@ class hdflvplayerModelhdflvplayerinstall extends JModelist {
         return $msg;
     }
 
-    //Function to insert default values to hdflvplayername table.
-	function load_data_hdflvplayername()
-	    {
-	        $db		=& JFactory::getDBO();
-	        $msg 	= '';
-	
-	        $query = "SELECT Count(*) FROM `#__hdflvplayername`;";
-	
-	        $db->setQuery($query);
-	        $result = $db->loadResult();
-	
-	        if ($db->getErrorNum()) {
-	            $msg .= $db->getErrorMsg() . '<br />';
-	        }
-	
-	        if ((strlen(trim($msg)) == 0) && ((int)$result == 0)) {
-	            $query = "INSERT INTO `#__hdflvplayername` (`id`, `name`,`published`) VALUES
-	                (1, 'None', 1);" ;
-	
-	            $db->setQuery($query);
-	
-	            if (!$db->query()) {
-	                $msg .= $db->stderr() . '<br />';
-	            }
-	        }
-	
-	        return $msg;
-	    }
+function load_data_hdflvplayername()
+    {
+        $db		=& JFactory::getDBO();
+        $msg 	= '';
+
+        $query = "SELECT Count(*) FROM `#__hdflvplayername`;";
+
+        $db->setQuery($query);
+        $result = $db->loadResult();
+
+        if ($db->getErrorNum()) {
+            $msg .= $db->getErrorMsg() . '<br />';
+        }
+
+        if ((strlen(trim($msg)) == 0) && ((int)$result == 0)) {
+            $query = "INSERT INTO `#__hdflvplayername` (`id`, `name`,`published`) VALUES
+                (1, 'None', 1);" ;
+
+            $db->setQuery($query);
+
+            if (!$db->query()) {
+                $msg .= $db->stderr() . '<br />';
+            }
+        }
+
+        return $msg;
+    }
+
+
+
 
 }
 ?>

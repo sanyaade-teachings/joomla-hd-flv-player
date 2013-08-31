@@ -15,7 +15,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModelimpressionclicks extends JModel {
 
-	//Function to update the click and impression hits.
+
     function impressionclicks()
     {
 

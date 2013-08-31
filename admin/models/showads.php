@@ -24,7 +24,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModelshowads extends JModel {
 
-	//Default function to execute for pagination.
+
     function __construct()
 	{
 
@@ -39,7 +39,7 @@ class hdflvplayerModelshowads extends JModel {
 		$this->setState('limitstart', JRequest::getVar('limitstart', 0, '', 'int'));
 	}
 
-	//Function to display the ads list.
+
     function showadsmodel() {
         global $mainframe;
         global $option;
@@ -52,12 +52,12 @@ class hdflvplayerModelshowads extends JModel {
             $filter_adsname	= $app->getUserStateFromRequest( $option.'filter_adsname','filter_adsname','','string' );
 
 
-			// normal display section
+// normal display section
             $db = & JFactory::getDBO();
             $query = "SELECT * FROM #__hdflvplayerads";
             $db->setQuery($query);
             $rs_showads = $db->loadObjectList();
-       		// return $rs_showads;
+       // return $rs_showads;
 
             // search filter
             $search=$app->getUserStateFromRequest( $option.'search','search','','string' );
@@ -86,7 +86,7 @@ class hdflvplayerModelshowads extends JModel {
                 $db->setQuery( $query );
                 $rs_showads = $db->loadObjectList();
             }
- 			// search filter
+ // search filter
             if ($search)
             {
                 //$query = "SELECT * FROM #__hdflvplayerupload where title LIKE '$search%'";
@@ -118,17 +118,15 @@ class hdflvplayerModelshowads extends JModel {
 
 
 
-		//        global $mainframe;
-		//        $db = & JFactory::getDBO();
-		//        $query = "SELECT * FROM #__hdflvplayerads";
-		//        $db->setQuery($query);
-		//        $rs_showads = $db->loadObjectList();
-		//        return $rs_showads;
+//        global $mainframe;
+//        $db = & JFactory::getDBO();
+//        $query = "SELECT * FROM #__hdflvplayerads";
+//        $db->setQuery($query);
+//        $rs_showads = $db->loadObjectList();
+//        return $rs_showads;
     }
 
-    //Function to save the new ads.
-    function saveads($task) 
-    {
+    function saveads($task) {
         global $option, $mainframe;
         $option= 'com_hdflvplayer';
         $db = & JFactory::getDBO();
@@ -144,7 +142,7 @@ class hdflvplayerModelshowads extends JModel {
         $rs_save->adsdesc = JRequest::getVar('adsdesc', '', 'post', 'string', JREQUEST_ALLOWRAW);
         $rs_save->adsname = JRequest::getVar('adsname', '', 'post', 'string', JREQUEST_ALLOWRAW);
 
-        $fileoption = JRequest::getVar('fileoption');
+        $fileoption = $_POST['fileoption'];
         $vpath = VPATH1 . "/";
 
         if (!$rs_save->store()) {
@@ -156,14 +154,14 @@ class hdflvplayerModelshowads extends JModel {
 
 
         if ($fileoption == "Url") {
-            $postvideopath = JRequest::getVar('posturl-value');
+            $postvideopath = $_POST['posturl-value'];
             $query = "update #__hdflvplayerads SET filepath='$fileoption',postvideopath='$postvideopath' where id=$rs_save->id";
             $db->setQuery($query);
             $db->query();
         }
 
         if ($fileoption == "File" || $fileoption == "") {   // Checked for file option
-            $normal_video = JRequest::getVar('normalvideoform-value');
+            $normal_video = $_POST['normalvideoform-value'];
             $video_name = explode("uploads/", $normal_video);
             $vpath = VPATH1 . "/";
             $file_video = $video_name[1];
@@ -200,26 +198,26 @@ class hdflvplayerModelshowads extends JModel {
 
 
 
-	    // copying uploaded pre/post roll video to local host
-	
-	 /*   function copytovideos($vpath2, $targetpath, $vmfile, $idval, $dbname, $option, $newupload, $filepath) {
-	        global $mainframe;
-	        $option = JRequest::getCmd('option');
-	        $db = & JFactory::getDBO();
-	        $targetpath1 = $targetpath;
-	        if ($newupload == 1) {
-	            if (file_exists($targetpath)) {
-	                unlink($targetpath);
-	            }
-	        }
-	        rename($vpath2, $targetpath1);
-	        $query = "update #__hdflvplayerads set $dbname='$vmfile',filepath='$filepath' WHERE id = $idval ";
-	        $db->setQuery($query);
-	        $db->query();
-	    }
-	*/
+    // copying uploaded pre/post roll video to local host
 
-    // Extracting extension from uploading files
+ /*   function copytovideos($vpath2, $targetpath, $vmfile, $idval, $dbname, $option, $newupload, $filepath) {
+        global $mainframe;
+        $option = JRequest::getCmd('option');
+        $db = & JFactory::getDBO();
+        $targetpath1 = $targetpath;
+        if ($newupload == 1) {
+            if (file_exists($targetpath)) {
+                unlink($targetpath);
+            }
+        }
+        rename($vpath2, $targetpath1);
+        $query = "update #__hdflvplayerads set $dbname='$vmfile',filepath='$filepath' WHERE id = $idval ";
+        $db->setQuery($query);
+        $db->query();
+    }
+*/
+
+    // extracting extension from uploading files
     function findexts($filename) {
         $filename = strtolower($filename);
         $exts = split("[/\\.]", $filename);

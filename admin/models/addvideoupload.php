@@ -13,7 +13,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModeladdvideoupload extends JModel {
 
-	//Function to get data related to new video upload.
+
 	function addvideouploadmodel()
     {
                 $db =& JFactory::getDBO();
@@ -74,15 +74,8 @@ class hdflvplayerModeladdvideoupload extends JModel {
         $query = "SELECT id,adsname FROM #__hdflvplayerads  where typeofadd = 'mid' order by adsname asc";
         $db->setQuery( $query);
         $rs_midads = $db->loadObjectList();
-   if(version_compare(JVERSION,'1.6.0','ge'))
-        {
-        $query = "SELECT id,title FROM #__usergroups order by id asc";
-        }
-        else
-        {
-      $query = "SELECT id,name FROM #__groups order by id asc";
-        }
-       
+
+          $query = "SELECT id,title FROM #__usergroups order by id asc";
         $db->setQuery( $query);
         $rs_access = $db->loadObjectList();
 

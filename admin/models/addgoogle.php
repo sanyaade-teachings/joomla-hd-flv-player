@@ -13,7 +13,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModeladdgoogle extends JModel {
 
-	//Function to get data from hdflvaddgoogle table.
+
     function addgooglemodel() {
         $db =& JFactory::getDBO();
         $rs_addgoogle =& JTable::getInstance('hdflvaddgoogle', 'Table');
@@ -27,7 +27,7 @@ class hdflvplayerModeladdgoogle extends JModel {
         return $rs_addgoogle;
     }
 
-	//Function to save the google adsense data.
+
     function saveaddgoogle($task) {
         $option = 'com_hdflvplayer';
         global $mainframe;
@@ -35,21 +35,21 @@ class hdflvplayerModeladdgoogle extends JModel {
         $rs_saveaddgoogle =& JTable::getInstance('hdflvaddgoogle', 'Table');
         $id = 1;
 
-        if(JRequest::getVar('showoption') == '0') {
-            JRequest::setVar('closeadd','','post');
+        if($_POST['showoption'] == '0') {
+            $_POST['closeadd'] = '';
         }
-        if(JRequest::getVar('reopenadd')) {
-            JRequest::setVar('reopenadd','1','post');
-            JRequest::setVar('ropen','','post');
+        if(!isset($_POST['reopenadd'])) {
+            $_POST['reopenadd'] = '1';
+            $_POST['ropen'] = '';
         }
-        if(JRequest::getVar('showaddc')) {
-            JRequest::setVar('showaddc','0','post');
+        if(!isset($_POST['showaddc'])) {
+            $_POST['showaddc'] ='0';
         }
-        if(JRequest::getVar('showaddm')) {
-            JRequest::setVar('showaddm','0','post');
+        if(!isset($_POST['showaddm'])) {
+            $_POST['showaddm'] ='0';
         }
-        if(JRequest::getVar('showaddp')) {
-            JRequest::setVar('showaddp','0','post');
+        if(!isset($_POST['showaddp'])) {
+            $_POST['showaddp'] ='0';
         }
 
         $rs_saveaddgoogle->load($id);
@@ -57,7 +57,7 @@ class hdflvplayerModeladdgoogle extends JModel {
       
 
 
-        if (!$rs_saveaddgoogle->bind(JRequest::get('post'))) {
+        if (!$rs_saveaddgoogle->bind($_POST)) {
             echo "<script> alert('".$rs_saveaddgoogle->getError()."');window.history.go(-1); </script>\n";
             exit();
         }
@@ -70,11 +70,11 @@ class hdflvplayerModeladdgoogle extends JModel {
                 $msg = 'Changes Saved';
                 $link = 'index.php?option=' . $option .'&task=addgoogle';
                 break;
-            //case 'saveaddgoogle':
-                //default:
-                    //$msg = 'Saved';
-                    //$link = 'index.php?option=' . $option.'&task=addgoogle';
-                    //break;
+            case 'saveaddgoogle':
+                default:
+                    $msg = 'Saved';
+                    $link = 'index.php?option=' . $option.'&task=addgoogle';
+                    break;
             }
             // page redirect
             $app =& JFactory::getApplication();

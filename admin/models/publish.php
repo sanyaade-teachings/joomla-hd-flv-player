@@ -9,11 +9,11 @@
 //No direct acesss
 defined('_JEXEC') or die();
 
-jimport( 'joomla.application.component.model' );
+jimport('joomla.application.component.model');
 
 class hdflvplayerModelpublish extends JModel {
 
-	//Functon to publish or unpublish the data for front-end display.
+
 	function publishmodel($task)
     {
             $option = 'com_hdflvplayer';
@@ -32,6 +32,7 @@ class hdflvplayerModelpublish extends JModel {
             $taskname="";
 
             $taskname=JRequest::getvar('task','','get','var');
+            
 
             if($taskname=="uploadvideos")
             {
@@ -48,11 +49,9 @@ class hdflvplayerModelpublish extends JModel {
                 $tblname="hdflvplayername";
                 $taskname="playlistname";
             }
-
             $reviewTable =& JTable::getInstance($tblname, 'Table');
             $reviewTable->publish($cid, $publish);
             $link='index.php?option=' . $option.'&task='.$taskname;
-            $msg=isset($msg)?$msg:'';
             JFactory::getApplication()->redirect($link, $msg);
        
     }

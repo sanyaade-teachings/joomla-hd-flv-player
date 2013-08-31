@@ -13,7 +13,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModeluseraccess extends JModel {
 
-	//function to get user access for the video.
+
     function useraccessmodel($id, $access )
     {
        global $mainframe;

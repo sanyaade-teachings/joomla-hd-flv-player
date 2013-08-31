@@ -12,8 +12,6 @@ defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
 class hdflvplayerModelresethits extends JModel {
-	
-	//Function to reset the view hits of video in database.
     function resethitsmodel($task)
     {
         global $mainframe;

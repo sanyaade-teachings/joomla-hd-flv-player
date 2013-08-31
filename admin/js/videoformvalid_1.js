@@ -92,15 +92,6 @@ function urlvisible()
 
 
 }
-function urlvisible1()
-{
-    document.getElementById('ffmpeg_disable_new5').style.display="";
-    document.getElementById('ffmpeg_disable_new6').style.display="";
-    document.getElementById('ffmpeg_disable_new7').style.display="";
-    document.getElementById('ffmpeg_disable_new8').style.display="none";
-
-
-}
 
 function withoutflashhide()
 {
@@ -168,7 +159,6 @@ function streamer1(streamername)
         document.getElementById("filepath4").disabled=false;
         document.getElementById('fileoption').value='File';
         withoutflashvisible();
-        //urlvisible();
         urlhide();
 
     }
@@ -183,7 +173,7 @@ function streamer1(streamername)
         document.getElementById("filepath4").disabled=true;
         document.getElementById('fileoption').value='Url';
         withoutflashhide();
-        urlvisible1();
+        urlvisible();
     }
     else if(streamername=="rtmp")
     {
@@ -195,7 +185,7 @@ function streamer1(streamername)
         document.getElementById("filepath4").disabled=true;
         document.getElementById('fileoption').value='Url';
         withoutflashhide();
-        urlvisible1();
+        urlvisible();
     }
 
 

@@ -12,40 +12,21 @@ $editor =& JFactory::getEditor();
 ?>
 
 <script language="JavaScript" type="text/javascript">
-	var COM_HDFLVPLAYER_JERR_ENTER_GOOGLEAD_SCRIPT = '<?php echo JText::_("COM_HDFLVPLAYER_JERR_ENTER_GOOGLEAD_SCRIPT");?>'
      Joomla.submitbutton = function(pressbutton) {
 
-if (pressbutton == "saveaddgoogle" || pressbutton=="applyaddgoogle" || pressbutton == "cancel")
+if (pressbutton == "saveaddgoogle" || pressbutton=="applyaddgoogle")
     {
 
             var names=document.getElementById('name').value;
-            if(names=="" && pressbutton != "cancel")
+            if(names=="")
                 {
-                    alert(COM_HDFLVPLAYER_JERR_ENTER_GOOGLEAD_SCRIPT);
+                    alert("Enter Google Adsense Script");
                     return;
                 }
                 
                         submitform( pressbutton );
                          return;
                 
-     }
-     }
-
-       function submitbutton(pressbutton){
-
-if (pressbutton == "saveaddgoogle" || pressbutton=="applyaddgoogle" || pressbutton == "cancel")
-    {
-
-            var names=document.getElementById('name').value;
-            if(names=="" && pressbutton != "cancel")
-                {
-                    alert(COM_HDFLVPLAYER_JERR_ENTER_GOOGLEAD_SCRIPT);
-                    return;
-                }
-
-                        submitform( pressbutton );
-                         return;
-
      }
      }
  </script>
@@ -53,15 +34,15 @@ if (pressbutton == "saveaddgoogle" || pressbutton=="applyaddgoogle" || pressbutt
 <form action="index.php?option=com_hdflvplayer&task=addgoogle" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
     <div class="width-60 fltlft">
 <fieldset class="adminform">
-        <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_ADDS');?></legend>
+        <legend>Google Adds</legend>
          <table class="adminlist">
                         <thead>
                             <tr>
                                 <th>
-        					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_SETTINGS');?>
+        					Settings
                                 </th>
                                 <th>
-        					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_VALUE');?>
+        					Value
                                 </th>
                             </tr>
                         </thead>
@@ -72,23 +53,23 @@ if (pressbutton == "saveaddgoogle" || pressbutton=="applyaddgoogle" || pressbutt
                             </tr>
                         </tfoot>
                         <tbody>
-               <tr><td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_ENTER_CODE');?><div style="clear:both;font-size:12px;color:Red;"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_ADSENSE_BANNER');?></div></td><td colspan="3"><textarea rows="10" cols="60" name="code"  id="name" ><?php echo (stripslashes($rs_edit->code));?></textarea></td></tr>
-            <tr><td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_OPTION');?></td>
+            <tr><td class="key"> Enter the Code:</td><td colspan="3"><textarea rows="10" cols="60" name="code"  id="name" ><?php echo (stripslashes($rs_edit->code));?></textarea></td></tr>
+            <tr><td class="key">Option</td>
                 <td>
-                    <input type="radio" style="float:none;" name="showoption" value="0" checked ><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_ALWAYS_SHOW');?>
+                    <input type="radio" style="float:none;" name="showoption" value="0" checked >Always Show
                     <input type="radio" name="showoption" style="float:none;" value=1  <?php if($rs_edit->showoption == '1') echo 'checked'; ?> />
-                    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_CLOSE_AFTER');?><input type="text"  style="float:none;" name="closeadd" value=<?php echo $rs_edit->closeadd; ?> >&nbsp;<?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_SECOND');?>
+                    Close After:<input type="text"  style="float:none;" name="closeadd" value=<?php echo $rs_edit->closeadd; ?> >&nbsp;Sec
                 </td>
             </tr>
-            <tr><td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_REOPEN');?></td><td><input type="checkbox"  name="reopenadd" value="0"  <?php if($rs_edit->reopenadd == '0') echo 'checked'; ?> />&nbsp;&nbsp;<?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_REOPEN_AFTER');?><input type="text" style="float:none;" name="ropen" value=<?php echo $rs_edit->ropen; ?> >&nbsp;<?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_SECOND');?></td></tr>
+            <tr><td class="key">Reopen</td><td><input type="checkbox"  name="reopenadd" value="0"  <?php if($rs_edit->reopenadd == '0') echo 'checked'; ?> />&nbsp;&nbsp;Re-open After:<input type="text" style="float:none;" name="ropen" value=<?php echo $rs_edit->ropen; ?> >&nbsp;Sec</td></tr>
             <tr>
-                <td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_SHOW_ADSIN');?></td>
-                <td><input type="checkbox" style="float:none;" name="showaddc" value="1"  <?php if($rs_edit->showaddc == '1') echo 'checked'; ?> /><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_COMPONENT');?> &nbsp;&nbsp;
-                    <input type="checkbox" style="float:none;" name="showaddp" value="1"  <?php if($rs_edit->showaddp == '1') echo 'checked'; ?> /><?php echo JText::_('COM_HDFLVPLAYER_VIEW_ADDGOOGLE_TMPL_PLUGIN');?> &nbsp;&nbsp;
+                <td class="key">Show Ads in:</td>
+                <td><input type="checkbox" style="float:none;" name="showaddc" value="1"  <?php if($rs_edit->showaddc == '1') echo 'checked'; ?> />Component &nbsp;&nbsp;
+                    <input type="checkbox" style="float:none;" name="showaddp" value="1"  <?php if($rs_edit->showaddp == '1') echo 'checked'; ?> />Plugin &nbsp;&nbsp;
                 </td>
             </tr>
-            <tr><td class="key"><?php echo JText::_('COM_HDFLVPLAYER_PUBLISHED');?></td>
-                <td><input type="radio" style="float:none;" name="publish" value="0" checked="checked" /><?php echo JText::_('COM_HDFLVPLAYER_NO');?><input type="radio"  style="float:none;margin-left:8px;" name="publish"   value=1  <?php if($rs_edit->publish == '1') echo 'checked'; ?> /><?php echo JText::_('COM_HDFLVPLAYER_YES');?></td></tr>
+            <tr><td class="key">Published</td>
+                <td><input type="radio" style="float:none;" name="publish" value="0" checked="checked" />No<input type="radio"  style="float:none;" name="publish"   value=1  <?php if($rs_edit->publish == '1') echo 'checked'; ?> />Yes</td></tr>
                         </tbody>
         </table>
     </fieldset>

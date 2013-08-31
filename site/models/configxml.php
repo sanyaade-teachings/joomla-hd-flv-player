@@ -18,12 +18,11 @@ jimport('joomla.application.component.modellist');
 jimport( 'joomla.html.parameter' );
 
 // generating player configuration file
-class hdflvplayerModelconfigxml extends JModel {
+class hdflvplayerModelconfigxml extends JModelList {
 
     var $current_path = "/";
     var $base;
-	
-    //Function to get configuration for the player from database.
+
     function configgetrecords() {
         global $mainframe;
         $base = JURI::base();
@@ -37,7 +36,6 @@ class hdflvplayerModelconfigxml extends JModel {
         $query = "select * from #__hdflvplayersettings";
         $db->setQuery($query);
         $settingsrows = $db->loadObjectList();
-     
          $midrollads=true;
 
        
@@ -85,12 +83,10 @@ class hdflvplayerModelconfigxml extends JModel {
 
         $this->configxml($rs_modulesettings, $settingsrows, $video, $previewimage, $hdvideo, $hd_bol, $playid, $itemid, $playid_playlistname, $moduleid, $comppid, $this->$base, $midrollads);
     }
-	
-	  //Function to get the player settings and display as per settings.    
-      function configxml($rs_modulesettings, $settingsrows, $video, $previewimage, $hdvideo, $hd_bol, $playid, $itemid, $playid_playlistname, $moduleid, $comppid, $base, $allowmidrollads) 
-      {
+
+      function configxml($rs_modulesettings, $settingsrows, $video, $previewimage, $hdvideo, $hd_bol, $playid, $itemid, $playid_playlistname, $moduleid, $comppid, $base, $allowmidrollads) {
         global $mainframe;
-        $skin = $base . "components/com_hdflvplayer/hdflvplayer/skin/" . $settingsrows[0]->skin;
+        $skin = $base . "/components/com_hdflvplayer/hdflvplayer/skin/" . $settingsrows[0]->skin;
         $playerdb = & JFactory::getDBO();
         $query = "select * from #__hdflvplayerupload where id=$playid";
         $playerdb->setQuery($query);
@@ -152,7 +148,7 @@ else
             $hddefault="false";
         $playlistxml = "";
         $playlist = "false";
-        if ($settingsrows[0]->related_videos == "1" || $settingsrows[0]->related_videos == "4") {
+        if ($settingsrows[0]->related_videos == "1" || $settingsrows[0]->related_videos == "3") {
             $playlist = "true";
         }
         $license = "";
@@ -180,12 +176,11 @@ else
         ($settingsrows[0]->prerollads == 0) ? $prerollads = "false" : $prerollads = "true";
         ($settingsrows[0]->ads == 0) ? $ads = "false" : $ads = "true";
         ($settingsrows[0]->vast == 0) ? $vast = "false" : $vast = "true";
-        ($settingsrows[0]->midrollads == 0) ? $midrollads = "false" : $midrollads = "true";
+        
         ($settingsrows[0]->scaletohide == 0) ? $scaletohide = "false" : $scaletohide = "true";
         ($settingsrows[0]->embedcode_visible == 0) ? $embedcode_visible = "false" : $embedcode_visible = "true";
         ($settingsrows[0]->vquality == 1) ? $vquality = "small" : $vquality = "medium";
         $vast_pid = $settingsrows[0]->vast_pid;
-          $playlistxml = $base . "components/com_hdflvplayer/models/playxml.php";
         if ($rs_modulesettings != "") {
             $app = JFactory::getApplication();
             $params = $app->getParams('mod_hdflvplayer');
@@ -207,8 +202,8 @@ else
            
             $autoplay = $params->get('autoplay');
             ($autoplay == 0) ? $autoplay = "false" : $autoplay = "true";
-            $playlist_autoplay = $params->get('playlist_autoplay');
-            ($playlist_autoplay == 0) ? $playlist_autoplay = "false" : $playlist_autoplay = "true";
+            $playlistauto = $params->get('playlistauto');
+            ($playlistauto == 0) ? $playlist_autoplay = "false" : $playlist_autoplay = "true";
             $buffer = $params->get('buffer');
             $height = $params->get('height');
             $width = $params->get('width');
@@ -229,39 +224,48 @@ else
             $playlistopen = $params->get('playlist_open');
             ($playlistopen == 0) ? $playlist_open = "false" : $playlist_open = "true";
         }
-        $playlistxml =$base ."index.php?option=com_hdflvplayer&task=playxml";
+        $playlistxml ="index.php?option=com_hdflvplayer&task=playxml";
         if ($moduleid != "") {
             if ($playid != "")
-                $playlistxml = $base ."index.php?option=com_hdflvplayer&task=playxml&id=$playid&mid=$moduleid";
+                $playlistxml = "index.php?option=com_hdflvplayer&task=playxml&id=$playid&mid=$moduleid";
             else
                 
-               $playlistxml=$base ."index.php?option=com_hdflvplayer&task=playxml&playid=$playid_playlistname&mid=$moduleid";
+               $playlistxml="index.php?option=com_hdflvplayer&task=playxml&playid=$playid_playlistname&mid=$moduleid";
         }
         elseif ($playid_playlistname != "" && $playid != 0) {
-            $playlistxml =  $base ."index.php?option=com_hdflvplayer&task=playxml&playid=$playid_playlistname&id=$playid";
+            $playlistxml =  "index.php?option=com_hdflvplayer&task=playxml&playid=$playid_playlistname&id=$playid";
         } elseif ($playid != 0) {
-            $playlistxml =  $base ."index.php?option=com_hdflvplayer&task=playxml&id=$playid";
+            $playlistxml =  "index.php?option=com_hdflvplayer&task=playxml&id=$playid";
         }
 
         if ($playid_playlistname == "true" && $moduleid == "") {
-            $playlistxml =  $base ."index.php?option=com_hdflvplayer&task=playxml&id=$playid&playid=true";
+            $playlistxml =  "index.php?option=com_hdflvplayer&task=playxml&id=$playid&playid=true";
         }
         if ($comppid != '') {
-            $playlistxml = $base ."index.php?option=com_hdflvplayer&task=playxml&compid=$comppid&id=$playid";
+            $playlistxml = "index.php?option=com_hdflvplayer&task=playxml&compid=$comppid&id=$playid";
         }
    
 
 // mid ads
 
 
-         $midadsxml = $base . "index.php?option=com_hdflvplayer&task=midrollxml";
+         $midadsxml = "index.php?option=com_hdflvplayer&task=midrollxml";
+       
+
+
+
+
+
+
+
+
 //compid=$comppid&id=$playid&
         $emailpath = $base . "components/com_hdflvplayer/hdflvplayer/email.php";
         $logopath = $base . "/components/com_hdflvplayer/videos/" . $settingsrows[0]->logopath;
-        $languagexml = $base ."index.php?option=com_hdflvplayer&task=languagexml";
-        $adsxml = $base . "index.php?option=com_hdflvplayer&task=adsxml";
+        $languagexml = "index.php?option=com_hdflvplayer&task=languagexml";
+        $adsxml = "index.php?option=com_hdflvplayer&task=adsxml";
         //$midadsxml = $base . "index.php?option=com_hdflvplayer&task=midrollxml";
-        $videoshareurl = $base ."index.php?option=com_hdflvplayer&task=videourl";
+        $videoshareurl = "index.php?option=com_hdflvplayer&task=videourl";
         $locaiton = $base . "index.php?option=com_hdflvplayer";
         $cssurl = $base . "components/com_hdflvplayer/hdflvplayer/css/midrollformat.css";
         $language = JRequest::getVar('lang');
@@ -302,7 +306,7 @@ else
               embed_visible="' . $embedcode_visible . '"
               playlistXML="' . $playlistxml . '"
               adXML="' . JRoute::_($adsxml) . '"
-             midrollXML="' . $midadsxml . '"
+              midrollXML="' .JRoute::_($midadsxml). '"
               languageXML="' . JRoute::_($languagexml) . '"
               cssURL="' . $cssurl . '"
               debug="true"

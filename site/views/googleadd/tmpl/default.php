@@ -11,6 +11,7 @@
 // no direct access
 
 defined('_JEXEC') or die('Restricted access');
+
 echo $this->detail;
 $link = JRoute::_( 'index.php?option=com_hdflvplayer&task=videourl');
 echo "<a href=\"".$link."\">task=videourl</a>";

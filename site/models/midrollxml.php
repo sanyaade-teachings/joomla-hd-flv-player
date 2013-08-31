@@ -18,8 +18,14 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModelmidrollxml extends JModel {
 
-	//Funtion to get ads from the database.
+    /**
+     * Gets the greeting
+     *
+     * @return string The greeting to be displayed to the user
+     */
     function getads() {
+
+    
 
         global $mainframe;
         $db =& JFactory::getDBO();
@@ -37,12 +43,16 @@ class hdflvplayerModelmidrollxml extends JModel {
         $playlistrandom="false";
 
 
- $query="SELECT a.* FROM `#__hdflvplayerads` as a WHERE a.published=1 and typeofadd='mid' ";
- $db->setQuery($query);
+    $query="SELECT a.* FROM `#__hdflvplayerads` as a WHERE a.published=1 and typeofadd='mid' ";
+ $db->setQuery( $query );
 
 $rs_modulesettings = $db->loadObjectList();
 
-     $qry_settings = "select * from #__hdflvplayersettings LIMIT 1 "; //and home=1";//and id=11;";
+   
+
+
+ 
+        $qry_settings = "select * from #__hdflvplayersettings LIMIT 1 "; //and home=1";//and id=11;";
         $db->setQuery($qry_settings);
 
             $rs_random = $db->loadObjectList();
@@ -60,9 +70,12 @@ $rs_modulesettings = $db->loadObjectList();
             $this->showadsxml($rs_modulesettings, $random, $begin, $interval, $adrotate);
             }
 
+
+
+
         }
     
-	//Function to display the ads in the video.
+
     function showadsxml($midroll_video, $random, $begin, $interval, $adrotate) {
         ob_clean();
         header("content-type: text/xml");
@@ -72,7 +85,7 @@ $rs_modulesettings = $db->loadObjectList();
        if (count($midroll_video) > 0) {
             foreach ($midroll_video as $rows) {
 if($rows->clickurl=='')
-       $clickpath = JURI::base() . '?option=com_hdflvplayer&task=impressionclicks&click=click&id='.$rows->id;
+        $clickpath = JURI::base() . '?option=com_hdflvplayer&task=impressionclicks&click=click&id='.$rows->id;
 else
 $clickpath = $rows->clickurl;
 
@@ -80,6 +93,7 @@ if($rows->impressionurl=='')
         $impressionpath = JURI::base() . '?option=com_hdflvplayer&task=impressionclicks&click=impression&id='.$rows->id;
 else
 $impressionpath = $rows->impressionurl;
+        
 
                 //echo '<midroll videoid="' . $rows->vid . '" targeturl="' . $rows->targeturl . '" clickurl="' . $clickpath . '" impressionurl="' . $impressionpath . '">';
                 echo '<midroll targeturl="' . $rows->targeturl . '" clickurl="' . $clickpath . '" impressionurl="' . $impressionpath . '" >';
@@ -94,4 +108,5 @@ $impressionpath = $rows->impressionurl;
         echo '</midrollad>';
         exit();
     }
+
 }

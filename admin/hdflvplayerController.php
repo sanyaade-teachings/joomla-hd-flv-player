@@ -12,7 +12,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 //calling default joomla component
-jimport( 'joomla.application.component.controller' );
+jimport('joomla.application.component.controller');
 ini_set('display_errors',1);
 /**
  * details Component Administrator Controller
@@ -47,13 +47,15 @@ class hdflvplayerController extends JController {
     }
 
     // set default video function calling
+
      function setdefault() {
         if ($model = & $this->getModel('uploadvideos')) {
             $model->setdefault();
         }
     }
 
-	// Function to cancel the video upload operation.
+
+
     function UPLOADVIDEOCANCEL() {
         $view = & $this->getView('uploadvideos');
 
@@ -109,7 +111,9 @@ class hdflvplayerController extends JController {
         }
     }
 
-	// language setting cancel
+
+
+// language setting cancel
      function languagecancel() {
         $view = & $this->getView('editlanguage');
 
@@ -132,7 +136,6 @@ class hdflvplayerController extends JController {
         $view->setLayout('playersettingslayout');
         $view->playersettingsview();
     }
-    
     // edit default playersettings (press 'edit' button)
     function editplayersettings() {
         $view = & $this->getView('playersettings');
@@ -209,14 +212,14 @@ class hdflvplayerController extends JController {
         $view->editplaylistview();
     }
 
-	// save playlist
+// save playlist
     function saveplaylistname() {
         if ($model = & $this->getModel('editplaylistname')) {
             $model->saveplaylistname(JRequest::getVar('task'));
         }
     }
 
-	// apply playlist
+// apply playlist
     function applyplaylistname() {
         if ($model = & $this->getModel('editplaylistname')) {
 
@@ -224,7 +227,7 @@ class hdflvplayerController extends JController {
         }
     }
 
-	//remove playlist
+//remove playlist
     function removeplaylistname() {
         if ($model = & $this->getModel('editplaylistname')) {
             $model->removeplaylistname();
@@ -234,7 +237,7 @@ class hdflvplayerController extends JController {
 // -------------------------------------------------------------Ad Related controller function -------------------------------- //
 
 
-	// show ads controller 
+// show ads controller 
     function ads() {
         $view = & $this->getView('showads');
         if ($model = & $this->getModel('showads')) {
@@ -265,28 +268,25 @@ class hdflvplayerController extends JController {
         $view->editads();
     }
 
-	//save ad controller
+//save ad controller
     function saveads() {
         if ($model = & $this->getModel('showads')) {
             $model->saveads(JRequest::getVar('task'));
         }
     }
-    
-	//applying ad controller
+//applying ad controller
     function applyads() {
         if ($model = & $this->getModel('showads')) {
             $model->saveads(JRequest::getVar('task'));
         }
     }
-    
-	//remove ad controller
+//remove ad controller
     function removeads() {
         if ($model = & $this->getModel('editads')) {
             $model->removeads();
         }
     }
-    
-	// cancel ad controller
+// cancel ad controller
     function CANCELADS() {
         $view = & $this->getView('showads');
         if ($model = & $this->getModel('showads')) {
@@ -315,7 +315,7 @@ class hdflvplayerController extends JController {
     }
 
 // -------------------------------------------------------------Video uploaded Related controller function -------------------------------- //
-	//Function redirect to edit video page.
+
     function editvideoupload() {
         $view = & $this->getView('editvideoupload');
             if ($model = & $this->getModel('editvideoupload')) {
@@ -324,8 +324,7 @@ class hdflvplayerController extends JController {
         $view->setLayout('editaddlayout');
         $view->editvideouploadview();
     }
-    
-	//Function to add new video.
+
     function addvideoupload() {
         $view = & $this->getView('editvideoupload');
         if ($model = & $this->getModel('addvideoupload')) {
@@ -334,8 +333,7 @@ class hdflvplayerController extends JController {
         $view->setLayout('editaddlayout');
         $view->addvideouploadview();
     }
-	
-    //Function to save video upload and redirect to video listing page.
+
     function savevideoupload() {
 
         // Get/Create the model
@@ -345,10 +343,9 @@ class hdflvplayerController extends JController {
             $model->savevideouploadmodel(JRequest::getVar('task'));
         }
     }
-	
-    //Function to save video upload and remains in video upload page.
+
     function applyvideoupload() {
-		
+
         // Get/Create the model
         if ($model = & $this->getModel('savevideoupload')) {
             //Push the model into the view (as default)
@@ -356,8 +353,7 @@ class hdflvplayerController extends JController {
             $model->savevideouploadmodel(JRequest::getVar('task'));
         }
     }
-	
-    //Function to delete entry from listing page.
+
     function Remove() {
         //Get/Create the model
         if ($model = & $this->getModel('removevideoupload')) {
@@ -366,8 +362,7 @@ class hdflvplayerController extends JController {
             $model->removevideouploadmodel();
         }
     }
-	
-    //Function to publish the data for front-end display.
+
     function publish() {
         //Get/Create the model
         if ($model = & $this->getModel('publish')) {
@@ -376,8 +371,7 @@ class hdflvplayerController extends JController {
             $model->publishmodel(JRequest::getVar('task'));
         }
     }
-	
-    //Function to unpublish the data for front-end display.
+
     function unpublish() {
         //Get/Create the model
         if ($model = & $this->getModel('publish')) {
@@ -386,8 +380,7 @@ class hdflvplayerController extends JController {
             $model->publishmodel(JRequest::getVar('task'));
         }
     }
-	
-    //Funtion to reset the viewed hits for videos.  
+
     function resethits() {
         global $mainframe;
 
@@ -397,8 +390,8 @@ class hdflvplayerController extends JController {
             $model->resethitsmodel(JRequest::getVar('task'));
         }
     }
-	
-    /* function sortorder() {
+
+    function sortorder() {
         $view = & $this->getView('sortorder');
 
         // Get/Create the model
@@ -409,9 +402,8 @@ class hdflvplayerController extends JController {
         $view->setLayout('sortorderlayout');
 
         $view->sortorder();
-    } */
-	
-    //Function to create google Ads.
+    }
+
     function addgoogle() {
 
         $view = & $this->getView('addgoogle');
@@ -428,7 +420,6 @@ class hdflvplayerController extends JController {
         $view->addgoogleview();
     }
 
-    //function to get access for registered users.
     function accessregistered() {
         $cid = JRequest::getVar('cid', array(0), '', 'array');
         JArrayHelper::toInteger($cid, array(0));
@@ -439,7 +430,6 @@ class hdflvplayerController extends JController {
         }
     }
 
-    //function to get access for Author.
     function accessspecial() {
         $cid = JRequest::getVar('cid', array(0), '', 'array');
         JArrayHelper::toInteger($cid, array(0));
@@ -450,7 +440,6 @@ class hdflvplayerController extends JController {
         }
     }
 
-    //Function to get access for public users.
     function accesspublic() {
         $cid = JRequest::getVar('cid', array(0), '', 'array');
         JArrayHelper::toInteger($cid, array(0));
@@ -461,34 +450,24 @@ class hdflvplayerController extends JController {
         }
     }
 
-    /* function saveaddgoogle() {
+    function saveaddgoogle() {
         if ($model = & $this->getModel('addgoogle')) {
             $model->saveaddgoogle(JRequest::getVar('task'));
         }
-    } */
-	
-    //Function to save the google ads.
+    }
+
     function applyaddgoogle() {
         if ($model = & $this->getModel('addgoogle')) {
             $model->saveaddgoogle(JRequest::getVar('task'));
         }
     }
-    
-    //Function to cancel the google ads operation and redirect to video listing page.
-    function cancel()
-    {
-   		$this->display();
-    	
-    }
-	
-    //Function to execute query when install HDFLV PLayer extension.
+
     function hdflvplayerinstall() {
         if ($model = & $this->getModel('hdflvplayerinstall')) {
             $model->install(JRequest::getVar('task'));
         }
     }
 
-    // Function to execute query when update HDFLV PLayer extension.
     function hdflvplayerupgrade() {
         if ($model = & $this->getModel('hdflvplayerupgrade')) {
             $model->upgrade(JRequest::getVar('task'));

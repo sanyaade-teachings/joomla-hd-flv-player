@@ -23,7 +23,11 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModeladsxml extends JModel {
 
-    //Function to get ads content from database.
+    /**
+     * Gets the greeting
+     *
+     * @return string The greeting to be displayed to the user
+     */
     function getads() {
         $db = & JFactory::getDBO();
         $query_ads = "select * from #__hdflvplayerads where published=1 and typeofadd='prepost' "; //and home=1";//and id=11;";
@@ -36,8 +40,7 @@ class hdflvplayerModeladsxml extends JModel {
        ($random == 1) ? $random = "true" : $random = "false";
         $this->showadsxml($rs_ads, $random);
     }
-	
-    //Function to display the ads content.
+
     function showadsxml($rs_ads, $random) {
         ob_clean();
         header("content-type: text/xml");

@@ -4,16 +4,5 @@
 }
 .relatedvideos p strong
 {
-    background:#eeeeee;text-align:left;margin:10px 0 0;border:#ffffff solid 1px;line-height:10px !important;padding:8px !important;display:block;
+    background:#eeeeee;text-align:left;border:#ffffff solid 1px;line-height:10px;padding:8px;display:block;
 }
-.relatedvideos a.thumbimage{background: none !important;}
-#selectyourhost p strong{line-height:10px !important;}
-.video-info{
-    font-size: 10px;
-    font-weight: normal;
-    text-decoration: none;
-    background:none;
-    display:block;
-}
-.clear{clear:both;}
-#titletxt h3{margin: 0 0 10px 0 !important;margin:6px 0;}

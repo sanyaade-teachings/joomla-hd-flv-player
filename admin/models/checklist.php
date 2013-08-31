@@ -13,7 +13,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModelchecklist extends JModel {
 
-	//Function to get data for checklist view.
+
 	function checklistmodel()
     {
             $allow_status=0;
@@ -42,7 +42,7 @@ class hdflvplayerModelchecklist extends JModel {
             $per_upload=1;
             
             $checklist1 = array('allow_status' => $allow_status,'per_video'=>$per_video,'per_upload'=>$per_upload,'allow_fileuploads'=>$allow_fileuploads);
-           	
+           
             return $checklist1;
 
 

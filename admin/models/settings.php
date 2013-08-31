@@ -14,7 +14,7 @@ jimport('joomla.application.component.model');
 class hdflvplayerModelsettings extends JModel
 {
 
-	//Function to get the player setting details.
+
 	function getsetting()
     {   
 		$db =& JFactory::getDBO();
@@ -28,7 +28,6 @@ class hdflvplayerModelsettings extends JModel
 		return $rs_editsettings;
 	}
 
-	//Function to save the player setting details.
 	function saveplayersettings($task)
     {
         $option= 'com_hdflvplayer';
@@ -46,7 +45,7 @@ class hdflvplayerModelsettings extends JModel
                 echo "<script> alert('".$rs_savesettings->getError()."');window.history.go(-1); </script>\n";
                 exit();
             }
-			//$rs_savesettings->relatedcolor = JRequest::getVar( 'relatedcolor', '', 'post', 'string',JREQUEST_ALLOWRAW );
+//$rs_savesettings->relatedcolor = JRequest::getVar( 'relatedcolor', '', 'post', 'string',JREQUEST_ALLOWRAW );
             
             if (!$rs_savesettings->store()) {
                 echo "<script> alert('".$rs_savesettings->getError()."'); window.history.go(-1); </script>\n";
@@ -82,7 +81,7 @@ class hdflvplayerModelsettings extends JModel
            JFactory::getApplication()->redirect($link, $msg);
         }
 
-		//Function to validate the image extension.
+
         function fn_imagevalidation_settings(&$logoname,&$task,&$option,&$id)
         {
             $option= 'com_hdflvplayer';
@@ -112,9 +111,10 @@ class hdflvplayerModelsettings extends JModel
                 }
             }
         }
-	
-	    //Function to extract the extension from the filename.
-	    function findexts ($filename)
+
+//
+
+    function findexts ($filename)
         {
             $filename = strtolower($filename) ;
             $exts = split("[/\\.]", $filename) ;

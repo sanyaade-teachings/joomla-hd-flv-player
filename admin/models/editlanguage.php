@@ -13,7 +13,7 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModeleditlanguage extends JModel {
 
-	//Function to get data for language setup.
+
 	function editlanguagemodel()
     {
        /* $db =& JFactory::getDBO();

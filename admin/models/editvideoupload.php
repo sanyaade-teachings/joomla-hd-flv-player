@@ -13,10 +13,9 @@ jimport('joomla.application.component.model');
 
 class hdflvplayerModeleditvideoupload extends JModel {
 
-	//Function to get data when edit the uploaded video.
+
 	function editvideouploadmodel()
     {
-            
          $db =& JFactory::getDBO();
         $query = "SELECT id,name FROM #__hdflvplayername order by id asc";
         $db->setQuery( $query);
@@ -30,16 +29,14 @@ class hdflvplayerModeleditvideoupload extends JModel {
 //        $db->setQuery( $query);
 //        $rs_midads = $db->loadObjectList();
 
-        if(version_compare(JVERSION,'1.6.0','ge'))
-        {
+
         $query = "SELECT id,title FROM #__usergroups order by id asc";
-        }
-        else
-        {
-          $query = "SELECT id,name FROM #__groups order by id asc";
-        }
         $db->setQuery( $query);
         $rs_access = $db->loadObjectList();
+
+     
+
+
         $rs_editupload =& JTable::getInstance('hdflvplayerupload', 'Table');
 
         $cid = JRequest::getVar( 'cid', array(0), '', 'array' );

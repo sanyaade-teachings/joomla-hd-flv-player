@@ -8,19 +8,17 @@
  */
 
 // no direct access
-defined( '_JEXEC' ) or die( 'Access Denied!' );
-jimport( 'joomla.plugin.plugin' );
-jimport( 'joomla.html.parameter' );
-jimport( 'joomla.application.component.controller' );
+defined('_JEXEC') or die('Access Denied!');
+jimport('joomla.plugin.plugin');
+jimport('joomla.html.parameter');
+jimport('joomla.application.component.controller');
 
 class plgContenthdflvplayer extends JPlugin {
-	
-	//Default function for plugin.
+
     function plgContenthdflvplayer(&$subject, $params) {
         parent::__construct($subject, $params);
     }
 
-    //Function to get path of video folder and plugin parameters.
     function ss() {
         static $plgParams;
 
@@ -51,13 +49,11 @@ class plgContenthdflvplayer extends JPlugin {
         return $plgParams;
     }
 
-    //Function to get video parameter.
     function getContusVideoParam($key, $default='', $group = '_default') {
         $plgParams = $this->ss();
         return $plgParams->get($key, $default, $group = '_default');
     }
 
-    //Function to get video details.
     function showContusVideo($width=0, $height =0, $enablexml=0, $idval, $playlistname, $autoplay, $filepath, $videos, $thumImg) {
         $pparams = $this->ss();
         $width = $width;
@@ -75,20 +71,16 @@ class plgContenthdflvplayer extends JPlugin {
         return $replace;
     }
 
-    //Function to remove extra content from the plugin call code.
     function removesextraspace($str1) {
         $str2 = trim(str_replace("]", "", (trim($str1))));
         return $str2;
     }
 
-    //Function to send params to onPrepareContent function.
     function onContentPrepare($context, &$article, &$params, $page=0) {
         $this->onPrepareContent(&$article, &$params, $page);
     }
 
-    //Function to execute when prepare the content.
-    function onPrepareContent(&$row, &$params, $limitstart) 
-    {
+    function onPrepareContent(&$row, &$params, $limitstart) {
         $db = & JFactory::getDBO();
         $query = "SELECT title,id FROM #__hdflvplayerupload";
         $db->setQuery($query);
@@ -199,14 +191,12 @@ class plgContenthdflvplayer extends JPlugin {
 //exit();
     }
 
-    //Function to get video image.
     function addPicture($video, $width='', $height='', $a='') {
         $replace = '<img ' . $a . ' class="contusvideo" style="' . $width . $height . '" src="' . $video . '" />';
 
         return $replace;
     }
 
-    //Function to get youtube videos.
     function addVideoYoutube($video, $width='', $height='', $params=array()) {
 
         if (strpos($video, '/v/')) {// If yes, New way
@@ -231,9 +221,7 @@ class plgContenthdflvplayer extends JPlugin {
         return $replace;
     }
 
-    //Function to display the HDFLV player video.
-    function addVideoHdplayer($video, $width, $height, $enablexml, $idval, $playid, $autoplay, $filepath, $videos, $thumImg) 
-    {
+    function addVideoHdplayer($video, $width, $height, $enablexml, $idval, $playid, $autoplay, $filepath, $videos, $thumImg) {
         $baseurl = JURI::base();
         $baseurl1 = substr_replace($baseurl, "", -1);
         /* if($playid=="false")
@@ -286,7 +274,7 @@ class plgContenthdflvplayer extends JPlugin {
        function failed(e) {
        txt =  navigator.platform ;
 
-            if(txt =="iPod" || txt =="iPad" || txt =="iPhone"|| txt =="Linux armv7l")
+            if(txt =="iPod" || txt =="iPad" || txt =="iPhone"|| txt =="Linux armv7I")
             {
    alert("Player doesnot support this video.");
    }
@@ -311,7 +299,7 @@ class plgContenthdflvplayer extends JPlugin {
         $replace .='</div><script>
             txt =  navigator.platform ;
 
-            if(txt =="iPod" || txt =="iPad" || txt =="iPhone"|| txt =="Linux armv7l")
+            if(txt =="iPod" || txt =="iPad" || txt =="iPhone"|| txt =="Linux armv7I")
             {
                document.getElementById("plugin-html5player' . $idval . '").style.display = "block";
                document.getElementById("plugin-flashplayer' . $idval . '").style.display = "none";

@@ -11,16 +11,8 @@ defined('_JEXEC') or die('Restricted access');
 //$editor = & JFactory::getEditor();
 $rs_editsettings = $rs_showsettings = $this->playersettings;
 $basepath = JURI::base();
-$thumbpath1 = JURI::base() . "components/com_hdflvplayer";
+JHTML::_('script', JURI::base() . 'components/com_hdflvplayer/js/playersettings_logo.js', false, true);
 ?>
-<script type="text/javascript" src="<?php echo $thumbpath1 . '/js/playersettings_logo.js'; ?>"></script>
-<!--JHTML::_('script', JURI::base() . 'components/com_hdflvplayer/js/playersettings_logo.js', false, true);-->
-<style>
-<!--
-.fltlft{float:left;}
-.fltrt{float:right;}
--->
-</style>
 <?php
 if (JRequest::getVar('task') == 'editplayersettings') {
     if (count($rs_editsettings) > 0) {
@@ -30,15 +22,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
             <div class="width-60 fltlft">
                 <fieldset class="adminform">
-                    <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HDFLV_PLAYER_SETTINGS');?></legend>
+                    <legend>HDFLV Player Settings</legend>
                     <table class="adminlist">
                         <thead>
                             <tr>
                                 <th>
-                                					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+                        					Settings
                                 </th>
                                 <th>
-                                					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+                        					Value
                                 </th>
                             </tr>
                         </thead>
@@ -51,7 +43,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                         <tbody>
                             <tr>
                                 <td>
-                                					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BUFFER_TIME');?>
+                        					 Buffer Time
                                 </td>
                                 <td>
                                     <input type="text" name="buffer" value="<?php echo $rs_editsettings[0]->buffer; ?>"/>
@@ -61,7 +53,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                     <tr>
 
                         <td style="background-color:#D5E9EE; color:#333333;" colspan="2">
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RECOMMENDED_BUFFER');?>
+                            Recommended value is 3 secs
                         </td>
 
                     </tr>
@@ -69,7 +61,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-					   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_WIDTH');?>
+					   Width
                         </td>
                         <td>
                             <input type="text" name="width" value="<?php echo $rs_editsettings[0]->width; ?>"     /> px
@@ -81,7 +73,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HEIGHT');?>
+					 Height
                         </td>
                         <td>
                             <input type="text" name="height"  value="<?php echo $rs_editsettings[0]->height; ?>"     /> px
@@ -90,7 +82,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td colspan="2" style="background-color:#D5E9EE; color:#333333;">
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_WIDTH_VALUE');?>
+                            Width of the video can be 300px with all the controls enabled.  If you would like to have smaller than 300px then you have to disable couple of controls like Timer, Zoom..
 
                         </td>
 
@@ -98,13 +90,13 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_NORMAL_SCREEN');?>
+					 Normal Screen Scale
                         </td>
                         <td>
                             <select  name="normalscale">
-                                <option value="0" id="20"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ASPECT_RATIO');?></option>
-                                <option value="1" id="21"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ORIGINAL_SIZE');?></option>
-                                <option value="2" id="22"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FIT_SCREEN');?></option>
+                                <option value="0" id="20">Aspect Ratio</option>
+                                <option value="1" id="21">Original Size</option>
+                                <option value="2" id="22">Fit to Screen</option>
                             </select>
                             <?php
                             if ($rs_editsettings[0]->normalscale) {
@@ -116,13 +108,13 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                     </tr>
                     <tr>
                         <td>
-					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FULL_SCREEN_SCALE');?>
+					 Full Screen Scale
                         </td>
                         <td>
                             <select  name="fullscreenscale">
-                                <option value="0" id="10" name=0><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ASPECT_RATIO');?></option>
-                                <option value="1" id="11" name=1><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ORIGINAL_SIZE');?></option>
-                                <option value="2" id="12" name=2><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FIT_SCREEN');?></option>
+                                <option value="0" id="10" name=0>Aspect Ratio</option>
+                                <option value="1" id="11" name=1>Original Size</option>
+                                <option value="2" id="12" name=2>Fit to Screen</option>
                             </select>
 
                             <?php
@@ -137,25 +129,25 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_AUTOPLAY');?>
+					 Autoplay
                         </td>
                         <td>
                             <input type="radio"  style="float:none;" name="autoplay" <?php
                             if ($rs_editsettings[0]->autoplay == 1) {
                                 echo 'checked="checked" ';
                             }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="autoplay" <?php
                                    if ($rs_editsettings[0]->autoplay == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
                         <td>
-					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VOLUME');?>
+					 Volume
                         </td>
                         <td>
                             <input type="text" name="volume" value="<?php echo $rs_editsettings[0]->volume; ?>"     />
@@ -165,7 +157,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            </tr>
                            <tr>
                                <td>
-              					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FFMPEG_BINARYPATH');?>
+       					 FFMpeg Binary Path
                                </td>
                                <td>
                                    <input style="width:150px;" type="text" name="ffmpegpath" value="<?php echo $rs_editsettings[0]->ffmpegpath; ?>" />
@@ -174,7 +166,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            </tr>
                            <tr>
                                <td>
-              					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_NUMBER_RELATED_VIDEOS');?>
+       					Number of related videos display in front page per page
                                </td>
                                <td>
                                    <input name="nrelated" id="nrelated" maxlength="100"  value="<?php echo $rs_editsettings[0]->nrelated; ?>">
@@ -184,62 +176,62 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                            <tr>
                                <td>
-              				 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYLIST_AUTOPLAY');?>
+       				 Playlist Autoplay
                                </td>
                                <td>
                                    <input type="radio" style="float:none;" name="playlist_autoplay" <?php
                                    if ($rs_editsettings[0]->playlist_autoplay == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="playlist_autoplay" <?php
                                    if ($rs_editsettings[0]->playlist_autoplay == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
 
                     </tr>
                     <tr>
                         <td>
-			<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYLIST_OPEN');?>
+			Playlist Open
                         </td>
                         <td>
                             <input type="radio" style="float:none;" name="playlist_open" <?php
                                    if ($rs_editsettings[0]->playlist_open == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="playlist_open" <?php
                                    if ($rs_editsettings[0]->playlist_open == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
 
                     </tr>
 
                     <tr>
                         <td>
-			<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VAST');?>
+			Vast
                         </td>
                         <td>
                             <input type="radio" style="float:none;" name="vast" <?php
                                    if ($rs_editsettings[0]->vast == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="vast" <?php
                                    if ($rs_editsettings[0]->vast == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
 
                     </tr>
                     <tr>
                         <td>
-			<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VAST_PARTNER');?>
+			Vast Partner Id
                         </td>
                         <td>
                             <input type="text" name="vast_pid" value=""     />
@@ -250,19 +242,19 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-			<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HIDE_YOUTUBE');?>
+			Hide Youtube Logo
                         </td>
                         <td>
                             <input type="radio" style="float:none;"  name="scaletohide" <?php
                                    if ($rs_editsettings[0]->scaletohide == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="1" />Disable
                             <input type="radio" style="float:none;"  name="scaletohide" <?php
                                    if ($rs_editsettings[0]->scaletohide == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>	
+                            ?> value="0" />Enable
 
                         </td>
 
@@ -270,7 +262,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-					    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_ALPHA');?>	
+					    Logo Alpha
                         </td>
                         <td>
 
@@ -283,7 +275,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
 
                                <td style="background-color:#D5E9EE; color:#333333;" colspan="2">
-                                   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TRANSPARANCY_LOGO').'.&nbsp'.JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RECOMMENDED_VALUE');?>
+                                   Edit the value to have transparancy depth of logo
                                </td>
 
 
@@ -294,7 +286,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                            <tr>
                                <td>
-              					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_HIDE');?>
+       					 Skin Auto Hide
                                </td>
                                <td>
                                    <input type="radio" style="float:none;" name="skin_autohide" <?php
@@ -302,19 +294,19 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                        echo 'checked="checked" ';
                                    }
                             ?> value="1" />
-                            <?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            Enable
                             <input type="radio" style="float:none;" name="skin_autohide" <?php
                                    if ($rs_editsettings[0]->skin_autohide == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?>value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?>value="0" />Disable
                         </td>
                     </tr>
 
 
                     <tr>
                         <td>
-					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_STAGE_COLOR');?>
+					 Stage Color
                         </td>
                         <td>
 		# <input type="text" name="stagecolor"  value="<?php echo $rs_editsettings[0]->stagecolor; ?>"    />
@@ -324,20 +316,17 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                            <tr>
                                <td>
-              					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN');?>
+       					 Skin
                                </td>
                                <td>
                                    <select name="skin">
-                                       <option value="skin_black.swf" id="skin_black.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_BLACK');?></option>
-                                       <option value="skin_white.swf" id="skin_white.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_WHITE');?></option>
-                                       <option value="skin_fancyblack.swf" id="skin_fancyblack.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_FANCYBLACK');?></option>
-                                       <option value="skin_sleekblack.swf" id="skin_sleekblack.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_SLEEKBLACK');?></option>
-                                       <option value="skin_Overlay.swf" id="skin_overlay.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_OVERLAY');?></option>
-                                       <option value="skin_Vimeo.swf" id="skin_Vimeo.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_VIMEO');?></option>
-                                       <option value="skin_Youtube.swf" id="skin_Youtube.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_YOUTUBE');?></option>
-                                       <option value="skin_fresh_blue.swf" id="skin_fresh_blue.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_FRESHBLUE');?></option>
-                                       <option value="skin_fresh_orange.swf" id="skin_fresh_orange.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_FRESHORANGE');?></option>
-                                       <option value="skin_fresh_white.swf" id="skin_fresh_white.swf"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_FRESHWHITE');?></option>
+                                       <option value="skin_black.swf" id="skin_black.swf">skin_black.swf</option>
+                                       <option value="skin_white.swf" id="skin_white.swf">skin_white.swf</option>
+                                       <option value="skin_fancyblack.swf" id="skin_fancyblack.swf">skin_fancyblack.swf</option>
+                                       <option value="skin_sleekblack.swf" id="skin_sleekblack.swf">skin_sleekblack.swf</option>
+                                       <option value="skin_Overlay.swf" id="skin_overlay.swf">skin_overlay.swf</option>
+                                       <option value="skin_Vimeo.swf" id="skin_Vimeo.swf">skin_Vimeo.swf</option>
+                                       <option value="skin_Youtube.swf" id="skin_Youtube.swf">skin_Youtube.swf</option>
 
                                    </select>
 
@@ -352,18 +341,18 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                            <tr>
                                <td>
-              					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FULL_SCREEN');?>
+       					 Full Screen
                                </td>
                                <td>
                                    <input type="radio"  style="float:none;" name="fullscreen" <?php
                                    if ($rs_editsettings[0]->fullscreen == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?>value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?>value="1" />Enable
                             <input type="radio" style="float:none;" name="fullscreen" <?php
                                    if ($rs_editsettings[0]->fullscreen == 0) {
                                        echo 'checked="checked" ';
-                                   } ?>value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                                   } ?>value="0" />Disable
                         </td>
                     </tr>
 
@@ -372,36 +361,64 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ZOOM');?>
+					 Zoom
                         </td>
                         <td>
                             <input type="radio" style="float:none;" name="zoom" <?php
                                    if ($rs_editsettings[0]->zoom == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="zoom" <?php
                                    if ($rs_editsettings[0]->zoom == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?>value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?>value="0" />Disable
                         </td>
                     </tr>
+
                     <tr>
                         <td>
-       					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TIMER');?>
+					 Upload Max File Size
                         </td>
                         <td>
-                            <input type="radio" style="float:none;"  name="timer" <?php
+                            <select name="uploadmaxsize">
+                                <option value="50" id="50">50 MB</option>
+                                <option value="100" id="100">100 MB</option>
+                            </select>
+                            <?php
+                                   if ($rs_editsettings[0]->uploadmaxsize) {
+                                       echo '<script>document.getElementById("' . $rs_editsettings[0]->uploadmaxsize . '").selected="selected"</script>';
+                                   }
+                            ?>
+                               </td>
+
+                           </tr>
+
+
+
+                           <tr>
+                               <td style="background-color:#D5E9EE; color:#333333;" colspan="2">
+       		Recommended value is 50
+                               </td>
+
+                           </tr>
+
+                           <tr>
+                               <td>
+       					 Timer
+                               </td>
+                               <td>
+                                   <input type="radio" style="float:none;"  name="timer" <?php
                                    if ($rs_editsettings[0]->timer == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;"  name="timer" <?php
                                    if ($rs_editsettings[0]->timer == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
 
                     </tr>
@@ -410,19 +427,19 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-				 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SHARE');?>
+				 Share
                         </td>
                         <td>
                             <input type="radio" style="float:none;"  name="shareurl" <?php
                                    if ($rs_editsettings[0]->shareurl == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="shareurl" <?php
                                    if ($rs_editsettings[0]->shareurl == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
 
                     </tr>
@@ -430,19 +447,19 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-			 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HDDEFAULT');?>
+			 HD Default
                         </td>
                         <td>
                             <input type="radio" style="float:none;" name="hddefault" <?php
                                    if ($rs_editsettings[0]->hddefault == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="hddefault" <?php
                                    if ($rs_editsettings[0]->hddefault == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
 
                     </tr>
@@ -451,14 +468,14 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                     <tr>
                         <td>
-			<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS');?>
+			Related Videos
                         </td>
                         <td>
                             <select name="related_videos">
-                                <option value="1" id="1"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_ENABLE');?></option>
-                                <option value="2" id="2"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_DISABLE');?></option>
-                                <option value="3" id="3"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_WITHIN');?></option>
-                                <option value="4" id="4"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_OUTSIDE');?></option>
+                                <option value="1" id="1">Enable Both</option>
+                                <option value="2" id="2">Disable</option>
+                                <option value="3" id="3">Within Player</option>
+                                <option value="4" id="4">Outside Player</option>
                             </select>
                             <?php
                                    if ($rs_editsettings[0]->related_videos) {
@@ -469,9 +486,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                            </tr>
 
+
+
+
+
+
+
                            <tr>
                                <td>
-              			<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGINPAGE_LINK');?>
+       			Login Page Link
                                </td>
                                <td>
                                    <input name="urllink" id="urllink" maxlength="100"  value="<?php echo $rs_editsettings[0]->urllink; ?>">
@@ -483,44 +506,44 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                            <tr>
                                <td>
-              		<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_EMBED_CODE');?>
+       		Embed Code
                                </td>
                                <td>
                                    <input type="radio" style="float:none;" name="embedcode_visible" <?php
                                    if ($rs_editsettings[0]->embedcode_visible == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="embedcode_visible" <?php
                                    if ($rs_editsettings[0]->embedcode_visible == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
                         <td>
-		<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_GOOGLE_ANALYTICS');?>
+		Google Analytics
                         </td>
                         <td>
                             <input type="radio" style="float:none;" onclick="Toggle('shows')" name="googleana_visible" id="googleana_visible" <?php
                                    if ($rs_editsettings[0]->googleana_visible == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" onclick="Toggle('unshow')" name="googleana_visible" id="googleana_visible" <?php
                                    if ($rs_editsettings[0]->googleana_visible == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
                         <td>
                             <div id="show">
-                                <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_GOOGLE_ANALYTICS_ID');?>
+                                Enter Google Analytics ID
                             </div>
                         </td>
 
@@ -537,15 +560,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
     <div class="width-40 fltlft">
 
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_YOUTUBE_SETTINGS');?></legend>
+            <legend>Youtube Settings</legend>
             <table class="adminlist">
                 <thead>
                     <tr>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+					Settings
                         </th>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+					Value
                         </th>
                     </tr>
                 </thead>
@@ -559,18 +582,18 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
 
                     <tr>
-                        <td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VIDEO_QUALITY');?></td>
+                        <td class="key">Video Quality</td>
                         <td>
                             <input type="radio" style="float:none;"  name="vquality" <?php
                                    if ($rs_editsettings[0]->vquality == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SMALL');?>
+                            ?> value="1" />Small
                             <input type="radio" style="float:none;"  name="vquality" <?php
                                    if ($rs_editsettings[0]->vquality == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MEDIUM');?>
+                            ?> value="0" />Medium
                         </td>
                     </tr>
                 </tbody>
@@ -581,15 +604,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
     <div class="width-40 fltlft">
 
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_SETTINGS');?></legend>
+            <legend>Logo Settings</legend>
             <table class="adminlist">
                 <thead>
                     <tr>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+					Settings
                         </th>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+					Value
                         </th>
 
                     </tr>
@@ -602,14 +625,14 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                 </tfoot>
                 <tbody>
                     <tr>
-                        <td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LICENCE_KEY');?></td>
+                        <td class="key">Licence Key</td>
                         <td>
-                            <input type="text" name="licensekey" id="licensekey" size="45" maxlength="200"  value="<?php echo trim($rs_editsettings[0]->licensekey); ?>"  />
+                            <input type="text" name="licensekey" id="licensekey" size="45" maxlength="200"  value="<?php echo $rs_editsettings[0]->licensekey; ?>"  />
 
                             <?php
                                    if ($rs_editsettings[0]->licensekey == '') {
                             ?>
-                                       <a href="http://www.apptha.com/shop/checkout/cart" target="_blank"><img  src="components/com_hdflvplayer/images/buynow.gif" width="77" height="23" /></a>
+                                       <a href="http://hdflvplayer.net/shop/index.php?main_page=product_info&cPath=7&products_id=7" target="_blank"><img  src="components/com_hdflvplayer/images/buynow.gif" width="77" height="23" /></a>
                             <?php
                                    }
                             ?>
@@ -619,7 +642,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            <tr>
 
                                <td>
-                                   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO');?> </td>
+                                   Logo </td>
                                <td>
                                    <div id="var_logo">
                                        <input name="logopath" id="logopath" maxlength="100" readonly="readonly" value="<?php echo $rs_editsettings[0]->logopath; ?>">
@@ -629,14 +652,14 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            </tr>
                            <tr>
                                <td style="background-color:#D5E9EE; color:#333333;" colspan="2">
-                                   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ALLOWED_EXTENSIONS');?>
+                                   Allowed Extensions :jpg/jpeg,gif ,png
                                </td>
                            </tr>
 
                            <tr>
 
                                <td>
-                                   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_URL');?> </td>
+                                   Logo url </td>
                                <td>
                                    <input style="width:150px;" type="text" name="logourl" value="<?php echo $rs_editsettings[0]->logourl; ?>" />
                                </td>
@@ -645,13 +668,13 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            <tr>
 
                                <td>
-                                   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_POSITION');?></td>
+                                   Logo Position</td>
                                <td>
                                    <select name="logoalign">
-                                       <option value="TR" id="TR"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TOPRIGHT');?></option>
-                                       <option value="TL" id="TL"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TOPLEFT');?></option>
-                                       <option value="LB" id="LB"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BOTTOMLEFT');?></option>
-                                       <option value="RB" id="RB"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BOTTOMRIGHT');?></option>
+                                       <option value="TR" id="TR">Top Right</option>
+                                       <option value="TL" id="TL">Top Left</option>
+                                       <option value="LB" id="LB">Bottom Left</option>
+                                       <option value="RB" id="RB">Bottom Right</option>
                                    </select>
 
                             <?php
@@ -664,7 +687,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            </tr>
                            <tr>
                                <td colspan="2" style="background-color:#D5E9EE; color:#333333;">
-                                   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_DISABLED_IN_DEMO');?>
+                                   Disabled in Demo Version
                                </td>
                            </tr>
                        </tbody>
@@ -676,15 +699,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
            <div class="width-40 fltlft">
 
                <fieldset class="adminform">
-                   <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PREPOST_ADS_SETTINGS');?></legend>
+                   <legend>Pre/Post Roll Ads Settings</legend>
                    <table class="adminlist">
                        <thead>
                            <tr>
                                <th>
-              					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+       					Settings
                                </th>
                                <th>
-              					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+       					Value
                                </th>
 
                            </tr>
@@ -697,70 +720,70 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                        </tfoot>
                        <tbody>
                            <tr>
-                               <td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PREROLL_ADS');?></td>
+                               <td class="key"> Pre roll ads</td>
                                <td>
                                    <input type="radio" style="float:none;"  name="prerollads" <?php
                                    if ($rs_editsettings[0]->prerollads == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;"  name="prerollads" <?php
                                    if ($rs_editsettings[0]->prerollads == 0) {
                                        echo 'checked="checked" ';
-                                   } ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                                   } ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_POSTROLL_ADS');?> </td>
+                            Post roll ads </td>
                         <td>
                             <input type="radio" style="float:none;" name="postrollads" <?php
                                    if ($rs_editsettings[0]->postrollads == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="postrollads" <?php
                                    if ($rs_editsettings[0]->postrollads == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
 
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RANDOM');?> </td>
+                            Random </td>
                         <td>
                             <input type="radio" style="float:none;" name="random" <?php
                                    if ($rs_editsettings[0]->random == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="random" <?php
                                    if ($rs_editsettings[0]->random == 0) {
                                        echo 'checked="checked" ';
-                                   } ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                                   } ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_GOOGLE_ADS');?></td>
+                            Google Ads</td>
                         <td>
                             <input type="radio" style="float:none;" name="ads" <?php
                                    if ($rs_editsettings[0]->ads == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="ads" <?php
                                    if ($rs_editsettings[0]->ads == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
                 </tbody>
@@ -772,15 +795,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
     <div class="width-40 fltlft">
 
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MIDROLL_SETTINGS');?></legend>
+            <legend>Mid Roll Ads Settings</legend>
             <table class="adminlist">
                 <thead>
                     <tr>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+					Settings
                         </th>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+					Value
                         </th>
 
                     </tr>
@@ -793,25 +816,25 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                 </tfoot>
                 <tbody>
                     <tr>
-                        <td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MIDROLL_ADS');?></td>
+                        <td class="key">Mid roll ads</td>
                         <td>
                             <input type="radio" style="float:none;"  name="midrollads" <?php
                                    if ($rs_editsettings[0]->midrollads == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;"  name="midrollads" <?php
                                    if ($rs_editsettings[0]->midrollads == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BEGIN');?> </td>
+                            Begin </td>
                         <td>
                             <input type="text" name="midbegin" value="<?php echo $rs_editsettings[0]->midbegin; ?>"  />
                     </tr>
@@ -819,42 +842,42 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_AD_ROTATE');?></td>
+                            Ad Rotate</td>
                         <td>
                             <input type="radio" style="float:none;"  name="midadrotate" <?php
                                    if ($rs_editsettings[0]->midadrotate == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;"  name="midadrotate" <?php
                                    if ($rs_editsettings[0]->midadrotate == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MIDROLL_RANDOM_AD');?></td>
+                            Mid Roll Ads Random</td>
                         <td>
                             <input type="radio" style="float:none;"  name="midrandom" <?php
                                    if ($rs_editsettings[0]->midrandom == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="midrandom" <?php
                                    if ($rs_editsettings[0]->midrandom == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_AD_INTERVAL');?></td>
+                            Add Interval</td>
                         <td>
                             <input type="text" name="midinterval" value="<?php echo $rs_editsettings[0]->midinterval; ?>"   />
                         </td>
@@ -868,15 +891,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
     <div class="width-40 fltlft">
         <fieldset class="adminform">
-            <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FRONTPAGE_SETTINGS');?></legend>
+            <legend>Front Page Settings</legend>
             <table class="adminlist">
                 <thead>
                     <tr>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+					Settings
                         </th>
                         <th>
-					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+					Value
                         </th>
 
                     </tr>
@@ -889,71 +912,71 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                 </tfoot>
                 <tbody>
                     <tr>
-                        <td class="key"><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYER_TITLE');?></td>
+                        <td class="key">Title above the Player</td>
                         <td>
                             <input type="radio" style="float:none;"  name="title_ovisible" <?php
                                    if ($rs_editsettings[0]->title_ovisible == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="title_ovisible" <?php
                                    if ($rs_editsettings[0]->title_ovisible == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYER_DESCRIPTION');?> </td>
+                            Description below the Player </td>
                         <td>
                             <input type="radio" style="float:none;" name="description_ovisible" <?php
                                    if ($rs_editsettings[0]->description_ovisible == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="description_ovisible" <?php
                                    if ($rs_editsettings[0]->description_ovisible == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TIMES_VIEWED');?></td>
+                            Times Viewed</td>
                         <td>
                             <input type="radio" style="float:none;" name="viewed_visible" <?php
                                    if ($rs_editsettings[0]->viewed_visible == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="viewed_visible" <?php
                                    if ($rs_editsettings[0]->viewed_visible == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
                     <tr>
 
                         <td>
-                            <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYLIST_DROPDOWN');?></td>
+                            Playlist Drop Down</td>
                         <td>
                             <input type="radio" style="float:none;" name="playlist_dvisible" <?php
                                    if ($rs_editsettings[0]->playlist_dvisible == 1) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="1" /><?php echo JText::_('COM_HDFLVPLAYER_ENABLE');?>
+                            ?> value="1" />Enable
                             <input type="radio" style="float:none;" name="playlist_dvisible" <?php
                                    if ($rs_editsettings[0]->playlist_dvisible == 0) {
                                        echo 'checked="checked" ';
                                    }
-                            ?> value="0" /><?php echo JText::_('COM_HDFLVPLAYER_DISABLE');?>
+                            ?> value="0" />Disable
                         </td>
                     </tr>
 
@@ -973,15 +996,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                <form action="index.php?option=com_hdflvplayer&task=playersettings" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
                                    <div class="width-60 fltlft">
                                        <fieldset class="adminform">
-                                           <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HDFLV_PLAYER_SETTINGS');?></legend>
+                                           <legend>Player Settings</legend>
                                            <table class="adminlist">
                                                <thead>
                                                    <tr>
                                                        <th>
-                                                           <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+                                                           Settings
                                                        </th>
                                                        <th>
-                                                           <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+                                                           Value
                                                        </th>
                                                    </tr>
                                                </thead>
@@ -994,10 +1017,9 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                                    <tr>
                                                        <td>
                             <?php if (count($rs_showsettings) >= 1) {
-                            ?>
-                            <?php for ($i = 0, $n = count($rs_showsettings); $i < $n; $i++) {
  ?>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BUFFER_TIME');?>
+<?php for ($i = 0, $n = count($rs_showsettings); $i < $n; $i++) { ?>
+                                       Buffer Time
                                    </td>
                                    <td>
 <?php echo $rs_showsettings[$i]->buffer . ' ' . "secs"; ?>
@@ -1005,7 +1027,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_WIDTH');?>
+                                       Width
                                    </td>
                                    <td>
 <?php echo $rs_showsettings[$i]->width . ' ' . "px"; ?>
@@ -1014,7 +1036,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HEIGHT');?>
+                                       Height
                                    </td>
                                    <td>
 <?php echo $rs_showsettings[$i]->height . ' ' . "px"; ?>
@@ -1022,16 +1044,16 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_NORMAL_SCREEN');?>
+                                       Normal Screen Scale
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->normalscale == 0)
-                                           $val_normalscale = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ASPECT_RATIO");
+                                           $val_normalscale = "Aspect Ratio";
                                        else if ($rs_showsettings[$i]->normalscale == 1)
-                                           $val_normalscale = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ORIGINAL_SIZE");
+                                           $val_normalscale = "Original Size";
                                        else if ($rs_showsettings[$i]->normalscale == 2)
-                                           $val_normalscale = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FIT_SCREEN");
+                                           $val_normalscale = "Fit to screen";
                                        echo $val_normalscale;
                             ?>
                                    </td>
@@ -1039,16 +1061,16 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FULL_SCREEN_SCALE');?>
+                                       Full Screen Scale
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->fullscreenscale == 0)
-                                           $val_fullscreenscale = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ASPECT_RATIO");
+                                           $val_fullscreenscale = "Aspect Ratio";
                                        else if ($rs_showsettings[$i]->fullscreenscale == 1)
-                                           $val_fullscreenscale = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ORIGINAL_SIZE");
+                                           $val_fullscreenscale = "Original Size";
                                        else if ($rs_showsettings[$i]->fullscreenscale == 2)
-                                           $val_fullscreenscale = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FIT_SCREEN");
+                                           $val_fullscreenscale = "Fit to screen";
                                        echo $val_fullscreenscale;
                             ?>
                                    </td>
@@ -1058,12 +1080,11 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->autoplay == 1)
-                                           $autoplay = JText::_("COM_HDFLVPLAYER_ENABLED");
+                                           $autoplay = "Enabled";
                                        else
-                                           $autoplay= JText::_("COM_HDFLVPLAYER_DISABLED");
-                            
-                                       echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_AUTOPLAY');
-                             ?>
+                                           $autoplay="Disabled";
+                            ?>
+                                       Autoplay
                                    </td>
                                    <td>
 <?php echo $autoplay ?>
@@ -1071,7 +1092,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VOLUME');?>
+                                       Volume
                                    </td>
                                    <td>
 <?php echo $rs_showsettings[$i]->volume . ' ' . "%" ?>
@@ -1080,7 +1101,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FFMPEG_BINARYPATH');?>
+                                       FFMpeg Binary Path
                                    </td>
                                    <td>
 <?php echo $rs_showsettings[0]->ffmpegpath ?>
@@ -1088,7 +1109,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_NUMBER_RELATED_VIDEOS');?>
+                                       Number of related videos display in the front page per page
                                    </td>
                                    <td>
 <?php echo $rs_showsettings[0]->nrelated; ?>
@@ -1097,34 +1118,34 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYLIST_AUTOPLAY');?>
+                                       Playlist Autoplay
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->playlist_autoplay == 1)
-                                           $pautoplay = JText::_("COM_HDFLVPLAYER_ENABLED");
+                                           $pautoplay = "Enabled";
                                        else
-                                           $pautoplay= JText::_("COM_HDFLVPLAYER_DISABLED");
+                                           $pautoplay="Disabled";
                             ?>
 <?php echo $pautoplay; ?>
                                    </td>
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYLIST_OPEN');?>
+                                       Playlist Open
                                    </td>
                                    <td>
-                            <?php ($rs_showsettings[$i]->playlist_open == 1) ? $playlist_open = JText::_("COM_HDFLVPLAYER_ENABLED") : $playlist_open = JText::_("COM_HDFLVPLAYER_DISABLED"); ?>
+                            <?php ($rs_showsettings[$i]->playlist_open == 1) ? $playlist_open = "Enabled" : $playlist_open = "Disabled"; ?>
 <?php echo $playlist_open; ?>
                                    </td>
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VAST');?>
+                                       Vast
                                    </td>
                                    <td>
                             <?php
-                                       ($rs_showsettings[$i]->vast == 1) ? $vast = JText::_("COM_HDFLVPLAYER_ENABLED") : $vast = JText::_("COM_HDFLVPLAYER_DISABLED");
+                                       ($rs_showsettings[$i]->vast == 1) ? $vast = "Enabled" : $vast = "Disabled";
                                        echo $vast;
                             ?>
                                    </td>
@@ -1132,7 +1153,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VAST_PARTNER');?>
+                                       Vast Partner Id
                                    </td>
                                    <td>
 <?php echo $rs_editsettings[0]->vast_pid; ?>
@@ -1142,22 +1163,23 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HIDE_YOUTUBE');?>
+                                       Hide Youtube logo
                                    </td>
                                    <td>
-
-                            <?php
-                                       ($rs_showsettings[$i]->scaletohide == 0) ? $scaletohide = JText::_("COM_HDFLVPLAYER_ENABLED") : $scaletohide = JText::_("COM_HDFLVPLAYER_DISABLED");
-                                       echo $scaletohide;
+                           
+                                       <?php
+                                ($rs_showsettings[$i]->scaletohide == 0) ? $scaletohide = "Enabled" : $scaletohide = "Disabled";
+                                echo $scaletohide;
+                         
                             ?>
                                    </td>
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_ALPHA');?>
+                                       Logo Alpha
                                    </td>
                                    <td>
-                            <?php echo $rs_showsettings[$i]->logoalpha . ' ' . "%" ?>
+<?php echo $rs_showsettings[$i]->logoalpha . ' ' . "%" ?>
                                    </td>
                                </tr>
 
@@ -1167,24 +1189,13 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->skin_autohide == 1)
-                                           $skin_autohide = JText::_("COM_HDFLVPLAYER_ENABLED"); else
-                                           $skin_autohide= JText::_("COM_HDFLVPLAYER_DISABLED");
+                                           $skin_autohide = "Enabled"; else
+                                           $skin_autohide="Disabled";
                             ?>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN_HIDE');?>
+                                       Skin Auto Hide
                                    </td>
                                    <td>
-                            <?php echo $skin_autohide ?>
-                                   </td>
-                               </tr>
-
-
-
-                               <tr>
-                                   <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_STAGE_COLOR');?>
-                                   </td>
-                                   <td>
-                            <?php echo "#" . $rs_showsettings[$i]->stagecolor ?>
+<?php echo $skin_autohide ?>
                                    </td>
                                </tr>
 
@@ -1192,10 +1203,10 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SKIN');?>
+                                       Stage Color
                                    </td>
                                    <td>
-                            <?php echo $rs_showsettings[$i]->skin ?>
+<?php echo "#" . $rs_showsettings[$i]->stagecolor ?>
                                    </td>
                                </tr>
 
@@ -1203,16 +1214,27 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FULL_SCREEN');?>
+                                       Skin
+                                   </td>
+                                   <td>
+<?php echo $rs_showsettings[$i]->skin ?>
+                                   </td>
+                               </tr>
+
+
+
+                               <tr>
+                                   <td>
+                                       Full Screen
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->fullscreen == 1)
-                                           $fullscreen = JText::_("COM_HDFLVPLAYER_ENABLED");
+                                           $fullscreen = "Enabled";
                                        else
-                                           $fullscreen = JText::_("COM_HDFLVPLAYER_DISABLED");
+                                           $fullscreen="Disabled";
                             ?>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FULL_SCREEN').' '.$fullscreen ?>
+                                       Full Screen<?php echo ' ' . $fullscreen ?>
                                    </td>
                                </tr>
 
@@ -1221,30 +1243,44 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->zoom == 1)
-                                           $zoom = JText::_("COM_HDFLVPLAYER_ENABLED");
+                                           $zoom = "Enabled";
                                        else
-                                           $zoom = JText::_("COM_HDFLVPLAYER_DISABLED");
-                            
-                                       echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ZOOM');?>
-                             
+                                           $zoom="Disabled";
+                            ?>
+                                       Zoom
                                    </td>
                                    <td>
-                            <?php echo $zoom ?>
+<?php echo $zoom ?>
                                    </td>
                                </tr>
 
+
+
+
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TIMER');?>
+                                       Upload Max File Size
+                                   </td>
+                                   <td>
+<?php echo $rs_showsettings[$i]->uploadmaxsize . ' ' . "MB" ?>
+                                   </td>
+                               </tr>
+
+
+
+
+                               <tr>
+                                   <td>
+                                       Timer
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->timer == 1)
-                                           $timer = JText::_("COM_HDFLVPLAYER_ENABLED");
+                                           $timer = "Enabled";
                                        else
-                                           $timer = JText::_("COM_HDFLVPLAYER_DISABLED");
+                                           $timer="Disabled";
                             ?>
-                            <?php echo $timer; ?>
+<?php echo $timer; ?>
                                    </td>
                                </tr>
 
@@ -1252,13 +1288,13 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SHARE');?>
+                                       Share
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->shareurl == 1)
-                                           $shareurl = JText::_("COM_HDFLVPLAYER_ENABLED"); else
-                                           $shareurl = JText::_("COM_HDFLVPLAYER_DISABLED"); echo $shareurl;
+                                           $shareurl = "Enabled"; else
+                                           $shareurl="Disabled"; echo $shareurl;
                             ?>
                                    </td>
                                </tr>
@@ -1267,16 +1303,16 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_HDDEFAULT');?>
+                                       HD Default
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->hddefault == 1)
-                                           $hddefault = JText::_("COM_HDFLVPLAYER_ENABLED");
+                                           $hddefault = "Enabled";
                                        else
-                                           $hddefault = JText::_("COM_HDFLVPLAYER_DISABLED");
+                                           $hddefault="Disabled";
                             ?>
-                            <?php echo $hddefault; ?>
+<?php echo $hddefault; ?>
                                    </td>
                                </tr>
 
@@ -1284,26 +1320,30 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS');?>
+                                       Related Videos
                                    </td>
                                    <td>
                             <?php
                                        if ($rs_showsettings[$i]->related_videos == 1)
-                                           $related_videos = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_ENABLE");
+                                           $related_videos = "Enabled Both";
                                        elseif ($rs_showsettings[$i]->related_videos == 2)
-                                           $related_videos = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_DISABLED");
+                                           $related_videos = "Disabled";
                                        elseif ($rs_showsettings[$i]->related_videos == 3)
-                                           $related_videos = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_WITHIN");
+                                           $related_videos = "Within Player";
                                        else if ($rs_showsettings[$i]->related_videos == 4)
-                                           $related_videos = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RELATED_VIDEOS_OUTSIDE");
+                                           $related_videos = "Outside Player";
                             ?>
-                            <?php echo $related_videos; ?>
+<?php echo $related_videos; ?>
                                    </td>
                                </tr>
 
+
+
+
+
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_URL_LINK');?>
+                                       Url Link
                                    </td>
                                    <td>
                             <?php
@@ -1313,101 +1353,67 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                                </tr>
 
 
+
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_EMBED_CODE');?>
+                                       Embed code
                                    </td>
                                    <td>
                             <?php
-                                       ($rs_showsettings[$i]->embedcode_visible == 1) ? $embedcode_visible = JText::_("COM_HDFLVPLAYER_ENABLED") : $embedcode_visible = JText::_("COM_HDFLVPLAYER_DISABLED");
+                                       ($rs_showsettings[$i]->embedcode_visible == 1) ? $embedcode_visible = "Enabled" : $embedcode_visible = "Disabled";
                                        echo $embedcode_visible;
                             ?>
                                    </td>
                                </tr>
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_GOOGLE_ANALYTICS');?>
+                                       Google Analytics
                                    </td>
                                    <td>
                             <?php
-                                       ($rs_showsettings[$i]->googleana_visible == 1) ? $googleana_visible = JText::_("COM_HDFLVPLAYER_ENABLED") : $googleana_visible = JText::_("COM_HDFLVPLAYER_DISABLED");
+                                       ($rs_showsettings[$i]->googleana_visible == 1) ? $googleana_visible = "Enabled" : $googleana_visible = "Disabled";
                                        echo $googleana_visible;
+
                             ?>
                                    </td>
                                </tr>
 
                                <tr>
-                                   <td>
-                                       <div id="show">
-                                           <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_ANALYTICS_ID');?>
-                                       </div>
-                                   </td>
+                        <td>
+                            <div id="show">
+                                Google Analytics ID
+                            </div>
+                        </td>
 
-                                   <td>
-                                       <div id="show1">
-<?php
-                                       ($rs_showsettings[$i]->googleana_visible == 1) ? $googleanalyticsID = $rs_showsettings[$i]->googleanalyticsID : $googleanalyticsID = "";
-                                       echo $rs_showsettings[$i]->googleanalyticsID;
-?>
-                                   </div>
-                               </td>
-                           </tr>
-
-
-
-                   </table>
-               </fieldset>
-           </div>
+                        <td>
+                            <div id="show1">
+                                 <?php
+                                  ($rs_showsettings[$i]->googleana_visible == 1) ? $googleanalyticsID = $rs_showsettings[$i]->googleanalyticsID : $googleanalyticsID = "";
+                                   echo $rs_showsettings[$i]->googleanalyticsID;
+                                ?>
+                            </div>
+                        </td>
+                    </tr>
 
 
 
-           <div class="width-40 fltlft">
-               <fieldset class="adminform">
-                   <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_YOUTUBE_SETTINGS');?></legend>
-                   <table class="adminlist">
-                       <thead>
-                           <tr>
-                               <th>
-                                 					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
-                               </th>
-                               <th>
-                                 					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
-                               </th>
-                           </tr>
-                       </thead>
-                       <tfoot>
-                           <tr>
-                               <td colspan="2">&#160;
-                               </td>
-                           </tr>
-                       </tfoot>
-                       <tbody>
-                           <tr>
-                               <td>
-                                 					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VIDEO_QUALITY');?>
-                               </td>
-                               <td>
-<?php ($rs_showsettings[$i]->vquality == 1) ? $vquality = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SMALL") : $vquality = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MEDIUM"); ?>
-                            <?php echo $vquality; ?>
-                                   </td>
-                               </tr>
-
-                           </tbody>
                        </table>
                    </fieldset>
                </div>
 
+
+
                <div class="width-40 fltlft">
                    <fieldset class="adminform">
-                       <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_SETTINGS');?></legend>
+                       <legend>Youtube Settings</legend>
                        <table class="adminlist">
                            <thead>
                                <tr>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+                          					Settings
                                    </th>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+                          					Value
                                    </th>
                                </tr>
                            </thead>
@@ -1420,24 +1426,60 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            <tbody>
                                <tr>
                                    <td>
-                                     					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LICENCE_KEY');?>
+                          					Video Quality
                                    </td>
                                    <td>
-<?php echo trim($rs_editsettings[0]->licensekey); ?>
+<?php ($rs_showsettings[$i]->vquality == 1) ? $vquality = "Small" : $vquality = "Medium"; ?>
+<?php echo $vquality; ?>
+                                   </td>
+                               </tr>
+
+                           </tbody>
+                       </table>
+                   </fieldset>
+               </div>
+
+               <div class="width-40 fltlft">
+                   <fieldset class="adminform">
+                       <legend>Logo Settings</legend>
+                       <table class="adminlist">
+                           <thead>
+                               <tr>
+                                   <th>
+                          					Settings
+                                   </th>
+                                   <th>
+                          					Value
+                                   </th>
+                               </tr>
+                           </thead>
+                           <tfoot>
+                               <tr>
+                                   <td colspan="2">&#160;
+                                   </td>
+                               </tr>
+                           </tfoot>
+                           <tbody>
+                               <tr>
+                                   <td>
+                          					 LicenseKey
+                                   </td>
+                                   <td>
+                            <?php echo $rs_editsettings[0]->licensekey; ?>
                             <?php
                                        if ($rs_editsettings[0]->licensekey == '') {
                             ?>
-                                           <a href="http://www.apptha.com/shop/checkout/cart" target="_blank"><img  src="components/com_hdflvplayer/images/buynow.gif" width="77" height="23" /></a>
-<?php
+                                           <a href="http://hdflvplayer.net/shop/index.php?main_page=product_info&cPath=7&products_id=7" target="_blank"><img  src="components/com_hdflvplayer/images/buynow.gif" width="77" height="23" /></a>
+                            <?php
                                        }
-?>
+                            ?>
                                    </td>
                                </tr>
 
 
                                <tr>
                                    <td>
-                                     					    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO');?>
+                          					    Logo
                                    </td>
                                    <td>
 
@@ -1447,7 +1489,7 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_URL');?>
+                          					   Logo url
                                    </td>
                                    <td>
 
@@ -1457,21 +1499,21 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					  <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_LOGO_POSITION');?>
+                          					  Logo Position
                                    </td>
                                    <td>
-<?php
+                            <?php
                                        $logoalign = "";
                                        if ($rs_showsettings[$i]->logoalign == "TL")
-                                           $logoalign = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TOPLEFT");
+                                           $logoalign = "Top Left";
                                        if ($rs_showsettings[$i]->logoalign == "TR")
-                                           $logoalign = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TOPRIGHT");
+                                           $logoalign = "Top Right";
                                        if ($rs_showsettings[$i]->logoalign == "LB")
-                                           $logoalign = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BOTTOMLEFT");
+                                           $logoalign = "Bottom Left";
                                        if ($rs_showsettings[$i]->logoalign == "RB")
-                                           $logoalign = JText::_("COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BOTTOMRIGHT");
-?>
-                            <?php echo $logoalign; ?>
+                                           $logoalign = "Bottom Right";
+                            ?>
+<?php echo $logoalign; ?>
                                    </td>
                                </tr>
 
@@ -1482,15 +1524,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                <div class="width-40 fltlft">
                    <fieldset class="adminform">
-                       <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PREPOST_SETTINGS');?></legend>
+                       <legend>Pre/Post Ads Settings</legend>
                        <table class="adminlist">
                            <thead>
                                <tr>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+                          					Settings
                                    </th>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+                          					Value
                                    </th>
                                </tr>
                            </thead>
@@ -1503,12 +1545,12 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            <tbody>
                                <tr>
                                    <td>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PREROLL_ADS');?>
+                          					Pre roll ads
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->prerollads == 1) ? $prerollads = JText::_("COM_HDFLVPLAYER_ENABLED") : $prerollads = JText::_("COM_HDFLVPLAYER_DISABLED");
-?>
+                            <?php
+                                       ($rs_showsettings[$i]->prerollads == 1) ? $prerollads = "Enabled" : $prerollads = "Disabled";
+                            ?>
 
 <?php echo $prerollads; ?>
                                    </td>
@@ -1517,12 +1559,12 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					  <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_POSTROLL_ADS');?>
+                          					  Post roll ads
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->postrollads == 1) ? $postrollads = JText::_("COM_HDFLVPLAYER_ENABLED") : $postrollads = JText::_("COM_HDFLVPLAYER_DISABLED");
-?>
+                            <?php
+                                       ($rs_showsettings[$i]->postrollads == 1) ? $postrollads = "Enabled" : $postrollads = "Disabled";
+                            ?>
 
 <?php echo $postrollads; ?>
                                    </td>
@@ -1530,12 +1572,12 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					  <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_RANDOM');?>
+                          					  Random
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->random == 1) ? $random = JText::_("COM_HDFLVPLAYER_ENABLED") : $random = JText::_("COM_HDFLVPLAYER_DISABLED");
-?>
+                            <?php
+                                       ($rs_showsettings[$i]->random == 1) ? $random = "Enabled" : $random = "Disabled";
+                            ?>
 
 <?php echo $random; ?>
                                    </td>
@@ -1543,12 +1585,12 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                       <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_GOOGLE_ADS');?>
+                                       Google Ads
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->ads == 1) ? $ads = JText::_("COM_HDFLVPLAYER_ENABLED") : $ads = JText::_("COM_HDFLVPLAYER_DISABLED");
-?>
+                            <?php
+                                       ($rs_showsettings[$i]->ads == 1) ? $ads = "Enabled" : $ads = "Disabled";
+                            ?>
 
 <?php echo $ads; ?>
                                    </td>
@@ -1563,15 +1605,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                <div class="width-40 fltlft">
                    <fieldset class="adminform">
-                       <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MIDROLL_SETTINGS');?></legend>
+                       <legend>Mid RollAd Settings</legend>
                        <table class="adminlist">
                            <thead>
                                <tr>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+                          					Settings
                                    </th>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+                          					Value
                                    </th>
                                </tr>
                            </thead>
@@ -1584,12 +1626,12 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            <tbody>
                                <tr>
                                    <td>
-                                     					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MIDROLL_ADS');?>
+                          					 Mid roll ads
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->midrollads == 1) ? $midrollads = JText::_("COM_HDFLVPLAYER_ENABLED") : $midrollads = JText::_("COM_HDFLVPLAYER_DISABLED");
-?>
+                            <?php
+                                       ($rs_showsettings[$i]->midrollads == 1) ? $midrollads = "Enabled" : $midrollads = "Disabled";
+                            ?>
 
 <?php echo $midrollads; ?>
                                    </td>
@@ -1598,13 +1640,13 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					    <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_BEGIN');?>
+                          					    Begin
                                    </td>
                                    <td>
 
-<?php
+                            <?php
                                        ($rs_showsettings[$i]->midbegin == 0) ? $midbegin = "0" : $midbegin = $rs_showsettings[$i]->midbegin;
-?>
+                            ?>
 
 <?php echo $midbegin; ?>
                                    </td>
@@ -1612,14 +1654,14 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					  <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_AD_ROTATE');?>
+                          					  Ad Rotate
                                    </td>
                                    <td>
 
-<?php
+                            <?php
                                        //($rs_showsettings[$i]->$midadrotate == 1) ? $midadrotate = "Enabled" : $midadrotate = "Disabled";
-                                       ($rs_showsettings[$i]->midadrotate == 1) ? $midadrotate = JText::_("COM_HDFLVPLAYER_ENABLED") : $midadrotate = JText::_("COM_HDFLVPLAYER_DISABLED");
-?>
+                                       ($rs_showsettings[$i]->midadrotate == 1) ? $midadrotate = "Enabled" : $midadrotate = "Disabled";
+                            ?>
 
 <?php echo $midadrotate; ?>
                                    </td>
@@ -1627,12 +1669,12 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_MIDROLL_RANDOM_AD');?>
+                          					   Mid Roll Ads Random
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->midrandom == 1) ? $midrandom = JText::_("COM_HDFLVPLAYER_ENABLED") : $midrandom = JText::_("COM_HDFLVPLAYER_DISABLED");
-?>
+                            <?php
+                                       ($rs_showsettings[$i]->midrandom == 1) ? $midrandom = "Enabled" : $midrandom = "Disabled";
+                            ?>
 
 <?php echo $midrandom; ?>
                                    </td>
@@ -1640,12 +1682,12 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                                <tr>
                                    <td>
-                                     					     <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_AD_INTERVAL');?>
+                          					     Add Interval
                                    </td>
                                    <td>
-<?php
+                            <?php
                                        ($rs_showsettings[$i]->midinterval == 0) ? $midinterval = "0" : $midinterval = $rs_showsettings[$i]->midinterval;
-?>
+                            ?>
 
 <?php echo $midinterval; ?>
 
@@ -1664,15 +1706,15 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
                <div class="width-40 fltrt">
                    <fieldset class="adminform">
-                       <legend><?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_FRONTPAGE_SETTINGS');?></legend>
+                       <legend>Front Page Settings</legend>
                        <table class="adminlist">
                            <thead>
                                <tr>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_SETTINGS');?>
+                          					Settings
                                    </th>
                                    <th>
-                                     					<?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_VALUE');?>
+                          					Value
                                    </th>
                                </tr>
                            </thead>
@@ -1685,63 +1727,63 @@ if (JRequest::getVar('task') == 'editplayersettings') {
                            <tbody>
                                <tr>
                                    <td>
-                                     					 <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYER_TITLE');?>
+                          					 Title above the Player
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->title_ovisible == 1) ? $title_ovisible = JText::_("COM_HDFLVPLAYER_ENABLED") : $title_ovisible = JText::_("COM_HDFLVPLAYER_DISABLED");
+                            <?php
+                                       ($rs_showsettings[$i]->title_ovisible == 1) ? $title_ovisible = "Enabled" : $title_ovisible = "Disabled";
                                        echo $title_ovisible;
-?>
+                            ?>
                                    </td>
                                </tr>
 
 
                                <tr>
                                    <td>
-                                     				  <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYER_DESCRIPTION');?>
+                          				  Description below the Player
                                    </td>
                                    <td>
 
-<?php
-                                       ($rs_showsettings[$i]->description_ovisible == 1) ? $description_ovisible = JText::_("COM_HDFLVPLAYER_ENABLED") : $description_ovisible = JText::_("COM_HDFLVPLAYER_DISABLED");
+                            <?php
+                                       ($rs_showsettings[$i]->description_ovisible == 1) ? $description_ovisible = "Enabled" : $description_ovisible = "Disabled";
                                        echo $description_ovisible;
-?>
+                            ?>
                                    </td>
                                </tr>
 
                                <tr>
                                    <td>
-                                     					  <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_TIMES_VIEWED');?>
+                          					  Times Viewed
                                    </td>
                                    <td>
 
-<?php
-                                       ($rs_showsettings[$i]->viewed_visible == 1) ? $viewed_visible = JText::_("COM_HDFLVPLAYER_ENABLED") : $viewed_visible = JText::_("COM_HDFLVPLAYER_DISABLED");
+                            <?php
+                                       ($rs_showsettings[$i]->viewed_visible == 1) ? $viewed_visible = "Enabled" : $viewed_visible = "Disabled";
                                        echo $viewed_visible;
-?>
+                            ?>
                                    </td>
                                </tr>
 
                                <tr>
                                    <td>
-                                     					   <?php echo JText::_('COM_HDFLVPLAYER_VIEW_PLAYERSETTINGS_TMPL_PLAYLIST_DROPDOWN');?>
+                          					   Playlist Drop Down
 
                                    </td>
                                    <td>
-<?php
-                                       ($rs_showsettings[$i]->playlist_dvisible == 1) ? $playlist_dvisible = JText::_("COM_HDFLVPLAYER_ENABLED") : $playlist_dvisible = JText::_("COM_HDFLVPLAYER_DISABLED");
+                            <?php
+                                       ($rs_showsettings[$i]->playlist_dvisible == 1) ? $playlist_dvisible = "Enabled" : $playlist_dvisible = "Disabled";
                                        echo $playlist_dvisible;
-?>
+                            ?>
                                    </td>
                                </tr>
                            </tbody>
                        </table>
                    </fieldset>
                </div>
-<?php
+    <?php
                                    }
                                }
-?>
+    ?>
 
                                <input type="hidden" name="id" value=""/>
                                <input type="hidden" name="task" value=""/>
@@ -1754,40 +1796,44 @@ if (JRequest::getVar('task') == 'editplayersettings') {
 
 <?php } ?>
 
-                       <style type="text/css">
-                           #show
-                           {                     
-                               DISPLAY: none;
-                           }
+<style type="text/css">
+    #show
+    {
+        DISPLAY: none;
+    }
 
-                           #show1
-                           {
-                               DISPLAY: none;
-                           }
+    #show1
+    {
+        DISPLAY: none;
+    }
 
-                       </style>
+</style>
 
-                       <script type="text/javascript">
-                           function Toggle(theDiv) {
+<script type="text/javascript">
+    function Toggle(theDiv) {
 
-                               if(theDiv=="shows")
-                               {
-                                   document.getElementById("show").style.display = "block";
-                                   document.getElementById("show1").style.display = "block";
-                               }
-                               else
-                               {
-                                   document.getElementById("show").style.display = "none";
-                                   document.getElementById("show1").style.display = "none";
-                               }
-                           }
-                       </script>
+        if(theDiv=="shows")
+        {
+            document.getElementById("show").style.display = "block";
+            document.getElementById("show1").style.display = "block";
+        }
+        else
+        {
+            document.getElementById("show").style.display = "none";
+            document.getElementById("show1").style.display = "none";
+        }
+    }
+</script>
 
 <?php
-                           if ($rs_editsettings[0]->googleana_visible == 1) {
-                               echo '<script type="text/javascript">';
-                               echo 'document.getElementById("show").style.display = "block";';
-                               echo ' document.getElementById("show1").style.display = "block";';
-                               echo '</script>';
-                           }
+
+if ($rs_editsettings[0]->googleana_visible == 1)
+    {
+        echo '<script type="text/javascript">';
+        echo 'document.getElementById("show").style.display = "block";';
+        echo ' document.getElementById("show1").style.display = "block";';
+        echo '</script>';
+    }
+
+
 ?>

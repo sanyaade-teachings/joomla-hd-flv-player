@@ -18,10 +18,13 @@ class hdflvplayerViewsortorder extends JView
 {
 	function sortorder()
 	{
+        
+
         $model = $this->getModel();
         $sortorder = $model->sortordermodel();
-		print_r($sortorder);
-		parent::display();
+		
+		//parent::display();
 	}
+    
 }
 ?>   

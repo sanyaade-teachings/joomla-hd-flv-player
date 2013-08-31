@@ -19,7 +19,6 @@ jimport( 'joomla.application.component.view');
 class hdflvplayerViewplayer extends JView
 {
 
-	//player view display function.
 	function displayplayer()
 	{
         $model =& $this->getModel();

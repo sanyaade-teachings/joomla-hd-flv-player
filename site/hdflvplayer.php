@@ -14,7 +14,7 @@
 defined( '_JEXEC' ) or die( 'Restricted access' );
  
 // Require the base controller
-
+ 
 require_once( JPATH_COMPONENT.DS.'controller.php' );
  
 // Require specific controller if requested
