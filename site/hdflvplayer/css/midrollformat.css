@@ -1,0 +1,36 @@
+/**
+ * @name 	        hdflvplayer
+ * @version	        2.1
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
+ */
+ 
+.midroll {
+  color: #FFFFFF;
+  font-family:Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  display: block;
+  text-shadow: #6374AB 20px -12px 2px;
+  }
+.heading{
+color:#ffffff;
+font-size:14px;
+font-weight:bold;
+ text-decoration:underline;
+}
+.webaddress
+{
+ color: #F8FCC9;
+  font-family:Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  display: block;
+   }
