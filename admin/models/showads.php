@@ -1,231 +1,231 @@
 <?php
-
 /**
- * @version  $Id: showads.php 1.5,  28-Feb-2011 $$
- * @package	Joomla
- * @subpackage	hdflvplayer
- * @copyright   Copyright (C) 2011 Contus Support
- * @license     GNU/GPL http://www.gnu.org/copyleft/gpl.html
- * Edited       Gopinath.A
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
-
 //No direct acesss
 defined('_JEXEC') or die();
 
 //importing defalut joomla components
 jimport('joomla.application.component.model');
 
-
 /*
- * Description : Show Ads,Save Ads,Copy to videos,Find Extension
- *               
+ * HDFLV player Model class to show Pre-roll, Post-roll, Mid-roll Ads.
  */
-
-
 class hdflvplayerModelshowads extends JModel {
 
-
-    function __construct()
+	function __construct()
 	{
-
-
 		parent::__construct();
 
 		//Get configuration
 		$app	= JFactory::getApplication();
 		$config = JFactory::getConfig();
+
 		// Get the pagination request variables
 		$this->setState('limit', $app->getUserStateFromRequest('ads.limit', 'limit', $config->get('list_limit'), 'int'));
 		$this->setState('limitstart', JRequest::getVar('limitstart', 0, '', 'int'));
 	}
 
+	//Function to fetch Ads info
+	function showadsmodel() {
+		global $option;
+		$option = 'com_hdflvplayer';
+		$app = JFactory::getApplication();
+		$queryOrder = $querySearch = '';
+		$db = JFactory::getDBO();
 
-    function showadsmodel() {
-        global $mainframe;
-        global $option;
-        $option='com_hdflvplayer';
-            $app = & JFactory::getApplication();
-            // table ordering
-            // Default id desc order
-            $filter_order     = $app->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'id', 'cmd' );
-            $filter_order_Dir = $app->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', 'asc', 'word' );
-            $filter_adsname	= $app->getUserStateFromRequest( $option.'filter_adsname','filter_adsname','','string' );
+		//Instantiate variables for Filter
+		$filter_order     	= $app->getUserStateFromRequest( $option.'filter_orderads', 'filter_order', 'id', 'cmd' );
+		$filter_order_Dir 	= $app->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', 'ASC', 'word' );
+		$filter_order_State = $app->getUserStateFromRequest( $option.'filter_order_Status', 'filter_state', '', 'int' );
+		$filter_order_Type 	= $app->getUserStateFromRequest( $option.'filter_order_Type', 'filter_type', '', 'string' );
+		$search = $app->getUserStateFromRequest( $option.'search','search','','post','string' );
+		
+		//Filter for Status
+		if($filter_order_State != '')
+			{
+				$filter_state = $filter_order_State;
+				if($filter_order_State == 2)
+				{
+					$filter_state = 0;
+				}
+				$querySearch .= ' WHERE published = '.$filter_state;
+			}
+			else{
+				$querySearch .= ' WHERE published != -2';
+			}
+			
+		
+			//Filter for Type of Ad
+			if($filter_order_Type != '')
+			{
+			
+				$querySearch .= ' AND typeofadd LIKE \'%'.$filter_order_Type.'%\'';
+			}
+			
+			//Filter by Ad Name
+			if($search != ''){
+							
+				$querySearch .= ' AND adsname LIKE \'%'.$search.'%\'';
+				$lists['search']= $search;
+			}
+		
+			
+		//Fetching count for pagination and instantiate Pagination values
+		$query = 'SELECT count(id) FROM #__hdflvplayerads'.$querySearch;
+		$db->setQuery( $query );
+		$total = $db->loadResult();
 
+		jimport('joomla.html.pagination');
+		$pageNav = new JPagination($total,  $this->getState('limitstart'), $this->getState('limit'));
 
-// normal display section
-            $db = & JFactory::getDBO();
-            $query = "SELECT * FROM #__hdflvplayerads";
-            $db->setQuery($query);
-            $rs_showads = $db->loadObjectList();
-       // return $rs_showads;
-
-            // search filter
-            $search=$app->getUserStateFromRequest( $option.'search','search','','string' );
-
-            //exit();
-            $db =& JFactory::getDBO();
-            $query = "SELECT count(*) FROM #__hdflvplayerads";
-            $db->setQuery( $query );
-            $total = $db->loadResult();
-            jimport('joomla.html.pagination');
-            $pageNav = new JPagination($total,  $this->getState('limitstart'), $this->getState('limit'));
-            $where="";
-            $query = "SELECT * from #__hdflvplayerads";
-            $db->setQuery( $query );
-            $rs_showads = $db->loadObjectList();
-            if ($filter_adsname) {
-			    $query = "SELECT * from #__hdflvplayerads";
-                $db->setQuery( $query );
-                $rs_showads = $db->loadObjectList();
+		//Sorting query
+		if($filter_order)
+		{
+			$queryOrder = ' ORDER BY '.$filter_order.' '. $filter_order_Dir.' LIMIT '.$pageNav->limitstart.','.$pageNav->limit;
 		}
-            if($filter_order)
-            {
-                $query = "SELECT * FROM #__hdflvplayerads order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit";
+		
+		//Assign filter values into array for return
+		$lists['order_Dir']	= $filter_order_Dir;
+		$lists['order']	= $filter_order;
+		$lists['ads_state']= $filter_order_State;
+		$lists['ads_type'] = $filter_order_Type;
+			
+		//Query to fetch results
+		$query = 'SELECT id,adsname,postvideopath,clickcounts,impressioncounts,typeofadd,published FROM #__hdflvplayerads'.$querySearch.$queryOrder;
+		$db->setQuery( $query );
+		$rs_showads = $db->loadObjectList();
 
-                //$query = "SELECT a.*,b.name,g.title AS groupname FROM #__hdflvplayerupload a LEFT JOIN #__hdflvplayername b ON a.playlistid=b.id  LEFT JOIN #__usergroups AS g ON g.id = a.access $where order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit";
-                $db->setQuery( $query );
-                $rs_showads = $db->loadObjectList();
-            }
- // search filter
-            if ($search)
-            {
-                //$query = "SELECT * FROM #__hdflvplayerupload where title LIKE '$search%'";
-               // $query = "SELECT a.*,b.name FROM #__hdflvplayerupload a INNER JOIN #__hdflvplayername b ON a.playlistid=b.id where a.title LIKE '%$search%'";
-                $query = "SELECT * FROM #__hdflvplayerads where adsname LIKE '%$search%'";
-                //$query = "SELECT * FROM #__hdflvplayerupload where title LIKE '$search%' order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit ";
-                $db->setQuery( $query );
-                $rs_showads = $db->loadObjectList();
-                $lists['search']= $search;
-            }
+		//Checks if any error in database and displays here
+		if ($db->getErrorNum())
+		{
+			echo $db->stderr();
+			return false;
+		}
 
-            // table ordering
-            $lists['order_Dir']	= $filter_order_Dir;
-            $lists['order']	= $filter_order;
+		// search filter
+		$rs_showadsname = '';
+		$javascript		= 'onchange="document.adminForm.submit();"';
+		$lists['adsname'] = JHTML::_('list.category',  'filter_playlistname', 'com_hdflvplayer', (int) $rs_showadsname, $javascript );
 
-            if ($db->getErrorNum())
-            {
-                echo $db->stderr();
-                return false;
-            }
+		//Returns result set
+		$showarray = array('pageNav' 				=> $pageNav,
+            				   'limitstart'			=> $rs_showadsname,
+            				   'lists'				=> $lists,
+            				   'rs_showadslistname'	=> $rs_showadsname,
+            				   'rs_showads'			=> $rs_showads);
+		return $showarray;
+	}
 
-            // search filter
-             $rs_showadsname='';
-             $rs_showadsname='';
-            $javascript		= 'onchange="document.adminForm.submit();"';
-            $lists['adsname'] = JHTML::_('list.category',  'filter_playlistname', 'com_hdflvplayer', (int) $rs_showadsname, $javascript );
-            $showarray1 = array('pageNav' => $pageNav,'limitstart'=>$rs_showadsname,'lists'=>$lists,'rs_showadslistname'=>$rs_showadsname,'rs_showads'=>$rs_showads);
-            return $showarray1;
+	//Function to save Ads
+	function saveads($task) {
+		//Instantiate variables and global variables
+		global $option;
+		$option= 'com_hdflvplayer';
+		$db = JFactory::getDBO();
+		$adsSave = & JTable::getInstance('hdflvplayerads', 'Table');
 
+		//Fetch the selected row id
+		$cid = JRequest::getVar('cid', array(0), '', 'array');
+		$id = $cid[0];
+		$adsSave->load($id);
 
+		//Binds given input with table columns
+		if (!$adsSave->bind(JRequest::get('post'))) {
+			JError::raiseError(500, JText::_($adsSave->getError()));
+		}
 
-//        global $mainframe;
-//        $db = & JFactory::getDBO();
-//        $query = "SELECT * FROM #__hdflvplayerads";
-//        $db->setQuery($query);
-//        $rs_showads = $db->loadObjectList();
-//        return $rs_showads;
-    }
+		// ad description and ad name to table
+		$adsSave->adsdesc = JRequest::getVar('adsdesc', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		$adsSave->adsname = JRequest::getVar('adsname', '', 'post', 'string', JREQUEST_ALLOWRAW);
 
-    function saveads($task) {
-        global $option, $mainframe;
-        $option= 'com_hdflvplayer';
-        $db = & JFactory::getDBO();
-        $rs_save = & JTable::getInstance('hdflvplayerads', 'Table');
-        $cid = JRequest::getVar('cid', array(0), '', 'array');
-        $id = $cid[0];
-        $rs_save->load($id);
-        if (!$rs_save->bind(JRequest::get('post'))) {
-            echo "<script> alert('" . $rs_save->getError() . "');window.history.go(-1); </script>\n";
-            exit();
-        }
-        // add description and ad name to table
-        $rs_save->adsdesc = JRequest::getVar('adsdesc', '', 'post', 'string', JREQUEST_ALLOWRAW);
-        $rs_save->adsname = JRequest::getVar('adsname', '', 'post', 'string', JREQUEST_ALLOWRAW);
+		//Stores the input into table into appropriate columns
+		$fileoption = JRequest::getVar('fileoption','post');
+		if (!$adsSave->store()) {
+			JError::raiseError(500, JText::_($adsSave->getError()));
+		}
 
-        $fileoption = $_POST['fileoption'];
-        $vpath = VPATH1 . "/";
+		//Checks whether the given column available in the table or not
+		$adsSave->checkin();
 
-        if (!$rs_save->store()) {
-            echo "<script> alert('" . $rs_save->getError() . "'); window.history.go(-1); </script>\n";
-            exit();
-        }
-        $rs_save->checkin();
-        $idval = $rs_save->id;
+		//Fetch the last added id
+		$idval = $adsSave->id;
 
+		//If File Path option Url means, the below code will work
+		if ($fileoption == 'Url') {
+			$postvideopath = JRequest::getVar('posturl-value','post');
+			$query = 'UPDATE #__hdflvplayerads
+            		  SET filepath=\''.$fileoption.'\',postvideopath=\''.$postvideopath.'\'
+            		  WHERE id='.$idval;
+			$db->setQuery($query);
+			$db->query();
+		}
 
-        if ($fileoption == "Url") {
-            $postvideopath = $_POST['posturl-value'];
-            $query = "update #__hdflvplayerads SET filepath='$fileoption',postvideopath='$postvideopath' where id=$rs_save->id";
-            $db->setQuery($query);
-            $db->query();
-        }
+		//If File Path option File means, the below code will work.
+		else if ($fileoption == 'File') {
 
-        if ($fileoption == "File" || $fileoption == "") {   // Checked for file option
-            $normal_video = $_POST['normalvideoform-value'];
-            $video_name = explode("uploads/", $normal_video);
-            $vpath = VPATH1 . "/";
-            $file_video = $video_name[1];
-            if ($file_video <> "") {
-                $exts1 = $this->findexts($file_video);
-                $vpath2 = FVPATH . "/images/uploads/" . $file_video;
-                // $vpath2=FVPATH."/images/uploads/".$file_video."<br>";
-                $target_path1 = $vpath . $idval . "_ads" . "." . $exts1;
-                $file_name = $idval . "_ads" . "." . $exts1;
-                if (file_exists($target_path)) {
-                    unlink($target_path);
-                }
-                rename($vpath2, $target_path1);
-                $fileoption = "File";
-                $query = "update #__hdflvplayerads set postvideopath='$file_name',filepath='$fileoption' WHERE id = $idval ";
-                $db->setQuery($query);
-                $db->query();
-            }
-        }
+			//Getting file name from hidden value.
+			$normal_video = JRequest::getVar('normalvideoform-value','post');
+			$video_name = explode('uploads/', $normal_video);
+			$vpath = VPATH . '/';
+			$file_video = $video_name[1];
 
-        switch ($task) {
-            case 'applyads':
-                $msg = 'Changes Saved';
-                $link = 'index.php?option=' . $option . '&task=editads&cid[]=' . $rs_save->id;
-                break;
-            case 'saveads':
-            default:
-                $msg = 'Saved';
-                $link = 'index.php?option=' . $option . '&task=ads';
-                break;
-        }
-       JFactory::getApplication()->redirect($link, $msg);
-    }
+			//Checks if file uploaded, the uploaded file moves into com_hdflvplayer\images\uploads folder
+			if ($file_video <> '') {
+				$exts = $this->findexts($file_video);
+				$videoPath = FVPATH . '/images/uploads/' . $file_video;
+				$target_path = $vpath . $idval . '_ads' . '.' . $exts;
+				$file_name = $idval . '_ads' . '.' . $exts;
 
+				//removes file from 'uploads' folder and move it to 'videos' folder.
+				if (file_exists($target_path)) {
+					unlink($target_path);
+				}
+				rename($videoPath, $target_path);
 
+				//The renamed file name updated in table for last saved record.
+				$query = 'UPDATE #__hdflvplayerads
+                		SET postvideopath=\''.$file_name.'\',filepath=\''.$fileoption.'\'
+                		WHERE id = '.$idval;
+				$db->setQuery($query);
+				$db->query();
+			}
+		}
 
-    // copying uploaded pre/post roll video to local host
+		//Assigns message and redirects link for Apply and Save tasks
+		switch ($task) {
+			case 'applyads':
+				$msg = 'Changes Saved';
+				$link = 'index.php?option=' . $option . '&task=editads&cid[]=' . $adsSave->id;
+				break;
+			case 'saveads':
+			default:
+				$msg = 'Saved';
+				$link = 'index.php?option=' . $option . '&task=ads';
+				break;
+		}
 
- /*   function copytovideos($vpath2, $targetpath, $vmfile, $idval, $dbname, $option, $newupload, $filepath) {
-        global $mainframe;
-        $option = JRequest::getCmd('option');
-        $db = & JFactory::getDBO();
-        $targetpath1 = $targetpath;
-        if ($newupload == 1) {
-            if (file_exists($targetpath)) {
-                unlink($targetpath);
-            }
-        }
-        rename($vpath2, $targetpath1);
-        $query = "update #__hdflvplayerads set $dbname='$vmfile',filepath='$filepath' WHERE id = $idval ";
-        $db->setQuery($query);
-        $db->query();
-    }
-*/
+		//Redirects to given url with message
+		JFactory::getApplication()->redirect($link, $msg);
+	}
 
-    // extracting extension from uploading files
-    function findexts($filename) {
-        $filename = strtolower($filename);
-        $exts = split("[/\\.]", $filename);
-        $n = count($exts) - 1;
-        $exts = $exts[$n];
-        return $exts;
-    }
-
+	// Extracting file extension from uploaded files
+	function findexts($filename) {
+		$filename 	= strtolower($filename);
+		$exts 		= split("[/\\.]", $filename);
+		$count 		= count($exts) - 1;
+		$exts 		= $exts[$count];
+		return $exts;
+	}
 }
-
 ?>

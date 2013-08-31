@@ -1,257 +1,227 @@
-window.onload = function(){
-document.getElementById('fileoption').value='File';
-document.getElementById('streameroption1').checked==true;
-document.getElementById('stream1').style.display='none';
-document.getElementById('postroll').style.display='none';
-document.getElementById('preroll').style.display='none';
-//document.getElementById('midroll').style.display='none';
-document.getElementById('islive_visible').style.display='none';
+/**
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
+ */
+
+document.getElementById('fileoption').value = 'File';
+document.getElementById('stream1').style.display = 'none';
+document.getElementById('postroll').style.display = 'none';
+document.getElementById('preroll').style.display = 'none';
+document.getElementById('islive_visible').style.display = 'none';
 
 
-if(document.getElementById('prerollads').checked==1)
-    preroll(1);
-else
-    preroll(0) ;
-
-if(document.getElementById('postrollads').checked==1)
-    postroll(1);
-else
-    postroll(0) ;
-
-
-//    if(document.getElementById('midrollads').checked==1)
-//        midroll("1");
-//    else
-//        midroll("0") ;
-
-
-if(document.getElementById('mode1').value == 'Youtube')
-{
-    withoutflashhide();
-    urlvisible();
-    document.getElementById('ffmpeg_disable_new6').style.display="none";
-    document.getElementById('ffmpeg_disable_new7').style.display="none";
-    document.getElementById('ffmpeg_disable_new8').style.display="none";
-    document.getElementById('fvideos').style.display="none";
-}
-
-if(document.getElementById('mode1').value == 'File')
+if(document.getElementById('mode1').value == 'File' || document.getElementById('mode1').value == '')
 {
     withoutflashvisible();
     urlhide();
+    document.getElementById('fvideos').style.display = "none";
+}
+ else if(document.getElementById('mode1').value == 'Youtube')
+{
+    withoutflashhide();
+    urlvisible();
+    document.getElementById('ffmpeg_disable_new6').style.display = "none";
+    document.getElementById('ffmpeg_disable_new7').style.display = "none";
+    document.getElementById('ffmpeg_disable_new8').style.display = "none";
     document.getElementById('fvideos').style.display="none";
 }
-
-if(document.getElementById('mode1').value == 'FFmpeg')
+else if(document.getElementById('mode1').value == 'FFmpeg')
 {
-
     urlhide();
-    document.getElementById('fvideos').style.display="";
+    withoutflashhide();
+    document.getElementById('fvideos').style.display = '';
 }
-if(document.getElementById('mode1').value == 'Url')
+
+else if(document.getElementById('mode1').value == 'Url')
 {
 
-    if(document.getElementById('streameroption-value').value=="rtmp")
+    if(document.getElementById('streameroption-value').value == 'rtmp')
     {
-        document.getElementById('stream1').style.display='';
-        document.getElementById('islive_visible').style.display='';
+        document.getElementById('stream1').style.display = '';
+        document.getElementById('islive_visible').style.display = '';
     }
 
-
     withoutflashhide();
     urlvisible();
-    document.getElementById('fvideos').style.display="none";
-}
-if(document.getElementById('mode1').value == '')
-{
-
-    withoutflashvisible();
-    urlhide();
-    document.getElementById('fvideos').style.display="none";
+    document.getElementById('fvideos').style.display = 'none';
 }
 
-}
+
+
+
+if(document.getElementById('prerolladsyes').checked == 1)
+	{
+    preroll(1);
+	}
+else
+	{
+    preroll(0) ;
+	}
+
+if(document.getElementById('postrollads').checked==1)
+	{
+    postroll(1);
+	}
+else
+	{
+    postroll(0) ;
+	}
 
 
 function urlhide()
 {
 
-    document.getElementById('ffmpeg_disable_new5').style.display="none";
-    document.getElementById('ffmpeg_disable_new6').style.display="none";
-    document.getElementById('ffmpeg_disable_new7').style.display="none";
-    document.getElementById('ffmpeg_disable_new8').style.display="none";
-
+    document.getElementById('ffmpeg_disable_new5').style.display = 'none';
+    document.getElementById('ffmpeg_disable_new6').style.display = 'none';
+    document.getElementById('ffmpeg_disable_new7').style.display = 'none';
+    document.getElementById('ffmpeg_disable_new8').style.display = 'none';
 }
 
 function urlvisible()
 {
-    document.getElementById('ffmpeg_disable_new5').style.display="";
-    document.getElementById('ffmpeg_disable_new6').style.display="";
-    document.getElementById('ffmpeg_disable_new7').style.display="";
-    document.getElementById('ffmpeg_disable_new8').style.display="";
+    document.getElementById('ffmpeg_disable_new5').style.display = '';
+    document.getElementById('ffmpeg_disable_new6').style.display = '';
+    document.getElementById('ffmpeg_disable_new7').style.display = '';
+    document.getElementById('ffmpeg_disable_new8').style.display = '';
+}
 
-
+function urlvisible1()
+{
+    document.getElementById('ffmpeg_disable_new5').style.display = '';
+    document.getElementById('ffmpeg_disable_new6').style.display = '';
+    document.getElementById('ffmpeg_disable_new7').style.display = '';
+    document.getElementById('ffmpeg_disable_new8').style.display = 'none';
 }
 
 function withoutflashhide()
 {
-    document.getElementById('ffmpeg_disable_new1').style.display="none";
-    document.getElementById('ffmpeg_disable_new2').style.display="none";
-    document.getElementById('ffmpeg_disable_new3').style.display="none";
-    document.getElementById('ffmpeg_disable_new4').style.display="none";
+    document.getElementById('ffmpeg_disable_new1').style.display = 'none';
+    document.getElementById('ffmpeg_disable_new2').style.display = 'none';
+    document.getElementById('ffmpeg_disable_new3').style.display = 'none';
+    document.getElementById('ffmpeg_disable_new4').style.display = 'none';
 }
 
 function withoutflashvisible()
 {
-    document.getElementById('ffmpeg_disable_new1').style.display="";
-    document.getElementById('ffmpeg_disable_new2').style.display="";
-    document.getElementById('ffmpeg_disable_new3').style.display="";
-    document.getElementById('ffmpeg_disable_new4').style.display="";
-
-
+    document.getElementById('ffmpeg_disable_new1').style.display = '';
+    document.getElementById('ffmpeg_disable_new2').style.display = '';
+    document.getElementById('ffmpeg_disable_new3').style.display = '';
+    document.getElementById('ffmpeg_disable_new4').style.display = '';
 }
 
 function fileedit(file_var)
 {
-    if(file_var=='File')
+    if(file_var == 'File')
     {
         withoutflashvisible();
         urlhide();
-        document.getElementById('fvideos').style.display="none";
-        document.getElementById('fileoption').value='File';
+        document.getElementById('fvideos').style.display = 'none';
+        document.getElementById('fileoption').value = 'File';
     }
-    else if(file_var=='Url')
+    else if(file_var == 'Url')
     {
         withoutflashhide();
         urlvisible();
-        document.getElementById('fvideos').style.display="none";
-        document.getElementById('fileoption').value='Url';
+        document.getElementById('fvideos').style.display = 'none';
+        document.getElementById('fileoption').value = 'Url';
     }
-    else if(file_var=='Youtube')
+    else if(file_var == 'Youtube')
     {
         withoutflashhide();
         urlvisible();
-        document.getElementById('ffmpeg_disable_new6').style.display="none";
-        document.getElementById('ffmpeg_disable_new7').style.display="none";
-        document.getElementById('ffmpeg_disable_new8').style.display="none";
-        document.getElementById('fvideos').style.display="none";
-        document.getElementById('fileoption').value='Youtube';
+        document.getElementById('ffmpeg_disable_new6').style.display = 'none';
+        document.getElementById('ffmpeg_disable_new7').style.display = 'none';
+        document.getElementById('ffmpeg_disable_new8').style.display = 'none';
+        document.getElementById('fvideos').style.display = 'none';
+        document.getElementById('fileoption').value = 'Youtube';
     }
-    else if(file_var=='FFmpeg')
+    else if(file_var == 'FFmpeg')
     {
         withoutflashhide();
         urlhide();
-        document.getElementById('fvideos').style.display="";
-        document.getElementById('fileoption').value='FFmpeg';
+        document.getElementById('fvideos').style.display = '';
+        document.getElementById('fileoption').value = 'FFmpeg';
     }
 }
 
-function streamer1(streamername)
+function streamer(streamername)
 {
-    // alert(streamername);
-    if(streamername=="None")
+
+    if(streamername == 'None')
     {
-        document.getElementById('stream1').style.display='none';
-        document.getElementById('islive_visible').style.display='none';
-        document.getElementById("filepath1").checked=true;
-        document.getElementById("filepath1").disabled=false;
-        document.getElementById("filepath3").disabled=false;
-        document.getElementById("filepath4").disabled=false;
-        document.getElementById('fileoption').value='File';
+        document.getElementById('stream1').style.display = 'none';
+        document.getElementById('islive_visible').style.display = 'none';
+        document.getElementById("filepath1").checked = true;
+        document.getElementById("filepath1").disabled = false;
+        document.getElementById("filepath3").disabled = false;
+        document.getElementById("filepath4").disabled = false;
+        document.getElementById('fileoption').value = 'File';
         withoutflashvisible();
         urlhide();
-
     }
 
-    if(streamername=="lighttpd")
+    if(streamername == 'lighttpd')
     {
-        document.getElementById('stream1').style.display='none';
-        document.getElementById('islive_visible').style.display='none';
-        document.getElementById("filepath2").checked=true;
-        document.getElementById("filepath1").disabled=true;
-        document.getElementById("filepath3").disabled=true;
-        document.getElementById("filepath4").disabled=true;
-        document.getElementById('fileoption').value='Url';
+        document.getElementById('stream1').style.display = 'none';
+        document.getElementById('islive_visible').style.display = 'none';
+        document.getElementById("filepath2").checked = true;
+        document.getElementById("filepath1").disabled = true;
+        document.getElementById("filepath3").disabled = true;
+        document.getElementById("filepath4").disabled = true;
+        document.getElementById('fileoption').value = 'Url';
+        document.getElementById('fvideos').style.display = 'none';
         withoutflashhide();
-        urlvisible();
+        urlvisible1();
     }
-    else if(streamername=="rtmp")
+    else if(streamername == 'rtmp')
     {
-        document.getElementById('stream1').style.display='';
-        document.getElementById('islive_visible').style.display='';
-        document.getElementById("filepath2").checked=true;
-        document.getElementById("filepath1").disabled=true;
-        document.getElementById("filepath3").disabled=true;
-        document.getElementById("filepath4").disabled=true;
-        document.getElementById('fileoption').value='Url';
+        document.getElementById('stream1').style.display = '';
+        document.getElementById('islive_visible').style.display = '';
+        document.getElementById("filepath2").checked = true;
+        document.getElementById("filepath1").disabled = true;
+        document.getElementById("filepath3").disabled = true;
+        document.getElementById("filepath4").disabled = true;
+        document.getElementById('fileoption').value = 'Url';
+        document.getElementById('fvideos').style.display = 'none';
         withoutflashhide();
-        urlvisible();
+        urlvisible1();
     }
-
-
 }
 
-function getValue1()
-{
-    var var_up1;
-
-    var_up1='<input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" /><input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />';
-    document.getElementById('var_up1').innerHTML=var_up1;
-
-}
-function getValue2()
-{
-    var var_up2;
-    //var_up2='<input type="file" name="ffmpeg_videos" id="ffmpeg_videos" maxlength="100"  value="" /><label style="background-color:#D5E9EE; color:#333333;">Allowed Extensions :FLV,MP3, MP4, M4V, M4A, MOV, Mp4v, F4V</label>';
-    var_up2='<input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" /><input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />';
-    document.getElementById('fvideos').value='1';
-    document.getElementById('var_up2').innerHTML=var_up2;
-}
-function getValue3()
-{
-    var var_up3;
-    //var_up3='<input type="file" name="ffmpeg_thumbimages" id="ffmpeg_thumbimages" maxlength="100"  value="" /><label style="background-color:#D5E9EE; color:#333333;">Allowed Extensions :.jpg,.png,.gif </label>';
-    var_up3='<input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" /><input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />';
-    document.getElementById('fthumb').value='1';
-    document.getElementById('var_up3').innerHTML=var_up3;
-}
-function getValue4()
-{
-    var var_up4;
-    var_up4='<input type="file" name="ffmpeg_previewimages" id="ffmpeg_previewimages" maxlength="100"  value="" /><label style="background-color:#D5E9EE; color:#333333;">Allowed Extensions :.jpg,.png,.gif</label>';
-    document.getElementById('fpreview').value='1';
-    document.getElementById('var_up4').innerHTML=var_up4;
-}
-
-function getValue5()
-{
-    var var_up5;
-    var_up5='<input type="file" name="ffmpeg_hd" id="ffmpeg_hd" maxlength="100"  value="" /><label style="background-color:#D5E9EE; color:#333333;">Allowed Extensions :FLV,MP3, MP4, M4V, M4A, MOV, Mp4v, F4V </label>';
-    document.getElementById('fhd').value='1';
-    document.getElementById('var_up5').innerHTML=var_up5;
-}
 
 function postroll(postvalue)
 {
-    if(postvalue==0)
-        document.getElementById("postroll").style.display='none';
-    if(postvalue==1)
-        document.getElementById("postroll").style.display='';
+    if(postvalue == 0)
+    	{
+        document.getElementById("postroll").style.display = 'none';
+    	}
+    if(postvalue == 1)
+    	{
+        document.getElementById("postroll").style.display = '';
+    	}
 }
 
 function preroll(prevalue)
 {
-    if(prevalue==0)
-        document.getElementById("preroll").style.display='none';
-    if(prevalue==1)
-        document.getElementById("preroll").style.display='';
+    if(prevalue == 0)
+        document.getElementById("preroll").style.display = 'none';
+    if(prevalue == 1)
+        document.getElementById("preroll").style.display = '';
 }
 function select_alphabet(playlistbyalphabets)
 {
-
-    var rad_val_all="";
-    var rad_val_alphabet="";
-    document.getElementById('playlistid').innerHTML="";
+    var rad_val_all = '';
+    var rad_val_alphabet = '';
+    document.getElementById('playlistid').innerHTML = '';
 
     var final_array=new Array();
     var v_array1 = ["A", "B", "C", "D", "E","F","a","b","c","d","e","f"];
@@ -259,9 +229,8 @@ function select_alphabet(playlistbyalphabets)
     var v_array3 = ["M", "N", "O", "P", "Q","R","m","n","o","p","q","r"];
     var v_array4 = ["S", "T", "U", "V", "s","t","u","v"];
     var v_array5 = ["W", "X", "Y", "Z", "w","x","y","z"];
-
-
-
+    var v_array6 = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ];
+	var v_array7 = [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9","A", "B", "C", "D", "E", "F","G", "H", "I", "J", "K", "L","M", "N", "O", "P", "Q", "R","S", "T", "U", "V","W", "X", "Y", "Z",, "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"," "];
 
     for (var i=0; i < document.getElementsByName('displayplaylist').length; i++)
     {
@@ -342,6 +311,23 @@ function select_alphabet(playlistbyalphabets)
                     document.getElementById('playlistid').options[n++]=new Option(final_array[m][0],final_array[m][1]);
 
             }
+
+            if (rad_val_alphabet == '09') {
+    			first_letter = final_array[m][0];
+    			first_letter1 = first_letter.charAt(0);
+    			if (v_array6.in_array(first_letter1))
+    				document.getElementById('playlistid').options[n++] = new Option(
+    						final_array[m][0], final_array[m][1]);
+
+    		}
+    		if (rad_val_alphabet == '0z') {
+    			first_letter = final_array[m][0];
+    			first_letter1 = first_letter.charAt(0);
+
+    				document.getElementById('playlistid').options[n++] = new Option(
+    						final_array[m][0], final_array[m][1]);
+
+    		}
         }
 }
 Array.prototype.in_array = function(p_val) {

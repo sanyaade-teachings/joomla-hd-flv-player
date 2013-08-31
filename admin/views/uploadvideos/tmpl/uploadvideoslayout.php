@@ -1,380 +1,346 @@
 <?php
 /**
- * @version		$Id: uploadvideoslayout.php 1.4 2010-11-30 $
- * @package		Joomla
- * @subpackage	hdflvplayer
- * @copyright Copyright (C) 2010-2011 Contus Support
- * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 // no direct access
 defined('_JEXEC') or die('Restricted access');
-$videolist1 = $this->videolist;
-error_reporting(E_NOTICE || E_WARNING ||E_ALL);
-//$ordering = ($lists['order'] == 'ordering');
-//$playlistid=($lists['playlistid']);
+$videolist 			= $this->videolist;
+$baseurl			= JURI::base();
+$thumbpath			= $baseurl."components/com_hdflvplayer";
 
-$baseurl=JURI::base();
-$thumbpath1=JURI::base()."components/com_hdflvplayer";
-JHTML::_('behavior.tooltip');
-$toolTipArray = array('className' => 'custom2', 'showDelay'=>'0', 'hideDelay'=>'500',
-   'fixed'=>'true' , 'onShow'=>"function(tip) {tip.effect('opacity',{duration: 500, wait: false}).start(0,1)}"
-    , 'onHide'=>"function(tip) {tip.effect('opacity',
-        {duration: 500, wait: false}).start(1,0)}");
-JHTML::_('behavior.tooltip', '.hasTip2', $toolTipArray);  // class="hasTip2" titles
-$filename = 'testtooltip.js'; // used for class="hasTip3" titles
-$path = 'templates/rhuk_milkyway/js/';
-JHTML::script($filename, $path, true); // MooTools will load if it is not already loaded
-JHTML::_('script', JURI::base()."components/com_hdflvplayer/js/jquery-1.3.2.min.js", false, true);
-JHTML::_('script', JURI::base()."components/com_hdflvplayer/js/jquery-ui-1.7.1.custom.min.js", false, true);
-JHTML::_('script', JURI::base()."components/com_hdflvplayer/js/selectuser.js", false, true);
-JHTML::_('stylesheet',$thumbpath1."/css/styles123.css", array(), true);
-?>
-<script type="text/javascript">
-    // When the document is ready set up our sortable with it's inherant function(s)
-    var dragdr = jQuery.noConflict();
-    var videoid = new Array();
-    dragdr(document).ready(function() {
-        dragdr("#test-list").sortable({
-            handle : '.handle',
-            update : function () {
-                var order = dragdr('#test-list').sortable('serialize');
+$document = JFactory::getDocument();
 
-                orderid= order.split("listItem[]=");
+$document->addScript('components/com_hdflvplayer/js/jquery-1.3.2.min.js');
+$document->addScript('components/com_hdflvplayer/js/jquery-ui-1.7.1.custom.min.js');
+$document->addScript('components/com_hdflvplayer/js/uploadvideos_click_drag_sort.js');
 
-                for(i=1;i<orderid.length;i++)
-                {
-                    videoid[i]=orderid[i].replace('&',"");
-                    oid= "ordertd_"+videoid[i];
-                    document.getElementById(oid).innerHTML=i-1;
-                }
+$states	= array(
+			-2	=> array('trash.png',		'messages.unpublish',	'JTRASHED',				'COM_MESSAGES_MARK_AS_UNREAD'),
+			1	=> array('tick.png',		'messages.unpublish',	'COM_MESSAGES_OPTION_READ',		'COM_MESSAGES_MARK_AS_UNREAD'),
+			0	=> array('publish_x.png',	'messages.publish',		'COM_MESSAGES_OPTION_UNREAD',	'COM_MESSAGES_MARK_AS_READ')
+		);
 
-                dragdr("#info").load("<?php echo $baseurl;?>/index.php?option=com_hdflvplayer&task=sortorder&"+order);
-
-                // showUser(playid,order);
-                //alert(myarray1);
-                //document.filterType.submit();
-                <!-- Codes by Quackit.com -->
-                //location.reload(true);
-
-            }
-        });
-    });
-
-</script>
-
-
+if(version_compare(JVERSION,'1.6.0','le')){?>
+<style>
+table tr td a img {
+	width: 16px;
+}
+td.center, th.center, .center {
+	text-align: center;
+	float: none;
+}
+</style>
+<?php } ?>
+<!-- Form content starts here -->
 <form action="index.php?option=com_hdflvplayer&task=uploadvideos" method="post" name="adminForm">
 
-    <table>
-        <tr>
-            <td align="left" width="100%">
-                Filter:
-                <input type="text" name="search" id="search" value="<?php if (isset($videolist1['lists']['search'])) echo $videolist1['lists']['search'];?>"  onchange="document.adminForm.submit();" />
-                <button onClick="this.form.submit();"><?php echo JText::_( 'Go' ); ?></button>
-                <button onClick="document.getElementById('search').value='';"><?php  echo JText::_( 'Reset' ); ?></button>
+<!-- Filter content starts here -->
+	<fieldset id="filter-bar">
 
-            </td>
-
-        </tr>
-    </table>
-    <table class="videolist">
-        <thead>
-
-            <th>
-                Sorting
-            </th>
-            <th>
-                <input type="checkbox" name="toggle"
-                       value="" onClick="checkAll(<?php echo
-                       count($videolist1['rs_showupload']); ?>);" />
-
-            </th>
-            <th>
-                <?php echo JHTML::_('grid.sort',  'Title', 'title', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
-
-            </th>
-            <th>
-                <?php echo JText::_( 'Default' ); ?>
-
-            </th>
+		<!-- Filter By search Box -->
+		<div class="filter-search fltlft">
+			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>
+			</label> <input type="text" name="search" id="search" value="<?php if (isset($videolist['lists']['search'])) echo $videolist['lists']['search'];?>" onchange="document.adminForm.submit();" />
+				<button onClick="this.form.submit();" class="searhbtn"><?php echo JText::_( 'Search' ); ?></button>
+				<button onClick="document.getElementById('search').value='';" class="searhbtn"><?php  echo JText::_( 'Clear' ); ?></button>
+		</div>
 
 
-            <th>
-                <?php echo JHTML::_('grid.sort',  'Playlist Name', 'playlistid', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+		<div class="filter-select fltrt">
 
-            </th>
+			<!-- Filter by publish status -->
+			<select name="filter_state" class="inputbox" onchange="this.form.submit()">
+				<option><?php echo JText::_('JOPTION_SELECT_PUBLISHED');?></option>
+				<option value="1" <?php if($videolist['lists']['video_state'] == '1'){ echo 'selected'; }?>>Published</option>
+				<option value="2" <?php if($videolist['lists']['video_state'] == '2'){ echo 'selected'; }?>>Unpublished</option>
+				<option value="-2" <?php if($videolist['lists']['video_state'] == '-2'){ echo 'selected'; }?>>Trashed</option>
+			</select>
 
-            <th>
-                <?php echo JHTML::_('grid.sort',  'Viewed', 'times_viewed', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
+			<!-- Filter by Playlist -->
+			<select name="filter_type" class="inputbox" onchange="this.form.submit()">
+				<option value="">--Select Playlist--</option>
+				<?php
+						$count = count($videolist['playlist']);
+						if ($count >= 1) {
+							for ($j = 0; $j < $count; $j++) {
+								$row_play = &$videolist['playlist'][$j];
+								?>
+								<option value="<?php echo $row_play->id; ?>" <?php if($videolist['lists']['playlist'] == $row_play->id){ echo 'selected'; }?>> <?php echo $row_play->name ?></option>
+								<?php
+							}
+				 }?>
+			</select>
 
-            </th>
-            <th>
-                <?php echo JText::_( 'Streamer Name' ); ?>
-
-            </th>
-            <th>
-                <?php echo JText::_( 'Streamer Path' ); ?>
-
-            </th>
-            <th>
-                <?php echo JHTML::_('grid.sort',  'Video Link', 'videourl', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
-
-            </th>
-            <th>
-                <?php echo JHTML::_('grid.sort',  'Thumb Link', 'thumburl', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
-
-            </th>
-            <th>
-                Postroll Ads
-
-            </th>
-            <th>
-                Preroll Ads
-            </th>
-               <th>
-                Midroll Ads
-            </th>
-            <th>
-                Access Level
-            </th>
-            <th>
-                <?php echo JHTML::_('grid.sort',  'Order', 'ordering', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
-
-            </th>
-            <th>
-            Published
-            </th>
-            <th>
-                <?php echo JHTML::_('grid.sort',  'Id', 'Id', @$videolist1['lists']['order_Dir'], @$videolist1['lists']['order'] ); ?>
-
-            </th>
-        </thead>
-
- <tbody id="test-list">
-<?php
-
-$imagepath=JURI::base()."components/com_hdflvplayer/images";
-?>
-                    <?php
-                    $k = 0;
-                    jimport('joomla.filter.output');
-                    $j=$videolist1['limitstart'];
-                    $n=count( $videolist1['rs_showupload'] );
-                    define('VPATH2', realpath(dirname(__FILE__).'/../../../components/com_hdflvplayer/videos') );
-                    $vpath=VPATH2."/";
-                    if ($n>=1)
-                    {
-                        for ($i=0; $i < $n; $i++)
-                        {
-                            $row_showupload = &$videolist1['rs_showupload'][$i];
-                            $checked = JHTML::_('grid.id', $i, $row_showupload->id );
-                            $published = JHTML::_('grid.published', $row_showupload, $i );
-                            $access = JHTML::_('grid.access', $row_showupload, $i );
-                            $link= JRoute::_( 'index.php?option=com_hdflvplayer&task=editvideoupload&cid[]='. $row_showupload->id);
-                            $str1=explode('administrator',JURI::base());
-                            $videopath=$str1[0]."components/com_hdflvplayer/videos/";
-
-                            ?>
-
-                    <tr id="listItem_<?php echo $row_showupload->id; ?>">
-                    <td>
-                        <p class="hasTip" title="Click and Drag" class="content" style="padding:6px;">  <img src="<?php echo $imagepath.'/arrow.png';?>" alt="move" width="16" height="16" class="handle" /> </p>
-                    </td>
-                    <td>
-                        <p class="content" style="padding:6px;"> <?php echo $checked; ?></p>
-                    </td>
-                    <td>
-                        <p class="content" style="padding:6px;">  <a href="<?php echo $link; ?>">
-                        <?php echo $newtext = wordwrap($row_showupload->title, 15, "\n", true);   ?></a></p>
-                    </td>
-                    <td>
-                        <p class="content" style="padding:6px;">  <?php if ( $row_showupload->home == 1 ) : ?>
-                            <img src="templates/hathor/images/menu/icon-16-default.png" alt="<?php echo JText::_( 'Default' ); ?>" />
-                            <?php else : ?>
-                            &nbsp;
-                        <?php endif; ?></p>
-                    </td>
-
-                     <td>
-                        <p class="content" style="padding:6px;">
-                            <?php
-                            $showname="";
-                            ($row_showupload->name==""?$showname="None":$showname=$row_showupload->name);
-
-                            echo  $newtext = wordwrap($showname, 15, "\n", true);
-
-                            ?>
-                        </p>
-                    </td>
-
-                    <td>
-                        <p class="content" style="padding:6px;"> <?php echo $row_showupload->times_viewed; ?></p>
-                    </td>
-                    <td>
-                        <p class="content" style="padding:6px;">
-                            <?php
-                            $showname="";
-                            ($row_showupload->name==""?$showname="None":$showname=$row_showupload->streamerpath);
-
-                            echo  $newtext = wordwrap($showname, 15, "\n", true);
-
-                            ?>
-                        </p>
-                    </td>
-
-                    <td>
-                        <p class="content" style="padding:6px;"> <?php echo $newtext = wordwrap($row_showupload->streameroption, 15, "\n", true);   ?></p>
-                    </td>
-
-                    <td>
-                        <p class="content" style="padding:6px;">
-                        <?php
-                            $str1=explode('administrator',JURI::base());
-                            $videopath1=$str1[0];
-                            $videolink1='index.php?option=com_hdflvplayer&id='. $row_showupload->id;
-                            $videolink=$videopath1.$videolink1;
-                            if($row_showupload->filepath=="File" || $row_showupload->filepath=="FFmpeg")
-                            {
-                                $videolink2=$row_showupload->ffmpeg_videos;
-                                if ( $videolink2 !="" ) : ?>
-                            <a href="javascript:void(0)"
-                               onclick="window.open('<?php echo $videopath.$row_showupload->ffmpeg_videos ;?>','','width=300,height=200,maximize=yes,menubar=no,status=no,location=yes,toolbar=yes,scrollbars=yes')">
-                                <?php echo  $newtext = wordwrap($row_showupload->ffmpeg_videos, 15, "\n", true); ?>
-
-                            </a>
-                            <?php  else :?>
-                            &nbsp;
-                            <?php endif;
-
-                        }
-                        elseif($row_showupload->filepath=="Url" || $row_showupload->filepath=="Youtube")
-                        {
-                            $videolink2=$row_showupload->videourl;
-                            if ( $videolink2 !="" ) : ?>
-                            <a href="javascript:void(0)"
-                               onclick="window.open('<?php echo $videolink; ?>','','width=600,height=500,maximize=yes,menubar=no,status=no,location=yes,toolbar=yes,scrollbars=yes')">
-                                <?php echo  $newtext = wordwrap($videolink2, 15, "\n", true); ?>
-                            </a>
-                            <?php  else :?>
-                            &nbsp;
-                            <?php endif;
-
-                        }
-                        ?>
-                        </p>
-                    </td>
+		</div>
+	</fieldset>
+	<!-- Filter content ends here -->
 
 
-                    <td>
-                        <p class="content" style="padding:6px;">  <?php
-                            $str1=explode('administrator',JURI::base());
-                            $thumbpath1=$str1[0]."/components/com_hdflvplayer/videos/";
-                            if($row_showupload->filepath=="File" || $row_showupload->filepath=="FFmpeg")
-                            {
-                                $thumblink2=$row_showupload->ffmpeg_thumbimages;
-                                if ( $thumblink2 !="" ) : ?>
-                            <a href="javascript:void(0)"
-                               onclick="window.open('<?php echo $thumbpath1.$row_showupload->ffmpeg_thumbimages ;?>','','width=300,height=200,menubar=yes,status=yes,location=yes,toolbar=yes,scrollbars=yes')">
-                                <?php echo  $newtext = wordwrap($row_showupload->ffmpeg_thumbimages, 15, "\n", true); ?>
-                            </a>
-                            <?php  else :?>
-                            &nbsp;
-                            <?php endif;
-                        }
-                        elseif($row_showupload->filepath=="Url" || $row_showupload->filepath=="Youtube")
-                        {
-                            $thumblink2=$row_showupload->thumburl;
-                            if ( $thumblink2 !="" ) : ?>
-                            <a href="javascript:void(0)" onClick="window.open('<?php echo trim($thumblink2) ; ?>','','width=600,height=500,menubar=yes,status=yes,location=yes,toolbar=yes,scrollbars=yes')">
-                                <?php echo  $newtext = wordwrap($thumblink2, 15, "\n", true); ?>
 
-                            </a>
-                            <?php  else :?>
-                            &nbsp;
-                            <?php endif;
-                        }
-                        else
-                        {
-                            ?>
+	<table class="videolist">
+		<!--  Grid titles here -->
+		<thead>
+			<th>Sorting</th>
+			<th><input type="checkbox" name="toggle" value="" onClick="checkAll(<?php echo count($videolist['rs_showupload']); ?>);" />
+			</th>
+			<th><?php echo JHTML::_('grid.sort',  'Title', 'title', @$videolist['lists']['order_Dir'], @$videolist['lists']['order'] ); ?>
+			</th>
+			<th>Default
+			</th>
+			<th><?php echo JHTML::_('grid.sort',  'Playlist Name', 'playlistid', @$videolist['lists']['order_Dir'], @$videolist['lists']['order'] ); ?>
+			</th>
+			<th><?php echo JHTML::_('grid.sort',  'Viewed', 'times_viewed', @$videolist['lists']['order_Dir'], @$videolist['lists']['order'] ); ?>
+			</th>
+			<th>Streamer Path</th>
+			<th>Streamer Name
+			</th>
 
-                            &nbsp;
-
-                        <?php
-                    }
-
-                    ?>
-                        </p>
-                    </td>
-                    <td>
-
-                                <?php
-                                if($row_showupload->postrollads==1)
-                                $postrollads="true";
-                                else
-                                $postrollads="false";
-                                ?>
-
-                        <p style="padding:6px;">   <?php echo $postrollads; ?> </p>
-                    </td>
-                    <td>
-                        <?php
-                        if($row_showupload->prerollads==1)
-                        $prerollads="true";
-                        else
-                        $prerollads="false";
-                        ?>
-
-                        <p style="padding:6px;">  <?php echo $prerollads; ?> </p>
-                    </td>
-
-                    <td>
-                        <?php
-                        if($row_showupload->midrollads==1)
-                        $midrollads="true";
-                        else
-                        $midrollads="false";
-                        ?>
-
-                        <p style="padding:6px;">  <?php echo $midrollads; ?> </p>
-                    </td>
+			<th><?php echo JHTML::_('grid.sort',  'Video Link', 'videourl', @$videolist['lists']['order_Dir'], @$videolist['lists']['order'] ); ?>
+			</th>
+			<th><?php echo JHTML::_('grid.sort',  'Thumb Link', 'thumburl', @$videolist['lists']['order_Dir'], @$videolist['lists']['order'] ); ?>
+			</th>
+			<th>Post-roll Ads</th>
+			<th>Pre-roll Ads</th>
+			<th>Mid-roll Ads</th>
+			<th>Access</th>
+			<th><?php echo JHTML::_('grid.sort',  'Ordering', 'ordering', @$videolist['lists']['order_Dir'], @$videolist['lists']['order'] ); ?>
+			</th>
+			<th>Status</th>
+			<th><?php echo JHTML::_('grid.sort',  'ID', 'Id', @$videolist['lists']['order_Dir'], @$videolist['lists']['order'] ); ?>
+			</th>
+		</thead>
+		<!--  Grid title ends here -->
 
 
-                     <td>
-                <p style="padding:6px;">
-                    <?php echo $access ;?>
-                </p>
+		<!-- Video details displays here -->
+		<tbody id="test-list">
+		<?php
+		$imagepath = JURI::base()."components/com_hdflvplayer/images";
+		jimport('joomla.filter.output');
 
-            </td>
-                    <td>
-                        <p style="padding:6px;" id="ordertd_<?php echo $row_showupload->id; ?>"> <?php echo $row_showupload->ordering; ?> </p>
-                    </td>
-                    <td>
-                        <p style="padding:6px;">  <?php echo $published; ?> </p>
-                    </td>
-                    <td>
-                        <p style="padding:3px;"> <?php echo $row_showupload->id; ?> </p>
-                    </td>
-                    </tr>
-                    <?php
-                    $k = 1 - $k;
-                    $j++;
-                }
-                ?>
-        <tr>
-            <td colspan="17"><?php echo $videolist1['pageNav']->getListFooter(); ?></td>
-        </tr>
+		$count = count( $videolist['rs_showupload'] );
 
-            <?php
-        } // If condn for count
-        ?>
-</tbody>
-    </table>
+		if ($count >= 1)
+		{
+			for ($i = 0; $i < $count; $i++)
+			{
+				$row_showupload = &$videolist['rs_showupload'][$i];
 
-    <!-- To sort Table Ordering -->
-    <input type="hidden" name="filter_order" value="<?php echo $videolist1['lists']['order']; ?>" />
-    <input type="hidden" name="filter_order_Dir" value="<?php echo $videolist1['lists']['order_Dir']; ?>" />
-    <input type="hidden" name="task" value="" />
-    <input type="hidden" name="boxchecked" value="0" />
-    <?php echo JHTML::_( 'form.token' ); ?>
+				$checked 		= JHTML::_('grid.id', $i, $row_showupload->id );
+
+				$published 		= JHtml::_('grid.published',  $row_showupload, $i, $states[$row_showupload->published][0], $states[$row_showupload->published][0], '', 'cb');
+				$row_showupload->groupname = isset($row_showupload->groupname)?$row_showupload->groupname:'';
+
+				$link			= JRoute::_( 'index.php?option=com_hdflvplayer&task=editvideoupload&cid[]='. $row_showupload->id);
+				$basepath		= explode('administrator',JURI::base());
+				$videopath		= $basepath[0]."components/com_hdflvplayer/videos/";
+		?>
+
+		<tr id="listItem_<?php echo $row_showupload->id; ?>">
+
+				<!-- Column to rearrange sort order -->
+				<td>
+					<p class="hasTip" title="Click and Drag" class="content" style="padding: 6px;">
+						<img src="<?php echo $imagepath.'/arrow.png';?>" alt="move"	width="16" height="16" class="handle" />
+					</p>
+				</td>
+
+				<!-- Column to show checkboxes for edit,delete,publish,unpublish,default,reset views -->
+				<td>
+					<p class="content" style="padding: 6px;">
+					<?php echo $checked; ?>
+					</p>
+				</td>
+
+				<!-- Column to show Video Title -->
+				<td align="left">
+					<p class="content" style="padding: 6px;">
+						<a href="<?php echo $link; ?>"> <?php echo wordwrap($row_showupload->title, 15, "\n", true);   ?>
+						</a>
+					</p>
+				</td>
+
+				<!-- Column to show default video -->
+				<td>
+					<p class="content" style="padding: 6px;">
+					<?php if ( $row_showupload->home == 1 ) :
+					  ?>
+						<img src="<?php echo JURI::base().'components/com_hdflvplayer/images/icon-16-default.png';?>" alt="<?php echo JText::_( 'Default' ); ?>" />
+							<?php
+							 else : ?>
+						&nbsp;
+						<?php endif; ?>
+					</p>
+				</td>
+
+				<!-- Column to show playlist name of the video -->
+				<td align="left">
+					<p class="content" style="padding: 6px;">
+					<?php
+					$showname = "";
+					($row_showupload->name == ""?$showname = "-":$showname = $row_showupload->name);
+					echo wordwrap($showname, 15, "\n", true);
+					?>
+					</p>
+				</td>
+
+				<!-- Column to show viewed count of each video -->
+				<td>
+					<p class="content" style="padding: 6px;">
+					<?php echo $row_showupload->times_viewed; ?>
+					</p>
+				</td>
+
+				<!-- Column to show streamer path for rtmp video -->
+				<td>
+					<p class="content" style="padding: 6px;">
+					<?php
+					$showname = "";
+					($row_showupload->name == ""?$showname = "None":$showname = $row_showupload->streamerpath);
+					echo wordwrap($showname, 15, "\n", true);
+					?>
+					</p>
+				</td>
+
+				<!-- Column to show streamer option for each video -->
+				<td>
+					<p class="content" style="padding: 6px;">
+					<?php echo wordwrap($row_showupload->streameroption, 15, "\n", true);   ?>
+					</p>
+				</td>
+
+				<!-- Column to show video file with video link to view-->
+				<td>
+					<p class="content" style="padding: 6px;">
+					<?php
+					$videopath_temp = $basepath[0];
+					$videolink_temp = 'index.php?option=com_hdflvplayer&id='. $row_showupload->id;
+					$videolink	= $videopath_temp.$videolink_temp;
+
+						$videolinkffmpeg = $row_showupload->videourl;
+						 ?>
+						<a href="javascript:void(0)" onclick="window.open('<?php echo $videolink; ?>','','width=600,height=500,maximize=yes,menubar=no,status=no,location=yes,toolbar=yes,scrollbars=yes')">
+							<?php
+                                                        if ( $videolinkffmpeg != "" ) :
+                                                            echo wordwrap($videolinkffmpeg, 15, "\n", true);
+                                                        elseif($row_showupload->hdurl != ''):
+                                                            echo wordwrap($row_showupload->hdurl, 15, "\n", true);
+                                                        endif;
+
+                                                        ?>
+						</a>
+
+					</p>
+				</td>
+
+				<!-- Column to show thumb image file -->
+				<td>
+					<p class="content" style="padding: 6px;">
+					<?php
+						$thumblinkffmpeg = $row_showupload->thumburl;
+						$frontbaseUrl = str_replace('administrator/','',$baseurl);
+						if($row_showupload->filepath == 'File' || $row_showupload->filepath == 'FFmpeg')
+						{
+							$thumbLink =  $frontbaseUrl.'components/com_hdflvplayer/videos/'.$thumblinkffmpeg;
+						}
+						else{
+							$thumbLink = $thumblinkffmpeg;
+						}
+
+						if ( $thumblinkffmpeg != "" ) : ?>
+						<a href="javascript:void(0)"
+							onClick="window.open('<?php echo $thumbLink ; ?>','','width=600,height=500,menubar=yes,status=yes,location=yes,toolbar=yes,scrollbars=yes')">
+							<?php echo wordwrap($thumblinkffmpeg, 15, "\n", true); ?>
+						</a>
+						<?php  else :?>
+						&nbsp;
+						<?php endif;?>
+					</p>
+				</td>
+
+				<!-- Column to show whether the pre roll, post roll, mid roll ads enabled or not -->
+				<td><?php
+				if($row_showupload->postrollads == 1)
+				$postrollads = "Enabled";
+				else
+				$postrollads = "Disabled";
+				?>
+					<p style="padding: 6px;">
+					<?php echo $postrollads; ?>
+					</p>
+				</td>
+
+
+				<td><?php
+				if($row_showupload->prerollads == 1)
+				$prerollads = "Enabled";
+				else
+				$prerollads = "Disabled";
+				?>
+					<p style="padding: 6px;">
+					<?php echo $prerollads; ?>
+					</p>
+				</td>
+				<td><?php
+				if($row_showupload->midrollads == 1)
+				$midrollads = "Enabled";
+				else
+				$midrollads = "Disabled";
+				?>
+					<p style="padding: 6px;">
+					<?php echo $midrollads; ?>
+					</p>
+				</td>
+				<td>
+					<p style="padding: 6px;">
+					<?php echo $row_showupload->groupname ;?>
+					</p>
+				</td>
+				<td>
+					<p style="padding: 6px;"
+						id="ordertd_<?php echo $row_showupload->id; ?>">
+						<?php echo $row_showupload->ordering; ?>
+					</p>
+				</td>
+				<td>
+					<p style="padding: 6px;">
+					<?php echo $published; ?>
+					</p>
+				</td>
+				<td>
+					<p style="padding: 3px;">
+					<?php echo $row_showupload->id; ?>
+					</p>
+				</td>
+			</tr>
+			<?php
+			//$j++;
+			}
+			?>
+			<tr>
+				<td colspan="17"><?php echo $videolist['pageNav']->getListFooter(); ?>
+				</td>
+			</tr>
+
+			<?php
+		} // If condn for count
+		?>
+		</tbody>
+	</table>
+	<!-- To sort Table Ordering -->
+	<input type="hidden" name="filter_order" value="<?php echo $videolist['lists']['order']; ?>" />
+	<input type="hidden" name="filter_order_Dir" value="<?php echo $videolist['lists']['order_Dir']; ?>" />
+	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="boxchecked" value="0" />
+	<?php echo JHTML::_( 'form.token' ); ?>
 </form>
-

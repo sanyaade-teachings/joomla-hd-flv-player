@@ -1,12 +1,16 @@
 <?php
 /**
- * @version	$Id: videourl.php 1.5,  2011-Mar-11 $
- * @package	Joomla.Framework
- * @subpackage  HDFLV Player
- * @component   com_hdflvplayer
- * @author      contus support interactive
- * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 
 // Check to ensure this file is included in Joomla!
@@ -14,36 +18,26 @@ defined('_JEXEC') or die();
 
 jimport( 'joomla.application.component.model' );
 
-
+/*
+ * HDFLV player model Class for Video URL  
+ */
 class hdflvplayerModelvideourl extends JModel
 {
-    /**
-     * Gets the greeting
-     *
-     * @return string The greeting to be displayed to the user
-     */
+    
     function getallvideourl()
     {
-
-
         $this->showallurl();
         exit();
-
     }
 
     function showallurl()
     {
-        //$video = new hdflvplayerModelvideourl();
-        //$video =$this->getyoutube($videourl);
-
-        $vurl="";
-        $vurl=JRequest::getvar('url','','get','var');
-        $imgurl=JRequest::getvar('imageurl','','get','var');
-
-        //if(isset($_GET['url']) && isset($_GET['imageurl']))
+        $vurl 	= '';
+        $vurl	= JRequest::getvar('url','','get','var');
+        $imgurl	= JRequest::getvar('imageurl','','get','var');
+       
         if(($vurl) && ($imgurl))
         {
-            //$vurl=$_GET['url'];
             $vurl=$vurl;
             $video=$this->getVideoType($vurl);
             if ($this->url AND $this->type != '') {
@@ -59,7 +53,7 @@ class hdflvplayerModelvideourl extends JModel
 
             $imgurl =$this->imgURL($vurl);
             print("&location1=".$vidurl[0]."&location2=".$vidurl[1]."&location3=".$vidurl[2]."&imageurl=".$imgurl);
-            //print($imgurl);
+            
             exit();
 
         }
@@ -73,17 +67,14 @@ class hdflvplayerModelvideourl extends JModel
 
                 $vidurl=$this->catchURL();
             }
-            /*$vidurl[0] = str_replace("&","$",$vidurl[0]);
-            $vidurl[1] = str_replace("&","$",$vidurl[1]);
-            $vidurl[2] = str_replace("&","$",$vidurl[2]); */
-
+            
             $vidurl[0] = str_replace("&","%26",$vidurl[0]);
             $vidurl[1] = str_replace("&","%26",$vidurl[1]);
             $vidurl[2] = str_replace("&","%26",$vidurl[2]);
 
             print("&location1=".$vidurl[0]."&location2=".$vidurl[1]."&location3=".$vidurl[2]);
         }
-        //elseif(isset($_GET['imageurl']))
+       
         elseif($imgurl)
         {
             $vurl=$imgurl;
@@ -93,14 +84,8 @@ class hdflvplayerModelvideourl extends JModel
             print($imgurl);
             exit();
 
-
-
         }
-
-
     }
-
-
 
 
     function page_exists($url){
@@ -127,23 +112,7 @@ class hdflvplayerModelvideourl extends JModel
 
         }
 
-    } // END page_exists() FUNCTION
-
-
-
-    // THIS FUNCTION CATCHES FLV URL
-
-    // INPUT: $url REPRESENTING THE URL
-
-
-
-
-
-    // THIS FUNCTION CATCHES FLV URL
-
-    // INPUT: $url REPRESENTING THE URL
-
-    // OUTPUT: TRUE OR FALSE
+    } 
 
     function getVideoType($location, $add = 0){
 
@@ -175,18 +144,10 @@ class hdflvplayerModelvideourl extends JModel
             $vresult[0]=$location;
         }
 
-
         $this->url = $vresult[0];
 
         $this->type = $type;
-
-
-
-
-
-
-
-    } // END getVideoType() FUNCTION
+    } 
 
 
 
@@ -230,18 +191,7 @@ class hdflvplayerModelvideourl extends JModel
 
 
 
-    } // END getType() FUNCTION
-
-
-
-
-
-
-    // THIS FUNCTION CATCHES FLV URL
-
-    // INPUT: $url REPRESENTING THE VIDEO PAGE URL
-
-    // OUTPUT: ARRAY CONTAINING $location AND $type
+    } 
 
     function catchData(){
 
@@ -483,7 +433,7 @@ class hdflvplayerModelvideourl extends JModel
 
         if (isset($inf['user']))
         $head .= 'Authorization: Basic '.
-        base64_encode($inf['user'].':'.(isset($inf['pass']) ? $inf['pass'] : ''))."\r\n";
+        $inf['user'].':'.(isset($inf['pass']) ? $inf['pass'] : '')."\r\n";
         if (func_num_args() > 2) {
             for ($i = 2; $i < func_num_args(); $i++) {
                 $arg = func_get_arg($i);
@@ -532,17 +482,9 @@ class hdflvplayerModelvideourl extends JModel
                 $return[strtolower(trim($temp[0]))] = trim($temp[1]);
             }
         }
-
-        //$return['_response'] = $response;
-        //$return['_request'] = $head;
-
-
-
+       
         return $return;
     }
-
-
-
 
     function file_get_contents_curl($url) {
         $ch = curl_init();
@@ -553,10 +495,6 @@ class hdflvplayerModelvideourl extends JModel
         curl_close($ch);
         return $data;
     }
-
-
-
-
 
     // THIS FUNCTION CATCHES FLV URL
 
@@ -574,21 +512,11 @@ class hdflvplayerModelvideourl extends JModel
             case "youtube":
 
                 $urlArray = split("=", $url);
-
                 $videoid = trim($urlArray[1]);
-
-
-
                 $pageurl = $_SERVER["HTTP_REFERER"];
-
                 $newAPIurl = "http://www.youtube.com/get_video_info?&video_id=$videoid";
-
                 $newAPIurl .= "&el=embedded&ps=chromeless&eurl=$pageurl";
-
-
-
                 $newInfo = trim($this->file_get_contents_curl($newAPIurl));
-
                 $infoArray = split("&", $newInfo);
 
                 for ($i=0; $i < count($infoArray); $i++) {
@@ -603,8 +531,6 @@ class hdflvplayerModelvideourl extends JModel
 
                 }
 
-
-
                 if (array_key_exists("token", $paramArray)) {
 
                     $t = $paramArray["token"];
@@ -616,7 +542,6 @@ class hdflvplayerModelvideourl extends JModel
                     $t = trim(strip_tags($this->file_get_contents_curl($legacyAPIurl)));
 
                 }
-
 
                 $vid = "http://www.youtube.com/get_video.php?video_id=$videoid&t=$t&fmt=18";
                 $response=$this->http_test_existance($vid);
@@ -631,43 +556,23 @@ class hdflvplayerModelvideourl extends JModel
                 $uri=$response["location"];
                 $vid_location[2] = $uri;
 
-
-
-
-
-
                 break;
 
             case "bliptv":
 
                 preg_match('/http:\/\/(.*?)blip\.tv\/file\/get\/(.*?)\.flv/', $newInfo, $result);
-
-
-
-
-
+                
                 $vid_location[0] = urldecode($result[0]);
-
-
 
                 break;
 
             case "break":
 
                 preg_match('/sGlobalFileName=\'[^\']+/', $newInfo, $resulta);
-
                 $resulta = str_replace('sGlobalFileName=\'', '', $resulta[0]);
-
                 preg_match('/sGlobalContentFilePath=\'[^\']+/', $newInfo, $resultb);
-
                 $resultb = str_replace('sGlobalContentFilePath=\'', '', $resultb[0]);
-
-
-
                 $vid_location[0] = 'http://media1.break.com/dnet/media/'.$resultb.'/'.$resulta.'.flv';
-
-
-
 
                 break;
 
@@ -675,47 +580,26 @@ class hdflvplayerModelvideourl extends JModel
 
                 preg_match('/mediaURL=http%3A%2F%2F(.*?)%2FItemFiles%2F%255BFrom%2520www.metacafe.com%255D%25(.*?)\.flv+/', $newInfo, $result);
                 preg_match('/http%3A%2F%2F(.*?)%2FItemFiles%2F%255BFrom%2520www.metacafe.com%255D%25(.*?)\.flv+/', $result[0], $result);
-
                 $vid_location[0] = urldecode(str_replace('&gdaKey', '?__gda__', $result[0]));
-
-
 
                 break;
 
             case "google":
 
-
-
                 preg_match('/http:\/\/(.*?)googlevideo.com\/videoplayback%3F[^\\\\]+/', $newInfo, $result);
-
-
-
                 $vid_location[0] = urldecode($result[0]);
-
-
 
                 break;
             case "dailymotion":
 
                 preg_match('/"video", "(.*?)"/', $newInfo, $result);
-
                 $flv = preg_split('/@@(.*?)\|\|/', urldecode($result[1]));
-
                 $vid_location[0]       = $flv[0];
 
                 break;
 
-
         }
-
-
         return $vid_location;
-
-
-
-    } // END catchURL() FUNCTION
-
-
-
+    } 
 }
 ?>

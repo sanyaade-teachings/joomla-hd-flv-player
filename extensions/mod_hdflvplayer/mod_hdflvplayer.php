@@ -1,28 +1,51 @@
 <?php
 /**
- * @version	$Id:mod_hdflvplayer.php 1.5 2011-Feb-28 $
- * @package	Joomla
- * @subpackage	hdflvplayer
- * @copyright	Copyright (C) 2011 - 2012 Contus Support Interactive Pvt., Limited. All rights reserved.
- * @license	GNU/GPL, see LICENSE.php
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
-ini_set('display_errors',1);
+
+//No direct acesss
 defined('_JEXEC') or die('Restricted access');
+
+//Includes helper file
 require_once (dirname(__FILE__).DS.'helper.php');
-$playerrecords=hdflvplayer::showhdplayer();
-$rs_thumbnail=hdflvplayer::getrecords($params);
-$pid="";
-$pid=JRequest::getvar('pid','','get','var');
-$rs_title=hdflvplayer::gettitle($pid,$params);
-$class	= $params->get( 'moduleclass_sfx' );
-$db =& JFactory::getDBO();
-$query1 = "select * from #__hdflvaddgoogle where publish='1' and id='1'";
-$db->setQuery( $query1 );
-$fields = $db->loadObjectList();
-$detailmodule="";
-if(count($fields)>0)
+
+//Fetch related videos here
+$rs_thumbnail	= hdflvplayer::getrecords($params);
+$pid		= '';
+$pid		= JRequest::getvar('pid','','get','var');
+
+//Fetch video details based selection in param settings  
+$rs_title	= hdflvplayer::gettitle($pid,$params);
+
+$class		= $params->get( 'moduleclass_sfx' );
+
+//Query to fetch Google Ads
+$db 		= JFactory::getDBO();
+$query 	    = 'SELECT closeadd,reopenadd,ropen,publish,showaddm FROM #__hdflvaddgoogle 
+			   WHERE publish=1';
+$db->setQuery($query);
+$fields = $db->loadObject();
+
+$detailmodule = array();
+
+//set Google Ads info into array variable.  
+if(!empty($fields))
 {
-$detailmodule = array('closeadd'=>$fields[0]->closeadd,'reopenadd'=>$fields[0]->reopenadd,'ropen'=>$fields[0]->ropen,'publish'=>$fields[0]->publish,'showaddm'=>$fields[0]->showaddm);
+$detailmodule = array('closeadd'	=> $fields->closeadd,
+					  'reopenadd'	=> $fields->reopenadd,
+					  'ropen'		=> $fields->ropen,
+					  'publish'		=> $fields->publish,
+				      'showaddm'	=> $fields->showaddm);
 }
 require(JModuleHelper::getLayoutPath('mod_hdflvplayer'));
 ?>

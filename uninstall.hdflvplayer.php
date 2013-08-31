@@ -1,5 +1,21 @@
 <?php
+/**
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
+ */
+
+// no direct access
 defined('_JEXEC') or die('Restricted access');
+
 error_reporting(0);
 // Imports
 jimport('joomla.installer.installer');
@@ -37,23 +53,43 @@ $db->setQuery("RENAME TABLE `#__hdflvplayerupload` TO `#__hdflvplayerupload_back
 $db->query();
 
 
-$db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'module' AND element = 'mod_hdflvplayer' LIMIT 1");
+////count checked cid
+
+$count = count( JRequest::getVar('cid','','post','array'));
+if($count !=3 || $count !=2 )
+{
+if (version_compare(JVERSION, '1.6.0', 'ge')) {
+
+    $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'module' AND element = 'mod_hdflvplayer' LIMIT 1");
+}
+ else {
+$db->setQuery("SELECT id FROM #__modules WHERE module = 'mod_hdflvplayer' LIMIT 1");
+}
 $id = $db->loadResult();
 if ($id) {
     $installer = new JInstaller();
     $installer->uninstall('module', $id);
 }
 
-$db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'plugin' AND element = 'hdflvplayer' AND folder = 'content' LIMIT 1");
+if (version_compare(JVERSION, '1.6.0', 'ge')) {
+
+   $db->setQuery("SELECT extension_id FROM #__extensions WHERE type = 'plugin' AND element = 'hdflvplayer' AND folder = 'content' LIMIT 1");
+
+}
+ else {
+ $db->setQuery("SELECT id FROM #__plugins WHERE element = 'hdflvplayer' AND folder = 'content' LIMIT 1");
+}
+
 $id = $db->loadResult();
 if ($id) {
     $installer = new JInstaller();
     $installer->uninstall('plugin', $id);
 }
+
+}
 ?>
-<br>
-<br>
-<h2 align="center">HDFLV Player UnInstallation Status</h2>
+
+<h2 align="center">HD FLV Player UnInstallation Status</h2>
 <table class="adminlist">
     <thead>
         <tr>
@@ -71,7 +107,7 @@ if ($id) {
             <th colspan="3"><?php echo JText::_('Core'); ?></th>
         </tr>
         <tr class="row0">
-            <td class="key" colspan="2"><?php echo JText::_('Component'); ?></td>
+            <td class="key" colspan="2"><?php echo 'HD FLVPlayer ' .JText::_('Component'); ?></td>
             <td style="text-align: center;">
                 <?php
                 //check installed components
@@ -87,7 +123,7 @@ if ($id) {
             </td>
         </tr>
         <tr class="row1">
-            <td class="key" colspan="2"><?php echo 'HDFLVPlayer ' . JText::_('Module'); ?></td>
+            <td class="key" colspan="2"><?php echo 'HD FLVPlayer ' . JText::_('Module'); ?></td>
             <td style="text-align: center;">
                 <?php
                 //check installed modules
@@ -107,7 +143,7 @@ if ($id) {
             <th colspan="3"><?php echo JText::_('Plugins'); ?></th>
         </tr>
         <tr class="row0">
-            <td class="key" colspan="2"><?php echo 'HDFLVPlayer'; ?></td>
+            <td class="key" colspan="2"><?php echo 'HD FLVPlayer'; ?></td>
 
             <td style="text-align: center;">
                 <?php

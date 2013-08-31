@@ -1,37 +1,36 @@
 <?php
-
 /**
- * @version  $Id: view.php 1.5,  28-Feb-2011 $$
- * @package		Joomla
- * @subpackage	hdflvplayer
- * @copyright Copyright (C) 2011 Contus Support
- * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 // no direct access
-
 defined( '_JEXEC' ) or die( 'Restricted access' );
 
+//importing default component 
 jimport( 'joomla.application.component.view');
 
+/*
+ * HDFLV player view class for google adsense
+ */
 class hdflvplayerViewaddgoogle extends JView
 {
-
+	//Function for showing Google Adsense
 	function addgoogleview()
-	{	
-	JSubMenuHelper::addEntry(JText::_('Videos'), 'index.php?option=com_hdflvplayer&task=uploadvideos',false);
-        JSubMenuHelper::addEntry(JText::_('Settings'), 'index.php?option=com_hdflvplayer&task=playersettings',false);
-        JSubMenuHelper::addEntry(JText::_('Playlist Name '), 'index.php?option=com_hdflvplayer&task=playlistname',false);
-        JSubMenuHelper::addEntry(JText::_('Checklist '), 'index.php?option=com_hdflvplayer&task=checklist',false);
-        JSubMenuHelper::addEntry(JText::_('Language Settings '), 'index.php?option=com_hdflvplayer&task=languagesetup',false);
-        JSubMenuHelper::addEntry(JText::_('Ads '), 'index.php?option=com_hdflvplayer&task=ads',false);
-        JSubMenuHelper::addEntry(JText::_('Google AdSense'), 'index.php?option=com_hdflvplayer&task=addgoogle',true);
-
-        $model = $this->getModel();
-        $addgoogle = $model->addgooglemodel();
-	$this->assignRef('addgoogle',$addgoogle);
-	parent::display();
+	{
+		$model = $this->getModel();
+		$addgoogle = $model->addgooglemodel();
+		$this->assignRef('addgoogle',$addgoogle);
+		parent::display();
 
 	}
-
 }
 ?>

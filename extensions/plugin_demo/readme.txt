@@ -1,6 +1,6 @@
 Plugin Steps
 
-1. Install the joomla_hdflvplayer_plugin_demo.
+1. Install the joomla_hdflvplayer_plugin.
 2. In the plugin manager under extensions menu Hdflvplayer Plugin can be found.
 3. Just publish it.
 4. In any articles plugin can be used...

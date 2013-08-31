@@ -1,19 +1,29 @@
 <?php
 /**
- * @version		$Id: uploadvideos.php 1.5,  2011-05-FEB $
- * @package		Joomla
- * @subpackage	hdflvplayer
- * @copyright Copyright (C) 2011-2011 Contus Support
- * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 //No direct acesss
 defined('_JEXEC') or die();
 
+//importing defalut joomla components
 jimport('joomla.application.component.model');
 
+/*
+ * HDFLV player Model class to fetch Video details.
+ */
 class hdflvplayerModeluploadvideos extends JModel {
 
-function __construct()
+	function __construct()
 	{
 		parent::__construct();
 
@@ -26,341 +36,208 @@ function __construct()
 		$this->setState('limitstart', JRequest::getVar('limitstart', 0, '', 'int'));
 
 	}
+
+	//Function to fetch Videos list and their
 	function videoslist()
-    {
-            global $option, $mainframe;
-            $app = & JFactory::getApplication();
-            // table ordering
-            // Default id desc order
-            $filter_order     = $app->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'ordering', 'cmd' );
-            $filter_order_Dir = $app->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', 'asc', 'word' );
-            $filter_playlistid	= $app->getUserStateFromRequest( $option.'filter_playlistid','filter_playlistid','','int' );
-            // search filter
-            $search=$app->getUserStateFromRequest( $option.'search','search','','string' );
-            $db =& JFactory::getDBO();
-            $query = "SELECT count(*) FROM #__hdflvplayerupload";
-            $db->setQuery( $query );
-            $total = $db->loadResult();
-            jimport('joomla.html.pagination');
-			$limitstart = $this->getState('limitstart');
-            $pageNav = new JPagination($total,  $this->getState('limitstart'), $this->getState('limit'));
-            $where="";
-            $query = "SELECT * from #__hdflvplayername";
-            $db->setQuery( $query );
-            $rs_showplaylistname = $db->loadObjectList();
-            if ($filter_playlistid) {
-			    $query = "SELECT * from #__hdflvplayername";
-                $db->setQuery( $query );
-                $rs_showupload = $db->loadObjectList();
+	{
+		//Global variable declaration
+		global $option;
+		$app =  JFactory::getApplication();
+
+		// Instantiate ordering as asc for ordering
+		$filter_order       = $app->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'ordering', 'cmd' );
+		$filter_order_Dir   = $app->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', 'asc', 'word' );
+		$filter_order_State = $app->getUserStateFromRequest( $option.'filter_order_Status', 'filter_state', '', 'int' );
+		$filter_order_Type 	= $app->getUserStateFromRequest( $option.'filter_order_Type', 'filter_type', '', 'string' );
+
+		$this->setState('filter.state', $filter_order_State);
+		// Instantiate search filter
+		$search = JRequest::getVar('search', '', 'string');
+
+		$db = JFactory::getDBO();
+
+		$querySearch = '';
+
+		//Filter for Published
+		if($filter_order_State != '')
+		{
+			$filter_state = $filter_order_State;
+			if($filter_order_State == 2)
+			{
+				$filter_state = 0;
+			}
+			$querySearch .= ' WHERE a.published = '.$filter_state;
 		}
-            if($filter_order)
-            {
-                //$query = "SELECT * FROM #__hdflvplayerupload order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit";
+		else{
+			$querySearch .= ' WHERE a.published != -2';
+		}
+			
+		//Filter for Playlist
+		if($filter_order_Type != '')
+		{
+			$querySearch .= ' AND playlistid ='.$filter_order_Type;
+		}
+			
+		//Filter by Video Name
+		if($search != ''){
+			$querySearch .= ' AND a.title LIKE \'%'.$search.'%\'';
+			$lists['search']= $search;
+		}
 
-                $query = "SELECT a.*,b.name,g.title AS groupname FROM #__hdflvplayerupload a LEFT JOIN #__hdflvplayername b ON a.playlistid=b.id  LEFT JOIN #__usergroups AS g ON g.id = a.access $where order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit";
-                $db->setQuery( $query );
-                $rs_showupload = $db->loadObjectList();
-            }
+		$query = 'SELECT count(a.id) FROM #__hdflvplayerupload as a'.$querySearch;
+		$db->setQuery( $query );
+		$total = $db->loadResult();
 
-            // table ordering
-            $lists['order_Dir']	= $filter_order_Dir;
-            $lists['order']	= $filter_order;
+		//import for Pagination
+		jimport('joomla.html.pagination');
+		$limitstart = $this->getState('limitstart');
+		$pageNav = new JPagination($total,  $this->getState('limitstart'), $this->getState('limit'));
 
-            if ($db->getErrorNum())
-            {
-                echo $db->stderr();
-                return false;
-            }
+		//Sorting query
+		if($filter_order)
+		{
+			$queryOrder = ' ORDER BY '.$filter_order.' '.$filter_order_Dir.
+						  ' LIMIT '.$pageNav->limitstart.','.$pageNav->limit;
+		}
 
-            // search filter
-            if ($search)
-            {
-                //$query = "SELECT * FROM #__hdflvplayerupload where title LIKE '$search%'";
-               // $query = "SELECT a.*,b.name FROM #__hdflvplayerupload a INNER JOIN #__hdflvplayername b ON a.playlistid=b.id where a.title LIKE '%$search%'";
-                $query = "SELECT a.*,b.name FROM #__hdflvplayerupload a LEFT JOIN #__hdflvplayername b ON a.playlistid=b.id where a.title LIKE '%$search%'";
-                //$query = "SELECT * FROM #__hdflvplayerupload where title LIKE '$search%' order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit ";
-                $db->setQuery( $query );
-                $rs_showupload = $db->loadObjectList();
-                $lists['search']= $search;
-            }
+		//Fetch video details
+		if(version_compare(JVERSION,'1.6.0','ge'))
+		{
+			$query = 'SELECT a.id,a.published,a.title,a.times_viewed,a.filepath,a.videourl,a.thumburl,a.previewurl,a.hdurl,a.home,a.streamerpath,a.streameroption,a.prerollads,a.postrollads,a.midrollads,a.ordering,a.access,
+						  b.name,g.title AS groupname FROM #__hdflvplayerupload a
+						  LEFT JOIN #__hdflvplayername b ON a.playlistid=b.id  
+						  LEFT JOIN #__usergroups AS g ON g.id = a.access '.$querySearch.$queryOrder;
 
-            $javascript		= 'onchange="document.adminForm.submit();"';
-            $lists['playlistid'] = JHTML::_('list.category',  'filter_playlistid', 'com_hdflvplayer', (int) $rs_showplaylistname, $javascript );
+		}
+		else
+		{
+			$query = 'SELECT a.id,a.published,a.title,a.times_viewed,a.filepath,a.videourl,a.thumburl,a.previewurl,a.hdurl,a.home,a.streamerpath,a.streameroption,a.prerollads,a.postrollads,a.midrollads,a.ordering,a.access,
+						  b.name,g.name AS groupname FROM #__hdflvplayerupload a
+						  LEFT JOIN #__hdflvplayername b ON a.playlistid=b.id  
+						  LEFT JOIN #__groups AS g ON g.id = a.access '.$querySearch.$queryOrder;
+
+		}
+		
+		$db->setQuery( $query );
+		$rs_showupload = $db->loadObjectList();
+
+		//Query for fetch playlist names
+		$query = 'SELECT id,name FROM  #__hdflvplayername
+            			WHERE published=1 ORDER BY id ASC';
+		$db->setQuery( $query );
+		$rs_play 			= $db->loadObjectList();
 
 
-            $showarray1 = array('pageNav' => $pageNav,'limitstart'=>$limitstart,'lists'=>$lists,'rs_showupload'=>$rs_showupload,'rs_showplaylistname'=>$rs_showplaylistname);
+		// table ordering
+		$lists['order_Dir']		= $filter_order_Dir;
+		$lists['order']			= $filter_order;
+		$lists['video_state']	= $filter_order_State;
+		$lists['playlist'] 		= $filter_order_Type;
+		//check and display error when database operations
+		if ($db->getErrorNum())
+		{
+			echo $db->stderr();
+			return false;
+		}
 
-            return $showarray1;
-
-
-
+		//returns page navigation, limits,video details
+		$showarray = array('pageNav' 				=> $pageNav,
+							'limitstart'			=> $limitstart,
+							'lists'					=> $lists,
+							'rs_showupload'			=> $rs_showupload,
+							'playlist'				=> $rs_play
+		);
+		return $showarray;
 	}
 
-
+	//Function for mark video as default
 	function setdefault()
-    {
-		$task="uploadvideos";
+	{
+		//Database connection and fetch selected row
+		$db =& JFactory::getDBO();
+		$cid	= JRequest::getVar( 'cid', array(), 'post', 'array' );//getting selected record
+		JArrayHelper::toInteger($cid);
 
-        $task=JRequest::getvar('task','','get','var');
+		$link = 'index.php?option=com_hdflvplayer&task=uploadvideos';
+		$tblname = 'hdflvplayerupload';
+		$msg = '';
 
-        if($task!="")
-        $task=$task;
-        else
-        $task="uploadvideos";
+		//Fetching 1st video from selected list
+		if (isset($cid[0]) && $cid[0]) {
+			$id = $cid[0];
+		}
 
-        //echo "task :".$task;
-        //exit();
-        global $mainframe;
-        $db =& JFactory::getDBO();
-        //JRequest::checkToken() or jexit( 'Invalid Token' );
-        $cid	= JRequest::getVar( 'cid', array(), 'post', 'array' );
-        JArrayHelper::toInteger($cid);
+		//returns when no item selected
+		else {
+			$msg = JText::_('No '.$msg.' selected');
+			$app =& JFactory::getApplication();
+			$app->redirect($link, $msg);
+			return false;
+		}
+		$item =& JTable::getInstance( "$tblname",'Table' );
+		$item->load($id);
 
-        if($task=="uploadvideos")
-        {
-            $link1="index.php?option=com_hdflvplayer&task=uploadvideos";
-            $tblname="hdflvplayerupload";
-            $msg1="Videos";
-        }
-        elseif($task=="languagesetup")
-        {
-            $link1="index.php?option=com_hdflvplayer&task=languagesetup";
-            $tblname="hdflvplayerlanguage";
-            $msg1="Language";
-        }
-        elseif($task=="ads")
-        {
-            $link1="index.php?option=com_hdflvplayer&task=ads";
-            $tblname="hdflvplayerads";
-            $msg1="Ads";
-        }
+		//Checks whether the item published or not.
+		if(!$item->get('published')) {
+			$msg=JText::_('The Default Video Must Be Published');
+			$app =& JFactory::getApplication();
+			$app->redirect($link, $msg);
+			return false;
+		}
 
+		//Update as default for selected item in table.
+		$query = 'UPDATE #__'.$tblname.' SET home=1 WHERE id='.$id;
+		$db->setQuery($query );
+		$db->query();
 
-        $link="$link1";
+		//Remaining items reset
+		$query = 'UPDATE #__'.$tblname.' SET home=0 WHERE id <> '.$id.' AND home=1';
+		$db->setQuery($query );
+		$db->query();
 
-        if (isset($cid[0]) && $cid[0]) {
-            $id = $cid[0];
-        } else {
-            $msg=JText::_("No $msg1 seleccted");
-             $app =& JFactory::getApplication();
-            $app->redirect($link, $msg);
-            return false;
-        }
-
-        $item =& JTable::getInstance( "$tblname",'Table' );
-        $item->load($id);
-       if($task=="uploadvideos")
-        {
-        if(!$item->get('published')) {
-            $msg=JText::_("The Default $msg1 Must Be Published");
-            $app =& JFactory::getApplication();
-            $app->redirect($link, $msg);
-            return false;
-        }
-        }
-        $query="update #__$tblname SET home=1 where id=$id";
-        $db->setQuery($query );
-        $db->query();
-
-        $query="update #__$tblname SET home=0 where id <> $id";
-        $db->setQuery($query );
-        $db->query();
-
-
-        $link="$link1";
-        $app =& JFactory::getApplication();
-            $app->redirect($link, $msg);
-
-
+		//Displays message with redirects
+		$app =& JFactory::getApplication();
+		$app->redirect($link, $msg);
 	}
 
+	//Function to reset viewed count
+	function resethitsmodel($task)
+	{
+		//Database connection initialization
+		$db	= JFactory::getDBO();
 
+		//Fetch row id
+		$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
+		$id = $cid[0];
+		$cids = implode( ',', $cid );
 
+		//Reset view count for selected video row
+		$query = 'UPDATE #__hdflvplayerupload SET times_viewed=0 WHERE id IN ('. $cids.' )';
+		$db->setQuery( $query );
+		$db->query();
+
+		//Redirects with success message
+		$msg = JText::_('Successfully Reset viewed count');
+		$link = 'index.php?option=com_hdflvplayer&task=uploadvideos';
+		$app =& JFactory::getApplication();
+		$app->redirect($link, $msg);
+	}
+
+	//Function to change sort order when drags the row
+	function sortordermodel()
+	{
+		$db = JFactory::getDBO();
+		$listitem = JRequest::getvar('listItem','','get','var');
+
+		$ids = implode(',', $listitem);
+		$sql = 'UPDATE #__hdflvplayerupload SET `ordering` = CASE id ';
+		foreach ($listitem as $position => $item) {
+			$sql .= sprintf("WHEN %d THEN %d ", $item, $position);
+		}
+		$sql .= ' END WHERE id IN ('.$ids.')';
+
+		$db->setQuery($sql );
+		$db->query();
+	}
 }
-?>
-
-
-
-
-<?php
-/**
- * @version		$Id: uploadvideos.php 1.5,  28-Feb-2011 $
- * @package		Joomla
- * @subpackage	hdflvplayer
- * @copyright Copyright (C) 2011 Contus Support
- * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
- */
-//No direct acesss
-
-/*
-defined('_JEXEC') or die();
-
-jimport('joomla.application.component.model');
-//jimport('joomla.application.component.modellist');
-class hdflvplayerModeluploadvideos extends JModel {
-
-
-	function videoslist()
-    {
-        
-            global $option, $mainframe;
-            $app = & JFactory::getApplication();
-            // table ordering
-            // Default id desc order
-            $filter_order     = $app->getUserStateFromRequest( $option.'filter_order', 'filter_order', 'ordering', 'cmd' );
-            $filter_order_Dir = $app->getUserStateFromRequest( $option.'filter_order_Dir', 'filter_order_Dir', 'asc', 'word' );
-            $filter_playlistid= $app->getUserStateFromRequest( $option.'filter_playlistid','filter_playlistid',	'','int' );
-
-
-           //exit();
-
-
-            // search filter
-            $search=$app->getUserStateFromRequest( $option.'search','search','','string' );
-
-            // page navigation
-            $limit = $app->getUserStateFromRequest($option.'.limit', 'limit', $app->getCfg('list_limit'), 'int');
-            $limitstart = $app->getUserStateFromRequest($option.'.limitstart', 'limitstart', 0, 'int');
-
-            $db =& JFactory::getDBO();
-            $query = "SELECT count(*) FROM #__hdflvplayerupload";
-            $db->setQuery( $query );
-            $total = $db->loadResult();
-          
-            jimport('joomla.html.pagination');
-            $pageNav = new JPagination($total, $limitstart, $limit);
-            $where="";
-
-            $query = "SELECT * from #__hdflvplayername";
-            $db->setQuery( $query );
-            $rs_showplaylistname = $db->loadObjectList();
-
-            if ($filter_playlistid) {
-			    $query = "SELECT * from #__hdflvplayername";
-                $db->setQuery( $query );
-                $rs_showupload = $db->loadObjectList();
-
-		}
-
-
-        
-
-            if($filter_order)
-            {
-                //$query = "SELECT * FROM #__hdflvplayerupload order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit";
-                $query = "SELECT a.*,b.name,g.title AS groupname FROM #__hdflvplayerupload a LEFT JOIN #__hdflvplayername b ON a.playlistid=b.id  LEFT JOIN #__usergroups AS g ON g.id = a.access $where order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit";
-                $db->setQuery( $query );
-                $rs_showupload = $db->loadObjectList();
-            }
-        
-            // table ordering
-            $lists['order_Dir']	= $filter_order_Dir;
-            $lists['order']		= $filter_order;
-
-            if ($db->getErrorNum())
-            {
-                echo $db->stderr();
-                return false;
-            }
-            // search filter
-            if ($search)
-            {
-                //$query = "SELECT * FROM #__hdflvplayerupload where title LIKE '$search%'";
-                $query = "SELECT a.*,b.name FROM #__hdflvplayerupload a INNER JOIN #__hdflvplayername b ON a.playlistid=b.id where a.title LIKE '$search%'";
-                //$query = "SELECT * FROM #__hdflvplayerupload where title LIKE '$search%' order by $filter_order $filter_order_Dir LIMIT $pageNav->limitstart,$pageNav->limit ";
-                $db->setQuery( $query );
-                $rs_showupload = $db->loadObjectList();
-                $lists['search']= $search;
-            }
-
-            $javascript		= 'onchange="document.adminForm.submit();"';
-            $lists['playlistid'] = JHTML::_('list.category',  'filter_playlistid', 'com_hdflvplayer', (int) $rs_showplaylistname, $javascript );
-           
-            
-            $showarray1 = array('pageNav' => $pageNav,'limitstart'=>$limitstart,'lists'=>$lists,'rs_showupload'=>$rs_showupload,'rs_showplaylistname'=>$rs_showplaylistname);
-           
-            return $showarray1;
-
-           
-
-	}
-
-
-	function setdefault()
-    {
-		$task="uploadvideos";
-
-        $task=JRequest::getvar('task','','get','var');
-
-        if($task!="")
-        $task=$task;
-        else
-        $task="uploadvideos";
-
-        //echo "task :".$task;
-        //exit();
-        global $mainframe;
-        $db =& JFactory::getDBO();
-        //JRequest::checkToken() or jexit( 'Invalid Token' );
-        $cid	= JRequest::getVar( 'cid', array(), 'post', 'array' );
-        JArrayHelper::toInteger($cid);
-
-        if($task=="uploadvideos")
-        {
-            $link1="index.php?option=com_hdflvplayer&task=uploadvideos";
-            $tblname="hdflvplayerupload";
-            $msg1="Videos";
-        }
-        elseif($task=="languagesetup")
-        {
-            $link1="index.php?option=com_hdflvplayer&task=languagesetup";
-            $tblname="hdflvplayerlanguage";
-            $msg1="Language";
-        }
-        elseif($task=="ads")
-        {
-            $link1="index.php?option=com_hdflvplayer&task=ads";
-            $tblname="hdflvplayerads";
-            $msg1="Ads";
-        }
-
-
-        $link="$link1";
-
-        if (isset($cid[0]) && $cid[0]) {
-            $id = $cid[0];
-        } else {
-            $msg=JText::_("No $msg1 seleccted");
-            JFactory::getApplication()->redirect($link, $msg);
-            return false;
-        }
-
-        $item =& JTable::getInstance( "$tblname",'Table' );
-        $item->load($id);
-       if($task=="uploadvideos")
-        {
-        if(!$item->get('published')) {
-            $msg=JText::_("The Default $msg1 Must Be Published");
-           JFactory::getApplication()->redirect($link, $msg);
-            return false;
-        }
-        }
-        $query="update #__$tblname SET home=1 where id=$id";
-        $db->setQuery($query );
-        $db->query();
-
-        $query="update #__$tblname SET home=0 where id <> $id";
-        $db->setQuery($query );
-        $db->query();
-
-
-        $link="$link1";
-       JFactory::getApplication()->redirect($link, $msg);
-
-
-	}
-
-   
-
-}*/
 ?>

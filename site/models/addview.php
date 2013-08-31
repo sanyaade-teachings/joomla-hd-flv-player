@@ -1,12 +1,16 @@
 <?php
 /**
- * @version	$Id: addview.php 1.5,  2011-Mar-11 $
- * @package	Joomla.Framework
- * @subpackage  HDFLV Player
- * @component   com_hdflvplayer
- * @author      contus support interactive
- * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 
 // Check to ensure this file is included in Joomla!
@@ -16,20 +20,15 @@ jimport( 'joomla.application.component.model' );
 
 class hdflvplayerModeladdview extends JModel
 {
-    /**
-     * Gets the greeting
-     *
-     * @return string The greeting to be displayed to the user
-     */
-    function getviewcount()
-    {
-    $thumbid1="";
-    $thumbid1=JRequest::getvar('thumbid','','get','int');
-    $db =& JFactory::getDBO();
-    $query="update #__hdflvplayerupload SET times_viewed=1+times_viewed where id=$thumbid1";
-    $db->setQuery($query );
-    $db->query();
-    
-    }
-    
+	function getviewcount()
+	{
+		$thumbid1="";
+		$thumbid1=JRequest::getvar('thumbid','','get','int');
+		$db =JFactory::getDBO();
+		$query="update #__hdflvplayerupload SET times_viewed=1+times_viewed where id=$thumbid1";
+		$db->setQuery($query );
+		$db->query();
+
+	}
+
 }

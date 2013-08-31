@@ -1,112 +1,99 @@
 <?php
-
 /**
- * @version  $Id:playxml.php 1.5,  2011-Mar-11 $
- * @package	Joomla.Framework
- * @subpackage  HDFLV Player
- * @component   com_hdflvplayer
- * @author      contus support interactive
- * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die();
 
-// implementing default component
+// implementing default component libraries
 jimport('joomla.application.component.model');
-
+/*
+ * HDFLV player component Model Class for Midroll XML 
+ */
 class hdflvplayerModelmidrollxml extends JModel {
 
-    /**
-     * Gets the greeting
-     *
-     * @return string The greeting to be displayed to the user
-     */
-    function getads() {
+	function getads() {
+		
+		//Declarations here
+		$db =JFactory::getDBO();
+		
+		$playlistid = $mid = $itemid = $moduleid = $id = $videoid = 0;
+		
+		$rs_modulesettings = '';
+		
+		$playlistautoplay = $postrollads = $prerollads = $home_bol = $playlistrandom = 'false';
+		
+		//Fetch Mid-rol Ads here
+		$query = 'SELECT `id`, `published`, `adsname`, `filepath`, `postvideopath`, `home`, `targeturl`, `clickurl`, `impressionurl`, `impressioncounts`, `clickcounts`, `adsdesc`, `typeofadd` FROM `#__hdflvplayerads`
+                    WHERE published=1 AND typeofadd=\'mid\'';
+		$db->setQuery($query);
 
-    
+		$rs_modulesettings = $db->loadObjectList();
+		
+		//Fetch Mid-roll Ad settings 
+		$qry_settings = "SELECT midrandom,midrollads,midadrotate,midinterval,midbegin FROM #__hdflvplayersettings";
+		$db->setQuery($qry_settings);
+		
+		$rs_random = $db->loadObject();
+                $midrollads = $rs_random->midrollads;
+		$random = $rs_random->midrandom;
+		$adrotate = $rs_random->midadrotate;
+		$interval = $rs_random->midinterval;
+		$begin = $rs_random->midbegin;
+		
+		($random == 1) ? $random = 'true' : $random = 'false';
+		($adrotate == 1) ? $adrotate = 'true' : $adrotate = 'false';
+		
+		$this->showadsxml($rs_modulesettings, $random, $begin, $interval, $adrotate);
+		
+	}
 
-        global $mainframe;
-        $db =& JFactory::getDBO();
-        $playlistid=0;
-        $mid=0;
-        $itemid=0;
-        $rs_modulesettings="";
-        $moduleid=0;
-        $id=0;
-        $playlistautoplay="false";
-        $postrollads="false";
-        $prerollads="false";
-        $videoid=0;
-        $home_bol="false";
-        $playlistrandom="false";
+	//Function to generate mid-roll XML
+	function showadsxml($midroll_video, $random, $begin, $interval, $adrotate) {
+             
+		ob_clean();
+		header("content-type: text/xml");
+		echo '<?xml version="1.0" encoding="utf-8"?>';
+		echo '<midrollad begin="' . $begin . '" adinterval="' . $interval . '" random="' . $random . '" adrotate="' . $adrotate . '">';
+		$current_path = "components/com_hdflvplayer/videos/";
+		if (count($midroll_video) > 0) {
+			foreach ($midroll_video as $rows) {
+				if($rows->clickurl=='')
+				$clickpath = JURI::base() . '?option=com_hdflvplayer&task=impressionclicks&click=click&id='.$rows->id;
+				else
+				$clickpath = $rows->clickurl;
 
-
-    $query="SELECT a.* FROM `#__hdflvplayerads` as a WHERE a.published=1 and typeofadd='mid' ";
- $db->setQuery( $query );
-
-$rs_modulesettings = $db->loadObjectList();
-
-   
-
-
- 
-        $qry_settings = "select * from #__hdflvplayersettings LIMIT 1 "; //and home=1";//and id=11;";
-        $db->setQuery($qry_settings);
-
-            $rs_random = $db->loadObjectList();
-            $random = $rs_random[0]->random;
-            $adrotate = $rs_random[0]->midadrotate;
-            $interval = $rs_random[0]->midinterval;
-            $begin = $rs_random[0]->midbegin;
-            ($random == 1) ? $random = "true" : $random = "false";
-            ($adrotate == 1) ? $adrotate = "true" : $adrotate = "false";
-            //print_r($rs_modulesettings);
-            //exit();
-
-            if($rs_modulesettings)
-            {
-            $this->showadsxml($rs_modulesettings, $random, $begin, $interval, $adrotate);
-            }
-
-
-
-
-        }
-    
-
-    function showadsxml($midroll_video, $random, $begin, $interval, $adrotate) {
-        ob_clean();
-        header("content-type: text/xml");
-        echo '<?xml version="1.0" encoding="utf-8"?>';
-        echo '<midrollad begin="' . $begin . '" adinterval="' . $interval . '" random="' . $random . '" adrotate="' . $adrotate . '">';
-        $current_path = "components/com_hdflvplayer/videos/";
-       if (count($midroll_video) > 0) {
-            foreach ($midroll_video as $rows) {
-if($rows->clickurl=='')
-        $clickpath = JURI::base() . '?option=com_hdflvplayer&task=impressionclicks&click=click&id='.$rows->id;
-else
-$clickpath = $rows->clickurl;
-
-if($rows->impressionurl=='')
-        $impressionpath = JURI::base() . '?option=com_hdflvplayer&task=impressionclicks&click=impression&id='.$rows->id;
-else
-$impressionpath = $rows->impressionurl;
-        
-
-                //echo '<midroll videoid="' . $rows->vid . '" targeturl="' . $rows->targeturl . '" clickurl="' . $clickpath . '" impressionurl="' . $impressionpath . '">';
-                echo '<midroll targeturl="' . $rows->targeturl . '" clickurl="' . $clickpath . '" impressionurl="' . $impressionpath . '" >';
-                echo '<![CDATA[';
-                echo '<span class="heading">' . $rows->adsname;
-                echo '</span><br><span class="midroll">' . $rows->adsdesc;
-                echo '</span><br><span class="webaddress">'. $rows->targeturl;
-                echo '</span>]]>';
-                echo '</midroll>';
-            }
-        }
-        echo '</midrollad>';
-        exit();
-    }
+				if($rows->impressionurl == '')
+				{
+				$impressionpath = JURI::base() . '?option=com_hdflvplayer&task=impressionclicks&click=impression&id='.$rows->id;
+				}
+				else
+				{
+				$impressionpath = $rows->impressionurl;
+				}
+				
+				echo '<midroll targeturl="' . $rows->targeturl . '" clickurl="' . $clickpath . '" impressionurl="' . $impressionpath . '" >';
+				echo '<![CDATA[';
+				echo '<span class="heading">' . $rows->adsname;
+				echo '</span><br><span class="midroll">' . $rows->adsdesc;
+				echo '</span><br><span class="webaddress">'. $rows->targeturl;
+				echo '</span>]]>';
+				echo '</midroll>';
+			}
+		}
+		echo '</midrollad>';
+		exit();
+	}
 
 }

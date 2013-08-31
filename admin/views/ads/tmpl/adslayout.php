@@ -1,288 +1,295 @@
 <?php
 /**
- * @version     $Id: adslayout.php 1.5,  28-Feb-2011 $$
- * @package	Joomla
- * @subpackage	hdflvplayer
- * @copyright   Copyright (C) 2011 Contus Support
- * @license     GNU/GPL http://www.gnu.org/copyleft/gpl.html
- * Edited       Gopinath.A
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 // no direct access
 defined('_JEXEC') or die('Restricted access');
+
+//Includes for tooltip
+JHTML::_('behavior.tooltip');
+
 $rs_roll = $this->adslist;
-JHTML::_('script', JURI::base() . "components/com_hdflvplayer/upload_script.js", false, true);
-//JHTML::_('script', JURI::base() . 'components/com_hdflvplayer/js/adsvalidate.js', false, true);
+
+$document = JFactory::getDocument();
+$document->addScript( 'components/com_hdflvplayer/js/upload_script.js' );
+$document->addScript( 'components/com_hdflvplayer/js/adslayout.js' );
 ?>
 
+<!-- Content here -->
+<div class="width-60 fltlft">
+	<fieldset class="adminform">
+		<legend>Select Ad Settings</legend>
+		<table class="adminlist">
 
-<script language="JavaScript" type="text/javascript">
-     Joomla.submitbutton = function(pressbutton) {
-         
+			<!-- Header shows here -->
+			<thead>
+				<tr>
+					<th>Settings</th>
+					<th>Value</th>
+				</tr>
+			</thead>
 
-    if (pressbutton == "saveads" || pressbutton=="applyads")
-    {
-        var f1_upload_filename=(document.getElementById('f1-upload-filename').textContent);
-        var bol_file1=(document.getElementById('filepath01').checked);
-        var bol_fileselect=(document.getElementById('selectadd01').checked);
-        var filepaths1=(document.getElementById('filepaths').textContent);
-//        var midsel=(document.getElementById('selectadd02').checked);
-//        if(midsel==true)
-//            {
-//                document.getElementById('filepaths').innerHTML="";
-//                document.getElementById('posturl').innerHTML="";
-//            }
+			<!-- Footer shows here -->
+			<tfoot>
+				<tr>
+					<td colspan="2">&#160;</td>
+				</tr>
+			</tfoot>
 
-        if (document.getElementById('adsname').value == "")
-        {
-            alert( document.getElementById('title_error').value);
-            return;
-        }
+			<!-- Body content here -->
+			<tbody>
 
-        if ((document.getElementById('typeofadd').value=="prepost"))
-        {
+				<!-- Choose the setting here -->
+				<tr>
+					<td class="key" width="200px;"><?php echo JHTML::tooltip('Choose type of Ad', 'Ad Type','', 'Ad Type');?>
+					</td>
+					<td>
+					<?php
+					$preAds = $midAds = '';
+					if ($rs_roll['rs_ads']->typeofadd == "prepost" || $rs_roll['rs_ads']->typeofadd == '') {
+						$preAds = 'checked';
+					}
+					else if ($rs_roll['rs_ads']->typeofadd == "mid") {
+						$midAds = 'checked';
+					}
+					?>
+					<input type="radio" style="float: none;" name="selectadd" id="selectadd" value="prepost" onclick="checkadd('prepost');" <?php echo $preAds; ?> />Pre-roll/Post-roll Ad 
+					<input type="radio" style="float: none;" name="selectadd" id="selectaddmid" value="mid" onclick="checkadd('mid');" <?php echo $midAds;?> />Mid-roll Ad
+					</td>
+				</tr>
 
+			</tbody>
 
-
-            if((bol_file1==true) && (bol_fileselect==true))
-            {
-
-                  if((bol_file1==true) && (bol_fileselect==true)&& (f1_upload_filename=="PostRoll.flv") && ((filepaths1=="undefined")||(filepaths1=="")))
-            {
-                alert('You must upload a file ');
-                return;
-                
-            }
-
-                document.getElementById('fileoption').value="File"
-                if(uploadqueue.length!="")
-                {
-                    alert( document.getElementById('progress_error').value);
-                    return;
-                }
-
-                if(document.getElementById('id').value=="")
-                {
-                    if(document.getElementById('normalvideoform-value').value=="") //&& (document.getElementById('selectadd01').value=="File"))
-                    {
-                        alert( document.getElementById('upload_error').value);
-                        return;
-                    }
-                }
-
-            }
-
-            if(bol_file1==false)
-            {
-
-                document.getElementById('fileoption').value="Url"
-                if(document.getElementById('posturl').value=="")
-                {
-                    alert( document.getElementById('url_error').value);
-                    return;
-                }
-                if(document.getElementById('posturl').value!="")
-                {
-                    document.getElementById('posturl-value').value=document.getElementById('posturl').value;
-                }
-            }
-        }
-        submitform( pressbutton );
-        return;
-    }
-    submitform( pressbutton );
-    return;
-
-}
-</script>
-
- <div class="width-60 fltlft">
-  <fieldset class="adminform">
-    <legend>Select Add Settings</legend>
-        <table class="adminlist">
-                        <thead>
-                            <tr>
-                                <th>
-        					Settings
-                                </th>
-                                <th>
-        					Value
-                                </th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">&#160;
-                                </td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-
-
-        <tr><td class="key" width="200px;">Select Settings</td>
-            <td>
-                <input type="radio" style="float:none;" name="selectadd" id="selectadd01" value="prepost" onclick="checkadd('prepost');" <?php
-if ($rs_roll['rs_ads']->typeofadd == "prepost" || $rs_roll['rs_ads']->typeofadd == '') {
-    echo 'checked';
-}
-?> />Pre/Post Roll Add
-                <input type="radio" style="float:none;" name="selectadd" id="selectadd02" value="mid" onclick="checkadd('mid');" <?php
-                       if ($rs_roll['rs_ads']->typeofadd == "mid") {
-                           echo 'checked';
-                       }
-?>/>Mid Roll Add
-            </td>
-        </tr>
-             </tbody>
-    </table>
-</fieldset>
- </div>
-<!-- editing -->
+		</table>
+	</fieldset>
+</div>
 
 <?php
-                       $var1 = "";
-                       if (isset($rs_roll['rs_ads']->typeofadd) && $rs_roll['rs_ads']->typeofadd == "mid") {
-                           $var1 = 'style="display: none;"';
-                       }
+$styleVar = '';
+if (isset($rs_roll['rs_ads']->typeofadd) && $rs_roll['rs_ads']->typeofadd == "mid") {
+	$styleVar = 'style="display: none;"';
+}
 ?>
-  <div class="width-60 fltlft">
-
-                <fieldset class="adminform" id="videodet" <?php echo $var1; ?>>
-                           <legend>Video Details</legend>
-                            <table class="adminlist">
-                        <thead>
-                            <tr>
-                                <th>
-        					Settings
-                                </th>
-                                <th>
-        					Value
-                                </th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">&#160;
-                                </td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                               <tr><td class="key" width="200px;">File Path</td>
-                                   <td>
-                                       <input type="radio" style="float:none;" name="filepath" id="filepath01" <?php
-                       if ($rs_roll['rs_ads']->filepath == "File" || $rs_roll['rs_ads']->filepath == '') {
-                           echo 'checked="checked" ';
-                       }
-?> value="File" onclick="fileads('File');"  />File
-                <input type="radio" style="float:none;" name="filepath" id="filepath02"<?php
-                       if ($rs_roll['rs_ads']->filepath == "Url") {
-                           echo 'checked="checked" ';
-                       }
-?>value="Url" onclick="fileads('Url');"/>Url
-            </td>
-        </tr>
-
-        <tr id="postrollnf" name="postrollnf"><td class="key">Upload Preroll/Post Roll</td>
-            <td>
-                <div id="f1-upload-form" >
-                    <form name="normalvideoform" method="post" enctype="multipart/form-data" >
-                        <input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" />
-                        <input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />
-                        <label id="filepaths"><?php echo $rs_roll['rs_ads']->postvideopath; ?></label>
-                        <input type="hidden" name="mode" value="video" />
-                    </form>
-                </div>
-                <div id="f1-upload-progress" style="display:none">
-                    <img id="f1-upload-image" src="components/com_hdflvplayer/images/empty.gif" alt="Uploading" />
-                    <label style="position:absolute;padding-top:3px;padding-left:25px;font-size:14px;font-weight:bold;" id="f1-upload-filename">PostRoll.flv</label>
-                    <span id="f1-upload-cancel">
-                        <a style="float:right;padding-right:10px;" href="javascript:cancelUpload('normalvideoform');" name="submitcancel">Cancel</a>
-                    </span>
-                    <label id="f1-upload-status" style="float:right;padding-right:40px;padding-left:20px;">Uploading</label>
-                    <span id="f1-upload-message" style="float:right;font-size:12px;background:#FFAFAE;padding:5px 150px 5px 10px;">
-                        <b>Upload Failed:</b> User Cancelled the upload
-                    </span>
-
-                </div>
-                <div id="nor"><iframe id="uploadvideo_target" name="uploadvideo_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe></div>
-            </td>
-
-        </tr>
-        <tr id="postrollurl">
-            <td class="key">
-                Preroll/Postroll Url
-            </td>
-            <td>
-                <input type="text" name="posturl"  id="posturl" style="width:300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->postvideopath; ?>"/></td>
-
-        </tr>
-         </tbody>
-    </table>
-</fieldset>
- </div>
-
-<form action="index.php?option=com_hdflvplayer&task=ads" method="post" name="adminForm" onsubmit="" id="adminForm" enctype="multipart/form-data">
 <div class="width-60 fltlft">
 
-                <fieldset class="adminform">
-                           <legend>Video Details</legend>
-                            <table class="adminlist">
-                        <thead>
-                            <tr>
-                                <th>
-        					Settings
-                                </th>
-                                <th>
-        					Value
-                                </th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">&#160;
-                                </td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-            <tr><td class="key">Ad Name</td><td><input type="text" name="adsname"  id="adsname" style="width:300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->adsname; ?>" /></td></tr>
-            <tr><td class="key">Ad Description </td>
-            <td>
-                <textarea rows="4" cols="40" style="width:auto;" name="adsdesc" id="adsdesc"><?php echo trim($rs_roll['rs_ads']->adsdesc); ?></textarea>
-               </td> </tr>
-               <tr><td class="key">Target URL </td><td><input type="text" name="targeturl"  id="targeturl" style="width:300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->targeturl; ?>" /></td></tr>
-               <tr><td class="key">Click Hits URL </td><td><input type="text" name="clickurl"  id="clickurl" style="width:300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->clickurl; ?>" /></td></tr>
-               <tr><td class="key">Impression Hits URL </td><td><input type="text" name="impressionurl"  id="impressionurl" style="width:300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->impressionurl; ?>" /></td></tr>
-               <tr><td class="key">Published</td>
-                   <td>
-                       Yes<input type="radio" style="float:none;" name="published" value=0 />
-                       No<input type="radio" name="published"  value=1  checked="checked" /></td>
-               </tr>
-</tbody>
-    </table>
-</fieldset>
- </div>
+	<fieldset class="adminform" id="videodet" <?php echo $styleVar; ?>>
+		<legend>Video Details</legend>
+		<table class="adminlist">
+
+			<!-- Header shows here -->
+			<thead>
+				<tr>
+					<th>Settings</th>
+					<th>Value</th>
+				</tr>
+			</thead>
+
+			<!-- Footer shows here -->
+			<tfoot>
+				<tr>
+					<td colspan="2">&#160;</td>
+				</tr>
+			</tfoot>
+
+			<!-- Body content shows here -->
+			<tbody>
+
+				<!-- Choose the File Path option, either file or By URL -->
+				<tr>
+					<td class="key" width="200px;"><?php echo JHTML::tooltip('Choose the File option', 'File Option','', 'File Option');?>
+					</td>
+					<td>
+					<?php 
+					$fileChecked = $urlChecked = '';
+					if ($rs_roll['rs_ads']->filepath == "File" || $rs_roll['rs_ads']->filepath == '') {
+							$fileChecked = 'checked="checked" ';
+						}
+						else if($rs_roll['rs_ads']->filepath == "Url")
+						{
+							$urlChecked = 'checked="checked" ';
+						}
+					?>
+					<input type="radio" style="float: none;" name="filepath" id="filepath" <?php echo $fileChecked; ?> value="File" onclick="fileads('File');" />File 
+					<input type="radio" style="float: none;" name="filepath" id="filepathurl" <?php echo $urlChecked; ?> value="Url" onclick="fileads('Url');" />URL
+					</td>
+				</tr>
+
+				<!-- If File menas, File upload option here -->
+				<tr id="postrollnf" name="postrollnf">
+					<td class="key"><?php echo JHTML::tooltip('Upload Video for Pre-roll/Post-roll', 'Upload Pre-roll/Post-roll','', 'Upload Pre-roll/Post-roll');?>
+					</td>
+					<td>
+						<div id="f1-upload-form">
+							<form name="normalvideoform" method="post" enctype="multipart/form-data">
+								<input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" /> 
+								<input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" /> 
+								<label id="filepaths"><?php echo $rs_roll['rs_ads']->postvideopath; ?></label> 
+								<input type="hidden" name="mode" value="video" />
+							</form>
+						</div>
+						<div id="f1-upload-progress" style="display: none">
+							<table>
+								<tr>
+									<td><img id="f1-upload-image" style="float: left;" src="components/com_hdflvplayer/images/empty.gif" alt="Uploading" />
+									</td>
+									<td><span style="float: left; clear: none; font-weight: bold;" id="f1-upload-filename">&nbsp;</span>
+									</td>
+									<td><span id="f1-upload-message" style="float: left;width:300px;"> </span>
+										<label id="f1-upload-status" style="float: left;"> &nbsp; </label>
+									</td>
+									<td><span id="f1-upload-cancel"> 
+										<a style="float: left; font-weight: bold" href="javascript:cancelUpload('normalvideoform');" name="submitcancel">Cancel</a> 
+										</span>
+									</td>
+								</tr>
+							</table>
+						</div>
+
+						<div id="nor">
+							<iframe id="uploadvideo_target" name="uploadvideo_target" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>
+						</div>
+					</td>
+
+				</tr>
+
+				<!-- If URL, means enter video here -->
+				<tr id="postrollurl">
+					<td class="key"><?php echo JHTML::tooltip('Enter Pre-roll/Post-roll Video URL', 'Pre-roll/Post-roll URL','', 'Pre-roll/Post-roll URL');?>
+
+					</td>
+					<td><input type="text" name="posturl" id="posturl" style="width: 300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->postvideopath; ?>" />
+					</td>
+
+				</tr>
+
+			</tbody>
+
+		</table>
+	</fieldset>
+</div>
 
 
+<form action="index.php?option=com_hdflvplayer&task=ads" method="post" name="adminForm" onsubmit="" id="adminForm" enctype="multipart/form-data">
+	<div class="width-60 fltlft">
 
-       <input type="hidden" name="id" id="id" value="<?php echo $rs_roll['rs_ads']->id; ?>" />
-        <input type="hidden" name="typeofadd" id="typeofadd" value="prepost" />
-       <input type="hidden" name="task" value="" />
-       <input type="hidden" name="boxchecked" value="1">
-       <input type="hidden" name="submitted" value="true" id="submitted">
-       <input type="hidden" name="fileoption" id="fileoption" value="<?php echo $rs_roll['rs_ads']->filepath; ?>" />
-    <input type="hidden" name="normalvideoform-value" id="normalvideoform-value" value="" />
-    <input type="hidden" name="posturl-value" id="posturl-value" value="" />
+		<fieldset class="adminform">
+			<legend>Video Details</legend>
+			<table class="adminlist">
 
-    <!-- form validation error variables -->
+				<!-- Header shows here -->
+				<thead>
+					<tr>
+						<th>Settings</th>
+						<th>Value</th>
+					</tr>
+				</thead>
 
-     <input type="hidden" name="upload_error" id="upload_error" value="<?php echo JText::_('You must Upload a file', true); ?>" >
-    <input type="hidden" name="title_error" id="title_error" value="<?php echo JText::_('You must provide a Title', true); ?>">
-    <input type="hidden" name="progress_error" id="progress_error" value="<?php echo JText::_('Upload in Progress', true); ?>" >
-    <input type="hidden" name="url_error" id="url_error" value="<?php echo JText::_('You must provide a Video Url', true); ?>" >
+				<!-- Footer shows here -->
+				<tfoot>
+					<tr>
+						<td colspan="2">&#160;</td>
+					</tr>
+				</tfoot>
 
-     <?php echo JHTML::_( 'form.token' ); ?>
+				<!-- Body content shows here -->
+				<tbody>
+
+					<!-- Enter Ad Name here -->
+					<tr>
+						<td class="key"><?php echo JHTML::tooltip('Enter Ad Name', 'Ad Name','', 'Ad Name');?>
+						</td>
+						<td><input type="text" name="adsname" id="adsname" style="width: 300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->adsname; ?>" />
+						</td>
+					</tr>
+
+					<!-- Enter Ad Description here -->
+					<tr>
+						<td class="key"><?php echo JHTML::tooltip('Enter Ad Description', 'Ad Description','', 'Ad Description');?>
+						</td>
+						<td><textarea rows="4" cols="40" style="width: auto;" name="adsdesc" id="adsdesc"><?php echo trim($rs_roll['rs_ads']->adsdesc); ?></textarea>
+						</td>
+					</tr>
+
+					<!-- Enter Target URL here -->
+					<tr>
+						<td class="key"><?php echo JHTML::tooltip('Enter URL redirects when click on Ad', 'Target URL','', 'Target URL');?>
+						</td>
+						<td><input type="text" name="targeturl" id="targeturl" style="width: 300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->targeturl; ?>" /></td>
+					</tr>
+
+					<!-- Enter Ad Visits URL here -->
+					<tr>
+						<td class="key"><?php echo JHTML::tooltip('Enter Ad Visits URL', 'Ad Visits URL','', 'Ad Visits URL');?>
+						</td>
+						<td><input type="text" name="clickurl" id="clickurl" style="width: 300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->clickurl; ?>" /></td>
+					</tr>
+
+					<!-- Enter Impression Hits URL here -->
+					<tr>
+						<td class="key"><?php echo JHTML::tooltip('Enter Impression Hits URL', 'Impression Hits URL','', 'Impression Hits URL');?>
+						</td>
+						<td><input type="text" name="impressionurl" id="impressionurl" style="width: 300px" maxlength="250" value="<?php echo $rs_roll['rs_ads']->impressionurl; ?>" /></td>
+					</tr>
+
+					<!-- Enter Publication status here -->
+					<tr>
+						<td class="key"><?php echo JHTML::tooltip('Choose Publication Status', 'Status','', 'Status');?>
+						</td>
+						<td><?php 
+						$publish = '1';
+
+						$publish = '1';$publishEnable = $publishDisable = '';
+						if ($rs_roll['rs_ads']->published != '') {
+							$publish = $rs_roll['rs_ads']->published;
+						}
+						if($publish == '1'){
+							$publishEnable = 'checked="checked"';
+						}
+						else{
+							$publishDisable = 'checked="checked"';
+						}
+						?> 
+						<select name="published" id="published">
+								<option value="1" <?php if(isset($rs_roll['rs_ads']->published) && $rs_roll['rs_ads']->published == 1) echo 'selected';?>>Published</option>
+								<option value="0" <?php if(isset($rs_roll['rs_ads']->published) && $rs_roll['rs_ads']->published == 0) echo 'selected';?>>Unpublished</option>
+								<option value="-2" <?php if(isset($rs_roll['rs_ads']->published) && $rs_roll['rs_ads']->published == -2) echo 'selected';?>>Trashed</option>
+							</select>
+						
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+
+	<input type="hidden" name="id" id="id" value="<?php echo $rs_roll['rs_ads']->id; ?>" /> 
+	<input type="hidden" name="typeofadd" id="typeofadd" value="<?php if($rs_roll['rs_ads']->typeofadd != ''){ echo $rs_roll['rs_ads']->typeofadd; } else { echo 'prepost'; }?>" /> 
+	<input type="hidden" name="task" value="" /> 
+	<input type="hidden" name="boxchecked" value="1"> 
+	<input type="hidden" name="submitted" value="true" id="submitted"> 
+	<input type="hidden" name="fileoption" id="fileoption" value="<?php echo $rs_roll['rs_ads']->filepath; ?>" />
+	<input type="hidden" name="normalvideoform-value" id="normalvideoform-value" value="" /> 
+	<input type="hidden" name="posturl-value" id="posturl-value" value="" />
+
+	<!-- form validation error variables -->
+
+	<input type="hidden" name="upload_error" id="upload_error" value="<?php echo JText::_('You must Upload a file', true); ?>"> 
+	<input type="hidden" name="title_error" id="title_error" value="<?php echo JText::_('You must provide a Title', true); ?>"> 
+	<input type="hidden" name="progress_error" id="progress_error" value="<?php echo JText::_('Upload in Progress', true); ?>"> 
+	<input type="hidden" name="url_error" id="url_error" value="<?php echo JText::_('You must provide a Video Url', true); ?>">
+	<?php echo JHTML::_('form.token'); ?>
 </form>
-<script language="JavaScript" type="text/javascript">
-
+<script type="text/javascript">
 if((document.getElementById('fileoption').value == 'File') || (document.getElementById('fileoption').value == ''))
 {
     adsflashdisable();
@@ -291,61 +298,6 @@ if((document.getElementById('fileoption').value == 'File') || (document.getEleme
 if(document.getElementById('fileoption').value == 'Url')
 {
     urlenable();
-
-}
-
-function urlenable()
-{
-    document.getElementById('postrollnf').style.display='none';
-    document.getElementById('postrollurl').style.display='';
-}
-function adsflashdisable()
-{
-    document.getElementById('postrollnf').style.display='';
-    document.getElementById('postrollurl').style.display='none';
-}
-function fileads(filepath)
-{
-    if(filepath=="File")
-    {
-        adsflashdisable();
-        document.getElementById('fileoption').value='File';
-    }
-    if(filepath=="Url")
-    {
-        urlenable();
-        document.getElementById('fileoption').value='Url';
-    }
-
-}
-
-/* altering */
-
-
-function addsetenable()
-{
-    document.getElementById('videodet').style.display='';
-}
-function addsetdisable()
-{
-
-    document.getElementById('videodet').style.display='none';
-}
-
-function checkadd(recadd)
-{
-    if(recadd=="prepost")
-    {
-        //alert("prepost");
-        // alert (document.getElementById('selectadd01').value);
-        addsetenable();
-        document.getElementById('typeofadd').value='prepost';
-    }
-    if(recadd=="mid")
-    {
-        addsetdisable();
-        document.getElementById('typeofadd').value='mid';
-    }
 
 }
 </script>

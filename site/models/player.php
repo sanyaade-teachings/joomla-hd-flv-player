@@ -1,12 +1,16 @@
 <?php
 /**
- * @version	$Id: player.php 1.5,  2011-Mar-11 $
- * @package	Joomla.Framework
- * @subpackage  HDFLV Player
- * @component   com_hdflvplayer
- * @author      contus support interactive
- * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 // no direct access
 
@@ -15,252 +19,256 @@ defined('_JEXEC') or die();
 
 jimport( 'joomla.application.component.model' );
 
+/*
+ * HDFLV player Model class to fetch Video details to display player
+ */
 class hdflvplayerModelplayer extends JModel
 {
-    /**
-     * Gets the greeting
-     *
-     * @return string The greeting to be displayed to the user
-     */
-    function showhdplayer()
-    {
 
-        global $mainframe;
-        $playid = 0;
-        $db =& JFactory::getDBO();
-        $playlistid="";
-        $query = "select * from #__hdflvplayersettings";
-        $db->setQuery( $query );
-        $settingsrows = $db->loadObjectList();
-
-        $query = "select * from #__hdflvplayername";
-        $db->setQuery( $query );
-        $rs_playlistname = $db->loadObjectList();
-
-        $params = &JComponentHelper::getParams( 'com_hdflvplayer' );
-        $playlistnameid=$params->get('playlistnameid');
-        if(isset($playlistnameid))
-        {
-            if($playlistnameid!=0)
-            $playlistid=$playlistnameid;
-        }
+	function showhdplayer()
+	{
+		$playid = 0;
+		$playlistid = $compid = '';
+		$db = JFactory::getDBO();
+		$home_bol = 'false';
+		$hdvideo = false;
+		$thumbid = '';
+		$hd_bol = 'false';
 
 
+		//Function call to get player settings.
+		$settingsrows = $this->getplayersettings();
+                
+		//Query for fetch Playlists
+		$query = 'SELECT `id`, `name` FROM `#__hdflvplayername` WHERE published=1';
+		$db->setQuery( $query );
+		$rs_playlistname = $db->loadObjectList();
 
-        $playid=JRequest::getvar('id','','get','var');
+		//Fetch Playlist ID from Module Parameter
+		$params = JComponentHelper::getParams( 'com_hdflvplayer' );
+		$playlistnameid = $params->get('playlistnameid');
+		if(isset($playlistnameid))
+		{
+			if($playlistnameid != 0)
+			$playlistid = $playlistnameid;
+		}
 
-        $compid1="";
+		$playid = JRequest::getvar('id','','get','var');
 
-        if(isset($_GET['compid']))
-        {
-            $compid1=JRequest::getvar('compid','','get','int');
-            $playlistid=$compid1;
-        }
+		//Fetch Playlist ID from URL
+		$compid = JRequest::getvar('compid','','get','int');
+		if($compid != '')
+		{
+			$playlistid = $compid;
+		}
 
 
 
+		$current_path = 'components/com_hdflvplayer/videos/';
 
+		//If Video ID available, then fetch that video details
+		if($playid)
+		{
+			 $query = 'SELECT `id`, `title`, `times_viewed`, `filepath`, `videourl`, `thumburl`, `previewurl`, `hdurl`,
+		`home`, `playlistid`,`streamerpath`, `streameroption`, `postrollads`, `prerollads`, `midrollads`, `description`,
+		`targeturl`, `download`, `prerollid`, `postrollid`, `access`, `islive` FROM `#__hdflvplayerupload`
+		 WHERE published=1 AND id='.$playid;
+			$db->setQuery( $query );
+			$rows = $db->loadObject();
 
-        if($playid)
-        $playid=$playid;
+		}
+		else if($playlistid != '')
+		{
+		//Fetch Videos of the selected Playlist
+		$query = 'SELECT `id`, `title`, `times_viewed`, `filepath`, `videourl`, `thumburl`, `previewurl`,
+		`hdurl`, `home`, `playlistid`, `streamerpath`, `streameroption`, `postrollads`,
+		`prerollads`, `midrollads`, `description`, `targeturl`, `download`, `prerollid`, `postrollid`, `access`, `islive`
+		 FROM `#__hdflvplayerupload`
+		 WHERE published=1 AND playlistid='.$playlistid.' ORDER BY ordering ASC';
+		$db->setQuery( $query );
+		$rows = $db->loadObject();
+		}
+		//Else fetch default video or 1st video details from table.
+		else
+		{
+			//Query to fetch default video
+			$query = 'SELECT `id`, `title`, `times_viewed`, `filepath`, `videourl`, `thumburl`, `previewurl`, `hdurl`,
+		`home`, `playlistid`,`streamerpath`, `streameroption`, `postrollads`, `prerollads`, `midrollads`, `description`,
+		`targeturl`, `download`, `prerollid`, `postrollid`, `access`, `islive` FROM `#__hdflvplayerupload`
+		 WHERE published=1 AND home=1 limit 1';
+			$db->setQuery( $query );
+			$rows_home = $db->loadObject();
 
+			//If default video not exist then, fetch 1st video
+			if(empty($rows_home))
+			{
+				$query = 'SELECT `id`, `title`, `times_viewed`, `filepath`, `videourl`, `thumburl`, `previewurl`, `hdurl`,
+		`home`, `playlistid`,`streamerpath`, `streameroption`, `postrollads`, `prerollads`, `midrollads`, `description`,
+		`targeturl`, `download`, `prerollid`, `postrollid`, `access`, `islive` FROM `#__hdflvplayerupload`
+		 WHERE published=1 ORDER BY ordering ASC LIMIT 1';
+				$db->setQuery( $query );
+				$rows = $db->loadObject();
+			}
+			else{
+				$rows = $rows_home;
+			}
 
-        $none="";
-
-        if($playid)
-        {
-            if($playlistid!="")
-            $query_all_count="select * from #__hdflvplayerupload  where published='1' and playlistid=$playlistid and id not in ($playid) order by ordering asc ";
-            else
-            $query_all_count="select * from #__hdflvplayerupload  where published='1' and  id not in ($playid) order by ordering asc ";
-        }
-        else
-        { if($playlistid!="")
-            $query_all_count="select * from #__hdflvplayerupload  where published='1' and playlistid=$playlistid order by ordering asc ";
-            else
-            { $none=0;
-                $query_all_count="select * from #__hdflvplayerupload  where published='1' order by ordering asc ";
-            }
-        }
-
-
-        $db->setQuery($query_all_count);
-        $rs_count = $db->loadObjectList();
-        $length=1;
-        $start=0;
-
-
-        if($rs_count>0)
-        {
-            if($none==0)
-            $total=count($rs_count)-1;
-            else
-            $total=count($rs_count);
-        }
-        else
-        $total=0;
-
-
-        $pageno = 1;
-
-        $page=JRequest::getvar('page','','get','int');
-
-
-        if($page)
-        {
-            $pageno = $page;
-        }
-        //$length=8;
-        if($settingsrows[0]->nrelated!="")
-        $length=$settingsrows[0]->nrelated;
-        else
-        $length=4;
-
-        if($length==0)
-        $length=1;
+		}
 
 
 
+		if (!empty($rows)) {
+			$thumbid = $rows->id;
 
-        $pages=ceil($total/$length);
-        if($pageno==1)
-        $start=0;
-        else
-        $start= ($pageno - 1) * $length;
+			//Update Viewed count for Video
+			$query='UPDATE #__hdflvplayerupload SET times_viewed=1+times_viewed WHERE id='.$playid;
+			$db->setQuery($query );
+			$db->query();
+			$playid = $rows->id;
+		}
 
+		//If Playlist Id available
+		if($playlistid != '')
+		{
+                 $query = 'SELECT count(`id`) FROM `#__hdflvplayerupload`
+		 WHERE published=1 AND playlistid='.$playlistid.' AND id NOT IN ('.$playid.') ORDER BY ordering ASC';
+                $db->setQuery( $query );
+		$rs_playlist_count = $db->loadResult();
 
+                $limit_query = 'SELECT count(`id`) FROM `#__hdflvplayerupload`
+		 WHERE published=1 AND playlistid='.$playlistid.' AND id NOT IN ('.$playid.') ORDER BY ordering ASC ';
 
-        $query1="select * from #__hdflvplayerupload where published='1'";
-        $db->setQuery( $query1 );
-        $rs_home = $db->loadObjectList();
-        $home_bol="false";
+		//Fetch Videos of the selected Playlist
+		$query = 'SELECT `id`, `title`, `times_viewed`, `filepath`, `videourl`, `thumburl`, `previewurl`,
+		`hdurl`, `home`, `playlistid`, `streamerpath`, `streameroption`, `postrollads`,
+		`prerollads`, `midrollads`, `description`, `targeturl`, `download`, `prerollid`, `postrollid`, `access`, `islive`
+		 FROM `#__hdflvplayerupload`
+		 WHERE published=1 AND playlistid='.$playlistid.' AND id NOT IN ('.$playid.') ORDER BY ordering ASC ';
+		}
+		//Fetch the remaining videos
+		else
+		{
 
+                $query = 'SELECT `playlistid` FROM `#__hdflvplayerupload` WHERE published=1 and id='.$playid;
 
-        if(count($rs_home>0))
-        {
-            for($k=0;$k<count($rs_home);$k++)
-            {
-                if($rs_home[$k]->home==1)
+		$db->setQuery( $query );
+		$playlistId_video = $db->loadResult();
+                $limit_query = 'SELECT count(`id`) FROM `#__hdflvplayerupload` WHERE published=1 AND id NOT IN ('.$playid.') AND playlistid='.$playlistId_video.'
+		 ORDER BY ordering ASC ';
+
+                 $query = 'SELECT `id`, `title`, `times_viewed`, `filepath`, `videourl`, `thumburl`, `previewurl`,
+		 `hdurl`, `home`, `playlistid`, `streamerpath`, `streameroption`, `postrollads`,
+		 `prerollads`, `midrollads`, `description`, `targeturl`, `download`, `prerollid`, `postrollid`, `access`,
+		 `islive` FROM `#__hdflvplayerupload` WHERE published=1 AND id NOT IN ('.$playid.') AND playlistid='.$playlistId_video.'
+		 ORDER BY ordering ASC ';
+		}
+                $length = 1;
+		$start = 0;
+                $db->setQuery( $limit_query );
+		$rs_playlist_count = $db->loadResult();
+
+		//Fetch Total No.of Videos for pagination
+		if($rs_playlist_count > 0)
+		{
+
+				$total = $rs_playlist_count;
+
+		}
+		else
+		{
+			$total = 0;
+		}
+                //Pagination variables initialize here
+		$pageno = 1;
+
+		$page = JRequest::getvar('page','','get','int');
+
+		if($page)
+		{
+			$pageno = $page;
+		}
+
+		//Fetch No.of Related Videos per page from Settings
+		if($settingsrows->nrelated != '')
+		{
+			$length = $settingsrows->nrelated;
+		}
+		else
+		{
+			$length = 4;
+		}
+
+		//If not settings available, default value.
+		if($length == 0)
+		{
+			$length = 1;
+		}
+
+		$pages = ceil($total/$length);
+		if($pageno == 1)
+		{
+			$start = 0;
+		}
+		else
+		{
+			$start = ($pageno - 1) * $length;
+		}
+
+                $query = $query.'LIMIT '.$start.','.$length;
+		$db->setQuery( $query );
+		$rs_playlist = $db->loadobjectList();
+
+		//Fetch the URL
+		$playerpath = JURI::base().'components/com_hdflvplayer/hdflvplayer/hdplayer.swf';
+		$baseurl = str_replace(':','%3A',JURI::base());
+		$baseurl = substr_replace($baseurl ,"",-1);
+		$baseurl = str_replace('/','%2F',$baseurl);
+
+		$emailpath = JURI::base()."/index.php?option=com_hdflvplayer&task=email";
+		$youtubeurl = JURI::base()."/index.php?option=com_hdflvplayer&task=youtubeurl&url=";
+		$logopath = JURI::base()."/components/com_hdflvplayer/videos/".$settingsrows->logopath;
+		$playlistXML = '';
+
+		//Fetch the Google Ads info from Table
+		$query = 'SELECT `id`, `code`, `showoption`, `closeadd`, `reopenadd`, `publish`, `ropen`, `showaddc`, `showaddm`, `showaddp` FROM `#__hdflvaddgoogle` WHERE publish=1 AND id=1';
+		$db->setQuery( $query );
+		$fields = $db->loadObject();
+                //Check google ads enable //
+                if($settingsrows->ads==1 && $fields->publish==1)
                 {
-                    $home_bol="true";
+                $goolge_ads=1;
                 }
-            }
-        }
+                else {
+                $goolge_ads=0;
+                }
+
+		//Assigns info into one array and returns
+		if(!empty($fields))
+		{
+		$insert_data_array = array('playerpath' => $playerpath,'baseurl'=>$baseurl,'thumbid'=>$thumbid,'rs_playlist'=>$rs_playlist,'length'=>$length,'total'=>$total,'closeadd'=>$fields->closeadd,'showoption'=>$fields->showoption,'reopenadd'=>$fields->reopenadd,'ropen'=>$fields->ropen,'publish'=>$goolge_ads,'showaddc'=>$fields->showaddc,'rs_playlistname'=>$rs_playlistname,'rs_title'=>$rows);
+		}
+		else
+		{
+		$insert_data_array = array('playerpath' => $playerpath,'baseurl'=>$baseurl,'thumbid'=>$thumbid,'rs_playlist'=>$rs_playlist,'length'=>$length,'total'=>$total,'closeadd'=>'','showoption'=>'','reopenadd'=>'','ropen'=>'','publish'=>'','showaddc'=>'','rs_playlistname'=>$rs_playlistname,'rs_title'=>$rows);
+		}
+
+		$settingsrows =  $insert_data_array;
+		return $settingsrows;
 
 
-        $current_path="components/com_hdflvplayer/videos/";
+	}
+
+	//Function to fetch Player settings
+	function getplayersettings()
+	{
+		//Query to fetch necessary settings.
+		$db = JFactory::getDBO();
+		$query = 'SELECT  width,height,googleana_visible, googleanalyticsID, playlist_dvisible, title_ovisible, description_ovisible, related_videos, nrelated, viewed_visible,logopath,ads
+        		  FROM `#__hdflvplayersettings`';
+		$db->setQuery( $query );
+		$settingsrows = $db->loadObject();
 
 
-        if($playid)
-        $query = "select * from #__hdflvplayerupload where published='1' and id=$playid";
-        else
-        {
-            if($home_bol=="true")
-            $query = "select * from #__hdflvplayerupload where published='1' and home=1 limit 1";
-            else
-            $query = "select * from #__hdflvplayerupload where published='1' order by ordering asc limit 1";
-        }
-
-        $db->setQuery( $query );
-        $rows = $db->loadObjectList();
-        $hdvideo = false;
-        $thumbid="";
-        if(count($rows)>0)
-        $thumbid=$rows[0]->id;
-
-        $hd_bol="false";
-        if (count($rows)>0) {
-            if($rows[0]->filepath=="File" || $rows[0]->filepath=="FFmpeg") {
-                $video=JURI::base().$current_path.$rows[0]->ffmpeg_videos;
-                ($rows[0]->ffmpeg_hd!="")?$hdvideo=JURI::base().$current_path.$rows[0]->ffmpeg_hd:$hdvideo="";
-                $previewimage=JURI::base().$current_path.$rows[0]->ffmpeg_previewimages;
-                if($rows[0]->ffmpeg_hd)
-                $hd_bol="true";
-                else
-                $hd_bol="false";
-            }
-            elseif($rows[0]->filepath=="Url")
-            {
-                $video=$rows[0]->videourl;
-                $previewimage=$rows[0]->previewurl;
-                if($rows[0]->hdurl)
-                $hd_bol="true";
-                else
-                $hd_bol="false";
-                $hdvideo=$rows[0]->hdurl;
-            }
-            elseif($rows[0]->filepath=="Youtube")
-            {
-                $video=$rows[0]->videourl;
-                $previewimage=$rows[0]->previewurl;
-                if($rows[0]->hdurl)
-                $hd_bol="true";
-                else
-                $hd_bol="false";
-                $hdvideo=$rows[0]->videourl;
-            }
-
-
-
-            $query="update #__hdflvplayerupload SET times_viewed=1+times_viewed where id=$playid";
-            $db->setQuery($query );
-            $db->query();
-            $playid = $rows[0]->id;
-        }
-
-        if($playlistid!="")
-        $query="select * from #__hdflvplayerupload  where published='1' and playlistid=$playlistid and id not in ($playid) order by ordering asc LIMIT $start,$length";
-        else
-        $query = "select * from #__hdflvplayerupload  where published='1' and id not in ($playid) order by ordering asc LIMIT $start,$length ";
-
-        //$query = "select * from #__hdflvplayerupload  where published='1' and id not in ($playid) order by ordering asc LIMIT $start,$length ";
-
-
-        $db->setQuery( $query );
-        $rs_playlist = $db->loadobjectList();
-
-
-        $query_title = "select title,description,ffmpeg_videos, filepath,videourl,ffmpeg_hd from #__hdflvplayerupload  where published='1' and id=$playid";
-        $db->setQuery( $query_title );
-        $rs_title = $db->loadobjectList();
-
-
-
-
-
-        $playerpath = JURI::base().'components/com_hdflvplayer/hdflvplayer/hdplayer.swf';
-        $baseurl=str_replace(':','%3A',JURI::base());
-        $baseurl=substr_replace($baseurl ,"",-1);
-        $baseurl=str_replace('/','%2F',$baseurl);
-
-
-        //$baseurl=$playerpath;
-
-        $emailpath=JURI::base()."/index.php?option=com_hdflvplayer&task=email";
-        $youtubeurl=JURI::base()."/index.php?option=com_hdflvplayer&task=youtubeurl&url=";
-        $logopath=JURI::base()."/components/com_hdflvplayer/videos/".$settingsrows[0]->logopath;
-        $playlistXML = '';
-        $playlist="false";
-        //if ($settingsrows[0]->related_videos == 1)
-        if ($settingsrows[0]->related_videos == "1" || $settingsrows[0]->related_videos == "3" )
-        {
-            $playlistXML = JURI::base()."index.php?option=com_hdflvplayer&task=xml";
-
-            //$playlistXML = "playlistXML=".JURI::base()."index.php?option=com_hdflvplayer&task=xml";
-            $playlist="true";
-        }
-
-        $query1 = "select * from #__hdflvaddgoogle where publish='1' and id='1'";
-        $db->setQuery( $query1 );
-        $fields = $db->loadObjectList();
-        if(count($fields)>0)
-        $insert_data_array = array('playerpath' => $playerpath,'baseurl'=>$baseurl,'thumbid'=>$thumbid,'rs_playlist'=>$rs_playlist,'length'=>$length,'total'=>$total,'closeadd'=>$fields[0]->closeadd,'showoption'=>$fields[0]->showoption,'reopenadd'=>$fields[0]->reopenadd,'ropen'=>$fields[0]->ropen,'publish'=>$fields[0]->publish,'showaddc'=>$fields[0]->showaddc,'rs_playlistname'=>$rs_playlistname,'rs_title'=>$rs_title);
-        else
-        $insert_data_array = array('playerpath' => $playerpath,'baseurl'=>$baseurl,'thumbid'=>$thumbid,'rs_playlist'=>$rs_playlist,'length'=>$length,'total'=>$total,'closeadd'=>"",'showoption'=>"",'reopenadd'=>"",'ropen'=>"",'publish'=>"",'showaddc'=>"",'rs_playlistname'=>$rs_playlistname,'rs_title'=>$rs_title);
-
-        $settingsrows = array_merge($settingsrows, $insert_data_array);
-        return $settingsrows;
-
-
-    }
+		return $settingsrows;
+	}
 }

@@ -1,18 +1,16 @@
 <?php
-
 /**
- * @version  $Id: adsxml.php 1.5,  2011-Mar-11 $
- * @package	Joomla.Framework
- * @subpackage  HDFLV Player
- * @component   com_hdflvplayer
- * @author      contus support interactive
- * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
- */
-
-/*
- * Description : getads()
- *  This Function Call To UserDefined Ads Function
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 
 // Check to ensure this file is included in Joomla! No Direct Access
@@ -21,26 +19,32 @@ defined('_JEXEC') or die();
 // Importing Default Joomla Component
 jimport('joomla.application.component.model');
 
+/*
+ * Model class for generating adsxml
+ */
 class hdflvplayerModeladsxml extends JModel {
 
-    /**
-     * Gets the greeting
-     *
-     * @return string The greeting to be displayed to the user
-     */
     function getads() {
-        $db = & JFactory::getDBO();
-        $query_ads = "select * from #__hdflvplayerads where published=1 and typeofadd='prepost' "; //and home=1";//and id=11;";
+        $db = JFactory::getDBO();
+        
+        //Fetch all Pre/Post Ads here
+        $query_ads = 'SELECT `id`, `published`, `adsname`, `filepath`, `postvideopath`, `home`, `targeturl`, `clickurl`,
+        `impressionurl`, `impressioncounts`, `clickcounts`, `adsdesc`, `typeofadd` FROM `#__hdflvplayerads`
+        WHERE published=1 and typeofadd=\'prepost\''; //and home=1";//and id=11;";
         $db->setQuery($query_ads);
         $rs_ads = $db->loadObjectList();
-        $qry_settings = "select * from #__hdflvplayersettings LIMIT 1 "; //and home=1";//and id=11;";
+        
+        //Fetch Random from Player settings. 
+        $qry_settings = "select random from #__hdflvplayersettings"; //and home=1";//and id=11;";
         $db->setQuery($qry_settings);
-        $rs_random = $db->loadObjectList();
-        $random = $rs_random[0]->random;
-       ($random == 1) ? $random = "true" : $random = "false";
+        $random = $db->loadResult();
+        
+        //Checks if random enabled or not. 
+        ($random == 1) ? $random = "true" : $random = "false";
         $this->showadsxml($rs_ads, $random);
     }
-
+	
+    //Function to generate Adsxml for Pre-roll/Post-roll Ads
     function showadsxml($rs_ads, $random) {
         ob_clean();
         header("content-type: text/xml");
@@ -52,14 +56,15 @@ class hdflvplayerModeladsxml extends JModel {
 
         if (count($rs_ads) > 0) {
             foreach ($rs_ads as $rows) {
-                $timage = "";
+                //Checks for Ads file is from URL or File
                 if ($rows->filepath == "File") {
                     $postvideo = JURI::base() . $current_path . $rows->postvideopath;
-                    //$prevideo=JURI::base().$current_path.$rows->prevideopath;
+                    
                 } elseif ($rows->filepath == "Url") {
                     $postvideo = $rows->postvideopath;
-                    // $prevideo=$rows->prevideopath;
+                    
                 }
+                //Generates XML tags for Ads here
                 echo '<ad id="' . $rows->id . '" url="' . $postvideo . '" targeturl="' . $rows->targeturl . '" clickurl="' . $clickpath . '" impressionurl="' . $impressionpath . '">';
                 echo '<![CDATA[' . $rows->adsname . ']]>';
                 echo '</ad>';

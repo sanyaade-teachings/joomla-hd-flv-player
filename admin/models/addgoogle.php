@@ -1,84 +1,110 @@
 <?php
 /**
- * @version  $Id: addgoogle.php 1.5,  28-Feb-2011 $$
- * @package		Joomla
- * @subpackage	hdflvplayer
- * @copyright Copyright (C) 2011 Contus Support
- * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 //No direct acesss
 defined('_JEXEC') or die();
 
+// importing default joomla components
 jimport('joomla.application.component.model');
 
+/*
+ * HDFLV player Model class to fetching checklist info.
+ */
 class hdflvplayerModeladdgoogle extends JModel {
 
+	//Function invoke when click on add button
+	function addgooglemodel() {
+		
+		$db =JFactory::getDBO();
+		$rs_addgoogle =JTable::getInstance('hdflvaddgoogle', 'Table');
 
-    function addgooglemodel() {
-        $db =& JFactory::getDBO();
-        $rs_addgoogle =& JTable::getInstance('hdflvaddgoogle', 'Table');
-        //$cid = JRequest::getVar( 'cid', array(0), '', 'array' );
+		// To get the id no to be edited...
+		$id = 1;
+		$rs_addgoogle->load($id);
 
-        // To get the id no to be edited...
-        $id = 1;
-        $rs_addgoogle->load($id);
-        $lists['published'] = JHTML::_('select.booleanlist','published',$rs_addgoogle->publish);
+		//Fetch the published status
+		$lists['published'] = JHTML::_('select.booleanlist','published',$rs_addgoogle->publish);
+		return $rs_addgoogle;
+	}
 
-        return $rs_addgoogle;
-    }
+	//Saves the google ads changes
+	function saveaddgoogle($task) {
+		
+		$option = 'com_hdflvplayer';
+		
+		//Instantiate database connection and table into variables
+		$db =JFactory::getDBO();
+		$rs_saveaddgoogle =JTable::getInstance('hdflvaddgoogle', 'Table');
+		$id = 1;
 
+		//Gets the input given in the form to save
+		$adsInfo = JRequest::get('post');
+		
+		//If Show option is "Always Show", then the "Close After" time reset to 0
 
-    function saveaddgoogle($task) {
-        $option = 'com_hdflvplayer';
-        global $mainframe;
-        $db =& JFactory::getDBO();
-        $rs_saveaddgoogle =& JTable::getInstance('hdflvaddgoogle', 'Table');
-        $id = 1;
+		if($adsInfo['showadd'][0]== 'showaddc') {
+			$adsInfo['showaddc'] = '1';
+		}
+		else{
+			$adsInfo['showaddc'] = '0';
+		}
+		if($adsInfo['showadd'][1] == 'showaddp') {
+			$adsInfo['showaddp'] = '1';
+		}
+		else{
+			$adsInfo['showaddp'] = '0';
+		}
+		if($adsInfo['showoption'] == '0') {
+			$adsInfo['closeadd'] = '0';
+		}
+		
+		//If Reopen After is not selected means, the time reset to 0
+		if(!isset($adsInfo['reopenadd'])) {
+			$adsInfo['reopenadd'] = '1';
+			$adsInfo['ropen'] = '0';
+		}
+		
+		//Fetch Google Ads code from POST and assign into array
+		$adsInfo['code']= htmlentities(stripslashes(JRequest::getVar('code','','post')));
+		$rs_saveaddgoogle->load($id);
 
-        if($_POST['showoption'] == '0') {
-            $_POST['closeadd'] = '';
-        }
-        if(!isset($_POST['reopenadd'])) {
-            $_POST['reopenadd'] = '1';
-            $_POST['ropen'] = '';
-        }
-        if(!isset($_POST['showaddc'])) {
-            $_POST['showaddc'] ='0';
-        }
-        if(!isset($_POST['showaddm'])) {
-            $_POST['showaddm'] ='0';
-        }
-        if(!isset($_POST['showaddp'])) {
-            $_POST['showaddp'] ='0';
-        }
-
-        $rs_saveaddgoogle->load($id);
-        
-      
-
-
-        if (!$rs_saveaddgoogle->bind($_POST)) {
-            echo "<script> alert('".$rs_saveaddgoogle->getError()."');window.history.go(-1); </script>\n";
-            exit();
-        }
-        if (!$rs_saveaddgoogle->store()) {
-            echo "<script> alert('".$rs_saveaddgoogle->getError()."'); window.history.go(-1); </script>\n";
-            exit();
-        }
-        switch ($task) {
-            case 'applyaddgoogle':
-                $msg = 'Changes Saved';
-                $link = 'index.php?option=' . $option .'&task=addgoogle';
-                break;
-            case 'saveaddgoogle':
-                default:
-                    $msg = 'Saved';
-                    $link = 'index.php?option=' . $option.'&task=addgoogle';
-                    break;
-            }
-            // page redirect
-            $app =& JFactory::getApplication();
-            $app->redirect($link, 'Saved');
-        }
-    }
-    ?>
+		//Binds the given input with table columns
+		if (!$rs_saveaddgoogle->bind($adsInfo)) {
+			JError::raiseError(500, JText::_($rs_saveaddgoogle->getError()));
+		}
+		
+		//Stores the input into table columns
+		if (!$rs_saveaddgoogle->store()) {
+			JError::raiseError(500, JText::_($rs_saveaddgoogle->getError()));
+		}
+		
+		//assigns message, redirect url based on task
+		switch ($task) {
+			case 'applyaddgoogle':
+				$msg = 'Changes Saved';
+				$link = 'index.php?option=' . $option .'&task=addgoogle';
+				break;
+			case 'saveaddgoogle':
+			default:
+				$msg = 'Saved';
+				$link = 'index.php?option=' . $option.'&task=addgoogle';
+				break;
+		}
+		
+		// page redirect
+		$app =JFactory::getApplication();
+		$app->redirect($link, 'Saved');
+	}
+}
+?>

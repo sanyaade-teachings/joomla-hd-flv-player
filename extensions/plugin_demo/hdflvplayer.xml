@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE install PUBLIC "-//Joomla! 1.5//DTD plugin 1.0//EN" "http://dev.joomla.org/xml/1.5/plugin-install.dtd">
-<extension version="1.6" type="plugin" group="content" method="upgrade">
-    <name>HD FLV Player Plugin</name>
-    <creationDate>Feb 28 2011</creationDate>
-    <author>Contus Support Interactive</author>
-    <authorEmail>support@hdflvplayer.net</authorEmail>
-    <authorUrl>url</authorUrl>
+<install version="1.5" type="plugin" group="content" method="upgrade">
+    <name>HD FLV Player</name>
+    <creationDate>July 14, 2012</creationDate>
+    <author>Apptha</author>
+    <authorEmail>support@apptha.com</authorEmail>
+    <authorUrl>http://www.apptha.com</authorUrl>
     <copyright>(C) 2011</copyright>
-    <license>GNU/GPL http://www.gnu.org/copyleft/gpl.html</license>
-    <version>1.5</version>
+     <license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+    <version>2.0</version>
     <description>
         <![CDATA[ <p>Plugin Steps</p>
-<p>1. Install the joomla_hdflvplayer_plugin_demo.<br />
+<p>1. Install the joomla_hdflvplayer_plugin.<br />
   2. In the plugin manager under extensions menu Hdflvplayer Plugin can be found.<br />
   3. Just publish it.<br />
   4. In any articles plugin can be used...<br />
@@ -33,6 +33,7 @@
 <p>Different combinations can be used as mentioned above<br />
 </p>]]>
 </description>
+  <scriptfile>install.hdflvplayer.php</scriptfile>
     <files>
         <filename plugin="hdflvplayer">hdflvplayer.php</filename>
         <filename>readme.txt</filename>
@@ -42,5 +43,5 @@
     
 </fields>
 </config>
-</extension>
+</install>
 

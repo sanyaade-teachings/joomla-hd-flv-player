@@ -1,112 +1,97 @@
 <?php
 /**
- * @version  $Id: hdflvplayer.php 1.5 2011-Feb-28 $
- * @package	Joomla
- * @subpackage	hdflvplayer
- * @copyright	Copyright (C) 2011 - 2012 Contus Support Interactive Pvt., Limited. All rights reserved.
- * @license	GNU/GPL, see LICENSE.php
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
+
+
 jimport('joomla.html.html');
+
+//imports for param fields
 jimport('joomla.form.formfield');
 
+$moduleBaseurl = str_replace('administrator/','',JURI::base());
+$document = JFactory::getDocument();
+$document->addScript($moduleBaseurl.'modules/mod_hdflvplayer/js/helper_js.js');
+
+/*
+ * Class for playlist, videos form fields
+ */
 class JFormFieldHdflvplayer extends JFormField
 {
 
-    protected $type = 'hdflvplayer';
+	protected $type = 'hdflvplayer';
+	
+	//Function for input to playlist parameter
+	function getInput() {
+		return $this->fetchElement($this->element['name'], $this->value, $this->element, $this->name);
+	}
+	
+	//Function to fetch playlist info from database
+	function fetchElement($name, $value, &$node, $control_name)
+	{
+				
+		$db = JFactory::getDBO();
+		
+		$videocat = '';
+		$style = 'display:block;';
+		
+		//query to fetch the playlist records
+		$query = 'SELECT a.id,a.name'
+		. ' FROM #__hdflvplayername AS a'
+		. ' WHERE a.published = 1'
+		. ' ORDER BY a.id';
 
- function getInput() {
-        return $this->fetchElement($this->element['name'], $this->value, $this->element, $this->name);
-    }
-    
-    function fetchElement($name, $value, &$node, $control_name)
-    {
-        $db =& JFactory::getDBO();
-        $videocat="";
-        $style="display:block;";
+		$db->setQuery( $query );
+		$options = $db->loadObjectList();
+		
+		//Fetch module id 
+		$moduleId = '';
+		$moduleId =  JRequest::getVar('id','int');
+		
+		//Check If module id available 
+		if($moduleId != '')
+		{
+			//Fetch params from module table. 
+			$qry = 'SELECT params from #__modules WHERE id='.$moduleId;
+			$db->setQuery( $qry );
+			$rs_params = $db->loadObject();
+			
+			$paramdecode = json_decode($rs_params->params, true);
+			 
+			$videocat = $paramdecode['videocat']['videocat'];
+			
+			$style = 'display:block;';
+			
+			//If Video category 1, show playlists
+			if($videocat == '1')
+			{
 
-        $query = 'SELECT a.id,a.name'
-        . ' FROM #__hdflvplayername AS a'
-        . ' WHERE a.published = 1'
-        . ' ORDER BY a.id'
-        ;
-        $db->setQuery( $query );
-        $options = $db->loadObjectList();
-        $moduleid="";
+				echo '<script>window.onload = hidelbl;</script>';
+			}
+			//else show videos list
+			else
+			{
 
-        if(isset($_GET['id']))
-        {
-            $moduleid=$_GET['id'];
-        }
-        if(isset($_GET['cid']))
-        {
-            $moduleid1=$_GET['cid'];
-            $moduleid=$moduleid1[0];
-        }
-        if($moduleid!="")
-        {
-            
-            $qry="Select * from #__modules where id=$moduleid";
-            $db->setQuery( $qry );
-            $rs_params = $db->loadObjectList();
-            $no = explode(" ",$rs_params[0]->params);
-            for($k=0;$k<count($no);$k++)
-            {
-                $str =$no[$k];
-                
-                if (strstr($str,'videocat'))
-                {  
-                    $fileidarr = explode(":",$str);
-                     $videocat=substr($fileidarr[8],1,1);
-                   
-                   
-                }
-            }
-           $style="display:block;";
-            if($videocat=="1")
-            {
-                
-                echo '<script>
-           function hidelbl()
-           {
-              
-            document.getElementById("jformparamsplaylistidplaylistid").style.display="none";
-            document.getElementById("jform_params_playlistid-lbl").style.display="none";
-            document.getElementById("jformparamsvideoidvideoid").style.display="block";
-            document.getElementById("jform_params_videoid-lbl").style.display="block";
-           }
-window.onload = hidelbl;
-</script>';
-            }
-            else
-            {
-               
-                echo '<script>
-           function hidelbl() {
-            document.getElementById("jformparamsvideoidvideoid").style.display="none";
-            document.getElementById("jform_params_videoid-lbl").style.display="none";
-}
-window.onload = hidelbl;
-</script>';
-            }
+				echo '<script>window.onload = hideplaylistvideo;</script>';
+			}
 
-        }
-        else
-        {
-            echo '<script>
-            function hidelbl() {
-            document.getElementById("jformparamsvideoidvideoid").style.display="none";
-            document.getElementById("jform_params_videoid-lbl").style.display="none";
-        }
-window.onload = hidelbl;
-</script>';
+		}
+		
+		array_unshift($options, JHTML::_('select.option', '0', '- '.JText::_('Select Playlist').' -', 'id', 'name'));
 
-        }
-
-        array_unshift($options, JHTML::_('select.option', '0', '- '.JText::_('Select Playlist').' -', 'id', 'name'));
-
-        return JHTML::_('select.genericlist',  $options, ''.$control_name.'['.$name.']', 'class="inputbox" ', 'id', 'name', $value, $control_name.$name );
-    }
+		return JHTML::_('select.genericlist',  $options, ''.$control_name.'['.$name.']', 'class="inputbox" ', 'id', 'name', $value, $control_name.$name );
+	}
 }

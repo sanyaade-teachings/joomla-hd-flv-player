@@ -1,18 +1,26 @@
 <?php
 /**
-* @version      $Id: videonames.php 1.5 2011-Feb-28 $
- * @package	Joomla
- * @subpackage	hdflvplayer
- * @copyright	Copyright (C) 2011 - 2012 Contus Support Interactive Pvt., Limited. All rights reserved.
- * @license	GNU/GPL, see LICENSE.php
-*/
-
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
+ */
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
+
 jimport('joomla.html.html');
 jimport('joomla.form.formfield');
 
-
+/*
+ * Jformfield Class for Videos list field
+ */
 class JFormFieldVideonames extends JFormField
 {
     protected $type = 'Videonames';
@@ -21,13 +29,13 @@ class JFormFieldVideonames extends JFormField
         return $this->fetchElement($this->element['name'], $this->value, $this->element, $this->name);
     }
 
-
+	 //Function to fetch videos from table and display in module parameter
     function fetchElement($name, $value, &$node, $control_name)
     {
         global $mainframe;
         $videocat="";
         $style="display:none;";
-        $db =& JFactory::getDBO();
+        $db = JFactory::getDBO();
         $query = 'SELECT a.id,a.title'
         . ' FROM #__hdflvplayerupload AS a'
         . ' WHERE a.published = 1'
@@ -36,45 +44,28 @@ class JFormFieldVideonames extends JFormField
         $db->setQuery( $query );
         $options = $db->loadObjectList();
         $moduleid="";
-        if(isset($_GET['id']))
+        $moduleId =  JRequest::getVar('id','int');
+		
+        if($moduleId != '')
         {
-            $moduleid=$_GET['id'];
-        }
-        if(isset($_GET['cid']))
-        {
-            $moduleid1=$_GET['cid'];
-            $moduleid=$moduleid1[0];
-        }
-        if($moduleid!="")
-        {
-            $qry="Select * from #__modules where id=$moduleid";
-            $db->setQuery( $qry );
-            $rs_params = $db->loadObjectList();
-            $no = explode(" ",$rs_params[0]->params);
-            for($k=0;$k<count($no);$k++)
+            $qry = 'SELECT params from #__modules WHERE id='.$moduleId;
+			$db->setQuery( $qry );
+			$rs_params = $db->loadObject();
+			$paramdecode = json_decode($rs_params->params, true);
+			$videocat = $paramdecode['videocat']['videocat'];
+			
+            if($videocat == '1')
             {
-                $str =$no[$k];
-                if (strstr($str,'videocat'))
-                {
-                    $fileidarr = explode("=",$str);
-                    $videocat=substr($fileidarr[7],0,1);
-                }
-            }
-            if($videocat=="1")
-            {
-                $style="display:block;";
+                $style = 'display:block;';
 
             }
             else
             {
-                $style="display:none;";
-
+                $style = 'display:none;';
 
             }
 
         }
-
-
         array_unshift($options, JHTML::_('select.option', '0', '- '.JText::_('Select Videos').' -', 'id', 'title'));
         return JHTML::_('select.genericlist',  $options, ''.$control_name.'['.$name.']', 'class="inputbox" style='.$style, 'id', 'title', $value, $control_name.$name );
     }

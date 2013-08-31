@@ -1,688 +1,623 @@
 <?php
 /**
- * @version     $Id: editaddlayout.php 1.5,  28-Feb-2011 $$
- * @package     Joomla
- * @subpackage  hdflvplayer
- * @copyright   Copyright (C) 2011 Contus Support
- * @license     GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 // no direct access
 defined('_JEXEC') or die('Restricted access');
+JHTML::_('behavior.tooltip');
 $editvideo = $this->editvideo;
-$editor = & JFactory::getEditor();
+$editor =  JFactory::getEditor();
+$thumbpath = JURI::base() . "components/com_hdflvplayer/";
 
-$k = 0;
-JHTML::_('script', JURI::base() . "components/com_hdflvplayer/upload_script.js", false, true);
+$document = JFactory::getDocument();
+$document->addScript('components/com_hdflvplayer/js/upload_script.js');
+$document->addScript('components/com_hdflvplayer/js/videoformvalid.js');
 
-JHTML::_('script', JURI::base() . 'components/com_hdflvplayer/js/videoformvalid.js', false, true);
+
+$isfilepathchk = $filepathurl = $ffmpegchk = $prerollchk = $midrollnochk = $midrollyeschk = $downloadnochk = $publishnochk = $youtubefilepathchk = '';
 ?>
-<script language="JavaScript" type="text/javascript">
 
-
-Joomla.submitbutton = function(pressbutton) {
-
-        if (pressbutton == 'CANCEL1')
-        {
-            submitform( pressbutton );
-            return;
-        }
-        if (pressbutton == 'addvideoupload')
-        {
-            submitform( pressbutton );
-            return;
-        }
-
-        // do field validation
-
-        if (pressbutton == "savevideoupload" || pressbutton=="applyvideoupload")
-        {
-            var bol_file1=(document.getElementById('filepath1').checked);
-            var bol_file2=(document.getElementById('filepath2').checked);
-            var bol_file3=(document.getElementById('filepath3').checked);
-            var bol_file4=(document.getElementById('filepath4').checked);
-            var streamer_name='';
-            var stream_opt=document.getElementsByName('streameroption[]');
-            //var islivevalue1=(document.getElementById('islive1').checked);
-            var islivevalue2=(document.getElementById('islive2').checked);
-            var length_stream=stream_opt.length;
-            for(i=0;i<length_stream;i++)
-            {
-                if(stream_opt[i].checked==true)
-                {
-                    document.getElementById('streameroption-value').value=stream_opt[i].value;
-                    if(stream_opt[i].value=='rtmp')
-                    {
-                        streamer_name=document.getElementById('streamname').value;
-                        document.getElementById('streamerpath-value').value=streamer_name;
-                        if(islivevalue2==true)
-                            document.getElementById('islive-value').value=1;
-                        else
-                            document.getElementById('islive-value').value=0;
-
-                    }
-                }
-            }
-            if (document.getElementById('title').value == "")
-            {
-                alert( "<?php echo JText::_( 'You must provide a Title', true ); ?>" );
-                return;
-            }
-
-                if(bol_file1==true)
-                {
-                    document.getElementById('fileoption').value='File';
-                    if(uploadqueue.length!="")
-                    {
-                        alert("<?php echo JText::_('Upload in Progress',true);?>");
-                        return;
-                    }
-                    if(document.getElementById('id').value=="")
-                    {
-                        if(document.getElementById('normalvideoform-value').value=="" && document.getElementById('hdvideoform-value').value=="")
-                        {
-                            alert("<?php echo JText::_('You must Upload a Video file',true);?>");
-                            return;
-                        }
-                          if(document.getElementById('thumbimageform-value').value=="")
-                        {
-                            alert("<?php echo JText::_('You must Upload a Thumb Image',true);?>");
-                            return;
-                        }
-
-                    }
-
-                }
-
-
-
-                if(bol_file2==true)
-                {
-                    if(document.getElementById('videourl').value=="")
-                    {
-                        alert( "<?php  echo JText::_( 'You must provide a Video Url', true ); ?>" )
-                        return;
-                    }
-
-                    document.getElementById('fileoption').value='Url';
-                    if(document.getElementById('videourl').value!="")
-                    	var url = document.getElementById('videourl').value
-                    	var urlregex = url.match("^(http:\/\/www.|https:\/\/www.|ftp:\/\/www.|www.){1}([0-9A-Za-z]+\.)");
-                        if(urlregex ==null){
-                   			 alert("<?php echo JText::_('Please Enter Valid URL',true);?>");
-                        	 return;
-                   }
-                        document.getElementById('videourl-value').value=document.getElementById('videourl').value;
-                    if(document.getElementById('thumburl').value!="")
-                        document.getElementById('thumburl-value').value=document.getElementById('thumburl').value;
-                    if(document.getElementById('previewurl').value!="")
-                        document.getElementById('previewurl-value').value=document.getElementById('previewurl').value;
-                    if(document.getElementById('hdurl').value!="")
-                        document.getElementById('hdurl-value').value=document.getElementById('hdurl').value;
-
-                }
-
-                if(bol_file4==true)
-                {
-                    if(document.getElementById('videourl').value=="")
-                    {
-                        alert( "<?php echo JText::_( 'You must provide a Video URL', true ); ?>" )
-                        return;
-                    }
-                    document.getElementById('fileoption').value='Youtube';
-                    if(document.getElementById('videourl').value!=""){
-                    	var youtube = document.getElementById('videourl').value
-                    	var matches = youtube.match(/http:\/\/(?:www\.)?youtube.*watch\?v=([a-zA-Z0-9\-_]+)/);
-                        if(matches == null){
-                        	 alert("<?php echo JText::_('Please Enter Valid youtube URL',true);?>");
-                             return;
-                        }
-                        document.getElementById('videourl-value').value=document.getElementById('videourl').value;
-                    }
-                }
-
-                if(bol_file3==true)
-                {
-                	  if(document.getElementById('myfile').value=="")
-                      {
-                          alert( "<?php echo JText::_( 'You must provide a Video file', true ); ?>" )
-                          return;
-                      }
-                    document.getElementById('fileoption').value='FFmpeg';
-                    if(uploadqueue.length!="")
-                    {
-                        alert("<?php echo JText::_('Upload in Progress',true);?>");
-                        return;
-                    }
-                }
-
-
-            submitform( pressbutton );
-            return;
-        }
-        //  }
-        else
-        {
-
-            submitform( pressbutton );
-            return;
-        }
-        }
+<script type="text/javascript">
+var user = new Array(<?php echo count($editvideo['rs_play']); ?>);
+<?php
+for ($i = 0; $i < count($editvideo['rs_play']); $i++) {
+    $playlistnames = $editvideo['rs_play'][$i];
+?>
+               user[<?php echo $i; ?>]= new Array(2);
+               user[<?php echo $i; ?>][1]= "<?php echo $playlistnames->id; ?>";
+               user[<?php echo $i; ?>][0]= "<?php echo $playlistnames->name; ?>";
+<?php
+}
+?>
 </script>
 
-
+<!--  Add video info here -->
 <div class="width-60 fltlft">
-<fieldset class="adminform">
-    <legend>Video </legend>
-         <table class="adminlist">
-                        <thead>
-                            <tr>
-                                <th>
-        					Settings
-                                </th>
-                                <th>
-        					Value
-                                </th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">&#160;
-                                </td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
+	<fieldset class="adminform">
+		<legend>Video </legend>
+		<table class="adminlist">
 
-        <tr>
-            <td>Streamer option</td>
-            <td>
-                <input type="radio"  style="float:none;"  name="streameroption[]" id="streameroption1" <?php
-if ($editvideo['rs_editupload']->streameroption == "None" || $editvideo['rs_editupload']->streameroption == '') {
-    echo 'checked="checked" ';
-}
-?> value="None"  checked="checked" onclick="streamer1('None');" />None
-                <input type="radio" style="float:none;" name="streameroption[]" id="streameroption2" <?php
-if ($editvideo['rs_editupload']->streameroption == "lighttpd") {
-    echo 'checked="checked" ';
-} ?>value="lighttpd"  onclick="streamer1('lighttpd');" />lighttpd
-                <input type="radio" style="float:none;" name="streameroption[]" id="streameroption3" <?php
-                       if ($editvideo['rs_editupload']->streameroption == "rtmp") {
-                           echo 'checked="checked" ';
-                       }
-?> value="rtmp"  onclick="streamer1('rtmp');" />rtmp
-            </td>
-        </tr>
+			<!-- Header here -->
+			<thead>
+				<tr>
+					<th>Settings</th>
+					<th>Value</th>
+				</tr>
+			</thead>
 
-        <tr id="stream1" name="stream1"><td>Streamer Path</td>
-            <td>
-                <input type="text" name="streamname"  id="streamname" style="width:300px" maxlength="250" value="<?php echo $editvideo['rs_editupload']->streamerpath; ?>" />
-            </td>
-        </tr>
-        <tr id="islive_visible" name="islive_visible">
-            <td>Is Live</td>
-            <td>
-                <input type="radio" style="float:none;" name="islive[]"  id="islive1"  <?php
-                       if ($editvideo['rs_editupload']->islive == '0' || $editvideo['rs_editupload']->islive == '') {
-                           echo 'checked="checked" ';
-                       }
-?>  value="0" />No
-                <input type="radio" style="float:none;" name="islive[]"  id="islive2" <?php
-                       if ($editvideo['rs_editupload']->islive == '1') {
-                           echo 'checked="checked" ';
-                       }
-?>  value="1" />Yes
-                   </td>
-               </tr>
+			<!-- Footer here -->
+			<tfoot>
+				<tr>
+					<td colspan="2">&#160;</td>
+				</tr>
+			</tfoot>
 
+			<tbody>
 
+				<!--  Select the streamer Option -->
+				<tr>
+					<td><?php echo JHTML::tooltip('Select the Streamer option', 'Streamer option','', 'Streamer option');?></td>
+					<td><?php
+					$streamernonechk = $lighttpdchk = $rtmpchk ='';
 
-               <tr><td width="200px;">File Path</td>
-                   <td>
-                       <input type="radio" style="float:none;" name="filepath" id="filepath1" <?php
-                       if ($editvideo['rs_editupload']->filepath == "File" || $editvideo['rs_editupload']->filepath == '') {
-                           echo 'checked="checked" ';
-                       }
-?> value="File" onclick="fileedit('File');"  />File
-                <input type="radio" style="float:none;" name="filepath" id="filepath2"<?php
-                       if ($editvideo['rs_editupload']->filepath == "Url") {
-                           echo 'checked="checked" ';
-                       }
-?>value="Url" onclick="fileedit('Url');"/>Url
-                <input type="radio" style="float:none;" name="filepath" id="filepath4"<?php
-                       if ($editvideo['rs_editupload']->filepath == "Youtube") {
-                           echo 'checked="checked" ';
-                       }
-?>value="Youtube" onclick="fileedit('Youtube');"/>You Tube
-                <input type="radio" style="float:none;" name="filepath" id="filepath3"<?php
-                       if ($editvideo['rs_editupload']->filepath == "FFmpeg") {
-                           echo 'checked="checked" ';
-                       }
-?>value="FFmpeg" onclick="fileedit('FFmpeg');"/>FFmpeg
+					if ($editvideo['rs_editupload']->streameroption == "None" || $editvideo['rs_editupload']->streameroption == '') {
+						 $streamernonechk = 'checked="checked" ';
 
-            </td></tr>
+					} else if ($editvideo['rs_editupload']->streameroption == "lighttpd") {
+						 $lighttpdchk = 'checked="checked" ';
 
-        <tr id="ffmpeg_disable_new1" name="ffmpeg_disable_new1"><td>Upload Video</td>
-            <td>
-                <div id="f1-upload-form" >
-                    <form name="normalvideoform" method="post" enctype="multipart/form-data" >
-                        <input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" />
-                        <input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />
-                        <label id="lbl_normal"><?php echo $editvideo['rs_editupload']->ffmpeg_videos; ?></label>
+					} else if ($editvideo['rs_editupload']->streameroption == "rtmp") {
+						 $rtmpchk = 'checked="checked" ';
 
-                        <input type="hidden" name="mode" value="video" />
-                    </form>
-                </div>
-                <div id="f1-upload-progress" style="display:none">
-                    <img id="f1-upload-image" src="components/com_hdflvplayer/images/empty.gif" alt="Uploading" />
-                    <label style="position:absolute;padding-top:3px;padding-left:25px;font-size:14px;font-weight:bold;"  id="f1-upload-filename">PostRoll.flv</label>
-                    <span id="f1-upload-cancel">
-                        <a style="float:right;padding-right:10px;" href="javascript:cancelUpload('normalvideoform');" name="submitcancel">Cancel</a>
-                    </span>
-                    <label id="f1-upload-status" style="float:right;padding-right:40px;padding-left:20px;">Uploading</label>
-                    <span id="f1-upload-message" style="float:right;font-size:12px;background:#FFAFAE;padding:5px 150px 5px 10px;">
-                        <b>Upload Failed:</b> User Cancelled the upload
-                    </span>
+					}
 
-                </div>
-            </td></tr>
+					?>
+					<input type="radio" style="float: none;" name="streameroption[]" id="streameroption1" <?php echo $streamernonechk; ?> value="None"  onclick="streamer('None');" />None
+					<input type="radio" style="float: none;" name="streameroption[]" id="streameroption2" <?php echo $lighttpdchk; ?> value="lighttpd" onclick="streamer('lighttpd');" />Lighttpd
+					<input type="radio" style="float: none;" name="streameroption[]" id="streameroption3" <?php echo $rtmpchk; ?> value="rtmp" onclick="streamer('rtmp');" />RTMP
+					</td>
+				</tr>
 
-        <tr id="ffmpeg_disable_new2" name="ffmpeg_disable_new2"> <td>Upload HD Video(optional)</td>
-            <td>
-                <div id="f2-upload-form" >
-                    <form name="hdvideoform" method="post" enctype="multipart/form-data" >
-                        <input type="file" name="myfile" onchange="enableUpload(this.form.name);" />
-                        <input type="button" name="uploadBtn" value="Upload HD Video" disabled="disabled" onclick="addQueue(this.form.name);" />
-                        <label><?php echo $editvideo['rs_editupload']->ffmpeg_hd; ?></label>
-                        <input type="hidden" name="mode" value="video" />
-                    </form>
-                </div>
-                <div id="f2-upload-progress" style="display:none">
-                    <img id="f2-upload-image" src="components/com_hdflvplayer/images/empty.gif" alt="Uploading" />
-                    <label style="position:absolute;padding-top:3px;padding-left:25px;font-size:14px;font-weight:bold;"  id="f2-upload-filename">PostRoll.flv</label>
-                    <span id="f2-upload-cancel">
-                        <a style="float:right;padding-right:10px;" href="javascript:cancelUpload('hdvideoform');" name="submitcancel">Cancel</a>
+				<!-- Enter Sreamer path for RTMP -->
+				<tr id="stream1">
+					<td><?php echo JHTML::tooltip('Enter the Streamer path', 'Streamer Path','', 'Streamer Path');?></td>
+					<td><input type="text" name="streamname" id="streamname" style="width: 300px" maxlength="250" value="<?php echo $editvideo['rs_editupload']->streamerpath; ?>" />
+					</td>
+				</tr>
 
-                    </span>
-                    <label id="f2-upload-status" style="float:right;padding-right:40px;padding-left:20px;">Uploading</label>
-                    <span id="f2-upload-message" style="float:right;font-size:12px;background:#FFAFAE;padding:5px 150px 5px 10px;">
-                        <b>Upload Failed:</b> User Cancelled the upload
-                    </span>
+				<!-- Choose whether Video live or not for RTMP videos -->
+				<tr id="islive_visible">
+					<td><?php echo JHTML::tooltip('Whether or not the video is live', 'Is Live','', 'Is Live');?></td>
+					<?php
+					$islivechk = $islivechkno = '';
+					if ($editvideo['rs_editupload']->islive == '0' || $editvideo['rs_editupload']->islive == '') {
+						$islivechk = 'checked="checked" ';
+					}
+					else if ($editvideo['rs_editupload']->islive == '1') {
+						$islivechkno =  'checked="checked" ';
+					}
+					?>
+					<td><input type="radio" style="float: none;" name="islive[]" id="islive1" <?php echo $islivechk;?> value="0" />No
+					<input type="radio" style="float: none;" name="islive[]" id="islive2" <?php echo $islivechkno;?> value="1" />Yes
+					</td>
+				</tr>
 
-                </div>
+				<!-- Select the file option for videos -->
+				<tr>
+					<td width="200px;"><?php echo JHTML::tooltip('Select the file option', 'File Option','', 'File Option');?></td>
+                        <?php
 
-            </td></tr>
-        <tr id="ffmpeg_disable_new3" name="ffmpeg_disable_new3"><td>Upload Thumb Image</td><td>
-                <div id="f3-upload-form" >
-                    <form name="thumbimageform" method="post" enctype="multipart/form-data" >
-                        <input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);"/>
-                        <input type="button" name="uploadBtn" value="Upload Thumb Image" disabled="disabled" onclick="addQueue(this.form.name);" />
-                        <label><?php echo $editvideo['rs_editupload']->ffmpeg_thumbimages; ?></label>
-                        <input type="hidden" name="mode" value="image" />
-                    </form>
-                </div>
-                <div id="f3-upload-progress" style="display:none">
-                    <img id="f3-upload-image" src="components/com_hdflvplayer/images/empty.gif" alt="Uploading" />
-                    <label style="position:absolute;padding-top:3px;padding-left:25px;font-size:14px;font-weight:bold;"  id="f3-upload-filename">PostRoll.flv</label>
-                    <span id="f3-upload-cancel">
-                        <a style="float:right;padding-right:10px;" href="javascript:cancelUpload('thumbimageform');" name="submitcancel">Cancel</a>
-                    </span>
-                    <label id="f3-upload-status" style="float:right;padding-right:40px;padding-left:20px;">Uploading</label>
-                    <span id="f3-upload-message" style="float:right;font-size:12px;background:#FFAFAE;padding:5px 150px 5px 10px;">
-                        <b>Upload Failed:</b> User Cancelled the upload
-                    </span>
+                        if ($editvideo['rs_editupload']->filepath == "File" || $editvideo['rs_editupload']->filepath == '') {
+                        	$isfilepathchk = 'checked="checked" ';
+                        }
+                        else if ($editvideo['rs_editupload']->filepath == "Url") {
+                        if ($editvideo['rs_editupload']->streameroption == "lighttpd" || $editvideo['rs_editupload']->streameroption == "rtmp" ) {
+                        	$youtubefilepathchk = 'disabled';
+                        	$isfilepathchk = 'disabled';
+                        	$ffmpegchk = 'disabled';
+                        }
+                        	$filepathurl = 'checked="checked" ';
+                        }
+                        else if ($editvideo['rs_editupload']->filepath == "Youtube") {
+                        	$youtubefilepathchk =  'checked="checked" ';
+                        }
+                        else if ($editvideo['rs_editupload']->filepath == "FFmpeg") {
+                        	$ffmpegchk = 'checked="checked"';
+                        }
+						?>
+					<td><input type="radio" style="float: none;" name="filepath" id="filepath1" <?php echo $isfilepathchk;?> value="File" onclick="fileedit('File');" />File
+                                            <input type="radio" style="float: none;" name="filepath" id="filepath2" <?php echo $filepathurl;?> 	value="Url" onclick="fileedit('Url');" />URL
+                                            <input type="radio" style="float: none;" name="filepath" id="filepath4" <?php echo $youtubefilepathchk; ?> value="Youtube" onclick="fileedit('Youtube');" />You Tube / Vimeo
+                                            <input type="radio" style="float: none;" name="filepath" id="filepath3" <?php echo $ffmpegchk; ?> value="FFmpeg" onclick="fileedit('FFmpeg');" />FFmpeg
+                    </td>
+				</tr>
 
-                </div>
+				<!-- Upload a Video -->
+				<tr id="ffmpeg_disable_new1">
+					<td><?php echo JHTML::tooltip('Upload Video', 'Upload Video','', 'Upload Video');?></td>
+					<td>
+						<div id="f1-upload-form">
+							<form action="" name="normalvideoform" method="post" enctype="multipart/form-data">
+								<input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" />
+                                                                <input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />
+                                                                <label id="lbl_normal"><?php if ($editvideo['rs_editupload']->filepath == "File" || $editvideo['rs_editupload']->filepath == "FFmpeg" ){ echo $editvideo['rs_editupload']->videourl; }?></label>
+                                                                <input type="hidden" name="mode" value="video" />
+							</form>
+						</div>
+						<div id="f1-upload-progress" style="display: none">
+							<table>
+								<tr>
+									<td><img id="f1-upload-image" style="float: left;"
+										src="components/com_hdflvplayer/images/empty.gif"
+										alt="Uploading" /></td>
+									<td><span style="float: left; clear: none; font-weight: bold;"
+										id="f1-upload-filename">&nbsp;</span>
+									</td>
+									<td><span id="f1-upload-message" style="float: left;width:300px"> </span>
+										<label id="f1-upload-status" style="float: left;"> &nbsp; </label>
+									</td>
+									<td><span id="f1-upload-cancel"> <a
+											style="float: left; font-weight: bold"
+											href="javascript:cancelUpload('normalvideoform');"
+											name="submitcancel">Cancel</a> </span></td>
+								</tr>
+							</table>
+						</div>
 
-            </td></tr>
+					</td>
+				</tr>
 
-        <tr id="ffmpeg_disable_new4" name="ffmpeg_disable_new4"><td>Upload Preview Image(optional)</td><td>
-                <div id="f4-upload-form" >
-                    <form name="previewimageform" method="post" enctype="multipart/form-data" >
+				<!-- Upload a HD Video -->
+				<tr id="ffmpeg_disable_new2">
+					<td><?php echo JHTML::tooltip('Upload a HD Video', 'Upload HD Video','', 'Upload HD Video (optional)');?></td>
+					<td>
+						<div id="f2-upload-form">
+							<form name="hdvideoform" method="post" action="" enctype="multipart/form-data">
+								<input type="file" name="myfile" onchange="enableUpload(this.form.name);" />
+                                                                <input type="button" name="uploadBtn" value="Upload HD Video" disabled="disabled" onclick="addQueue(this.form.name);" />
+                                                                <label><?php if ($editvideo['rs_editupload']->filepath == "File" || $editvideo['rs_editupload']->filepath == "FFmpeg" ){ echo $editvideo['rs_editupload']->hdurl; } ?></label>
+                                                                <input type="hidden" name="mode" value="video" />
+							</form>
+						</div>
+						<div id="f2-upload-progress" style="display: none">
+							<table>
+								<tr>
+									<td><img id="f2-upload-image" style="float: left;"
+										src="components/com_hdflvplayer/images/empty.gif"
+										alt="Uploading" /></td>
+									<td><span style="float: left; clear: none; font-weight: bold;"
+										id="f2-upload-filename">&nbsp;</span>
+									</td>
+									<td><span id="f2-upload-message" style="float: left;width:300px;"> </span>
+										<label id="f2-upload-status" style="float: left;"> &nbsp; </label>
+									</td>
+									<td><span id="f2-upload-cancel"> <a
+											style="float: left; font-weight: bold"
+											href="javascript:cancelUpload('hdvideoform');"
+											name="submitcancel">Cancel</a> </span></td>
+								</tr>
+							</table>
+						</div></td>
+				</tr>
 
-                        <input type="file" name="myfile" onchange="enableUpload(this.form.name);" />
-                        <input type="button" name="uploadBtn" value="Upload Preview Image" disabled="disabled" onclick="addQueue(this.form.name);" />
-                        <label><?php echo $editvideo['rs_editupload']->ffmpeg_previewimages; ?></label>
-                        <input type="hidden" name="mode" value="image" />
-                    </form>
-                </div>
-                <div id="f4-upload-progress" style="display:none">
-                    <img id="f4-upload-image" src="components/com_hdflvplayer/images/empty.gif" alt="Uploading" />
-                    <label style="position:absolute;padding-top:3px;padding-left:25px;font-size:14px;font-weight:bold;"  id="f4-upload-filename">PostRoll.flv</label>
-                    <span id="f4-upload-cancel">
-                        <a style="float:right;padding-right:10px;" href="javascript:cancelUpload('previewimageform');" name="submitcancel">Cancel</a>
-                    </span>
-                    <label id="f4-upload-status" style="float:right;padding-right:40px;padding-left:20px;">Uploading</label>
-                    <span id="f4-upload-message" style="float:right;font-size:12px;background:#FFAFAE;padding:5px 150px 5px 10px;">
-                        <b>Upload Failed:</b> User Cancelled the upload
-                    </span>
+				<!-- Upload thumb image for uploaded video -->
+				<tr id="ffmpeg_disable_new3">
+					<td><?php echo JHTML::tooltip('Upload thumb image for uploaded video', 'Upload Thumb Image','', 'Upload Thumb Image');?></td>
+					<td>
+						<div id="f3-upload-form">
+							<form name="thumbimageform" method="post" action="" enctype="multipart/form-data">
+								<input type="file" name="myfile" id="myfile" onchange="enableUpload(this.form.name);" />
+                                                                <input type="button" name="uploadBtn" value="Upload Thumb Image" disabled="disabled" onclick="addQueue(this.form.name);" />
+                                                                <label><?php if ($editvideo['rs_editupload']->filepath == "File" || $editvideo['rs_editupload']->filepath == "FFmpeg" ){ echo $editvideo['rs_editupload']->thumburl; }?></label>
+                                                                <input type="hidden" name="mode" value="image" />
+							</form>
+						</div>
+						<div id="f3-upload-progress" style="display: none">
+							<table>
+								<tr>
+									<td><img id="f3-upload-image" style="float: left;"
+										src="components/com_hdflvplayer/images/empty.gif"
+										alt="Uploading" /></td>
+									<td><span style="float: left; clear: none; font-weight: bold;"
+										id="f3-upload-filename">&nbsp;</span>
+									</td>
+									<td><span id="f3-upload-message" style="float: left;"> </span>
+										<label id="f3-upload-status" style="float: left;"> &nbsp; </label>
+									</td>
+									<td><span id="f3-upload-cancel"> <a
+											style="float: left; font-weight: bold"
+											href="javascript:cancelUpload('thumbimageform');"
+											name="submitcancel">Cancel</a> </span></td>
+								</tr>
+							</table>
+						</div></td>
+				</tr>
 
-                </div>
-                <div id="nor"><iframe id="uploadvideo_target" name="uploadvideo_target" src="#" style="width:0;height:0;border:0px solid #fff;"></iframe></div>
-            </td></tr>
+				<!-- Upload Preview Image for uploaded video -->
+				<tr id="ffmpeg_disable_new4">
+					<td><?php echo JHTML::tooltip('Upload Preview Image for uploaded video', 'Upload Preview Image','', 'Upload Preview Image (optional)');?></td>
+					<td>
+						<div id="f4-upload-form">
+							<form name="previewimageform" method="post" action="" enctype="multipart/form-data">
+								<input type="file" name="myfile" onchange="enableUpload(this.form.name);" />
+                                                                <input type="button" name="uploadBtn" value="Upload Preview Image" disabled="disabled" onclick="addQueue(this.form.name);" />
+                                                                <label><?php if ($editvideo['rs_editupload']->filepath == "File" || $editvideo['rs_editupload']->filepath == "FFmpeg" ){ echo $editvideo['rs_editupload']->previewurl; }?>	</label>
+                                                                <input type="hidden" name="mode" value="image" />
+							</form>
+						</div>
 
+						<div id="f4-upload-progress" style="display: none">
+							<table>
+								<tr>
+									<td><img id="f4-upload-image" style="float: left;"
+										src="components/com_hdflvplayer/images/empty.gif"
+										alt="Uploading" /></td>
+									<td><span style="float: left; clear: none; font-weight: bold;"
+										id="f4-upload-filename">&nbsp;</span>
+									</td>
+									<td><span id="f4-upload-message" style="float: left;"> </span>
+										<label id="f4-upload-status" style="float: left;"> &nbsp; </label>
+									</td>
+									<td><span id="f4-upload-cancel"> <a
+											style="float: left; font-weight: bold"
+											href="javascript:cancelUpload('previewimageform');"
+											name="submitcancel">Cancel</a> </span></td>
+								</tr>
+							</table>
+						</div>
 
+						<div id="nor">
+							<iframe id="uploadvideo_target" name="uploadvideo_target" src="#" style="width: 0; height: 0; border: 0px solid #fff;"></iframe>
+						</div>
+					</td>
+				</tr>
 
-        <tr id="ffmpeg_disable_new5" name="ffmpeg_disable_edit5" style="width:200px;">
-            <td>Video Url</td>
-            <td><input type="text" name="videourl"  id="videourl" size="100" maxlength="250" value="<?php echo $editvideo['rs_editupload']->videourl; ?>"/>
-            </td>
-        </tr>
-        <tr id="ffmpeg_disable_new6" name="ffmpeg_disable_edit6"><td>Thumb Url</td>
-            <td><input type="text" name="thumburl"  id="thumburl" size="100" maxlength="250" value="<?php echo $editvideo['rs_editupload']->thumburl; ?>"/>
-            </td></tr>
-        <tr id="ffmpeg_disable_new7" name="ffmpeg_disable_edit7"><td>Preview Url</td>
-            <td><input type="text" name="previewurl"  id="previewurl" size="100" maxlength="250" value="<?php echo $editvideo['rs_editupload']->previewurl; ?>"/>
-            </td></tr>
-        <tr id="ffmpeg_disable_new8" name="ffmpeg_disable_edit8"><td>Hd Url</td>
-            <td><input type="text" name="hdurl"  id="hdurl" size="100" maxlength="250" value="<?php echo $editvideo['rs_editupload']->hdurl; ?>"/>
-            </td></tr>
+				<!-- Video URL here -->
+				<tr id="ffmpeg_disable_new5" style="width: 200px;">
+					<td><?php echo JHTML::tooltip('Enter the video URL. Example: http://www.yourdomain.com/video.mp4', 'Video URL','', 'Video URL');?></td>
+					<td><input type="text" name="videourl" id="videourl" size="100" maxlength="250" value="<?php if ($editvideo['rs_editupload']->filepath == "Url" || $editvideo['rs_editupload']->filepath == "Youtube") { echo $editvideo['rs_editupload']->videourl; }?>" />
+					</td>
+				</tr>
 
+				<!-- Enter the Thumb URL -->
+				<tr id="ffmpeg_disable_new6">
+					<td><?php echo JHTML::tooltip('Enter the Thumb URL Example: http://www.yourdomain.com/thumb.jpg', 'Thumb URL','', 'Thumb URL');?></td>
+					<td><input type="text" name="thumburl" id="thumburl" size="100" maxlength="250" value="<?php if ($editvideo['rs_editupload']->filepath == "Url" || $editvideo['rs_editupload']->filepath == "Youtube") { echo $editvideo['rs_editupload']->thumburl; }?>" />
+					</td>
+				</tr>
 
-        <tr id="fvideos" name="fvideos"> <td>Upload Video</td>
-            <td>
-                <div id="f5-upload-form" >
-                    <form name="ffmpegform" method="post" enctype="multipart/form-data" >
-                        <input type="file" name="myfile" onchange="enableUpload(this.form.name);" />
-                        <input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />
-                        <label><?php echo $editvideo['rs_editupload']->ffmpeg_videos; ?></label>
-                        <input type="hidden" name="mode" value="video_ffmpeg" />
-                    </form>
-                </div>
-                <div id="f5-upload-progress" style="display:none">
-                    <img id="f5-upload-image" src="components/com_hdflvplayer/images/empty.gif" alt="Uploading" />
-                    <label style="position:absolute;padding-top:3px;padding-left:25px;font-size:14px;font-weight:bold;"  id="f5-upload-filename">PostRoll.flv</label>
-                    <span id="f5-upload-cancel">
-                        <a style="float:right;padding-right:10px;" href="javascript:cancelUpload('ffmpegvideoform');" name="submitcancel">Cancel</a>
+				<!-- Enter the Preview URL -->
+				<tr id="ffmpeg_disable_new7">
+					<td><?php echo JHTML::tooltip('Enter the Preview URL Example: http://www.yourdomain.com/preview.jpg', 'Preview URL','', 'Preview URL');?></td>
+					<td><input type="text" name="previewurl" id="previewurl" size="100" maxlength="250" value="<?php if ($editvideo['rs_editupload']->filepath == "Url" || $editvideo['rs_editupload']->filepath == "Youtube") { echo $editvideo['rs_editupload']->previewurl; }?>" />
+					</td>
+				</tr>
 
-                    </span>
-                    <label id="f5-upload-status" style="float:right;padding-right:40px;padding-left:20px;">Uploading</label>
-                    <span id="f5-upload-message" style="float:right;font-size:12px;background:#FFAFAE;padding:5px 150px 5px 10px;">
-                        <b>Upload Failed:</b> User Cancelled the upload
-                    </span>
-                </div>
-            </td></tr>
-                        </tbody>
-    </table>
-</fieldset>
+				<!-- Enter the HD URL -->
+				<tr id="ffmpeg_disable_new8">
+					<td><?php echo JHTML::tooltip('Enter the HD URL Example: http://www.yourdomain.com/video.mp4', 'HD URL','', 'HD URL');?></td>
+					<td><input type="text" name="hdurl" id="hdurl" size="100"
+						maxlength="250"
+						value="<?php if ($editvideo['rs_editupload']->filepath == "Url" || $editvideo['rs_editupload']->filepath == "Youtube") { echo $editvideo['rs_editupload']->hdurl; }?>" />
+					</td>
+				</tr>
+
+				<!-- Upload a Video -->
+				<tr id="fvideos">
+					<td><?php echo JHTML::tooltip('Upload a Video', 'Upload a Video','', 'Upload a Video');?></td>
+					<td>
+						<div id="f5-upload-form">
+							<form name="ffmpegform" method="post" action="" enctype="multipart/form-data">
+								<input type="file" name="myfile" onchange="enableUpload(this.form.name);" />
+                                <input type="button" name="uploadBtn" value="Upload Video" disabled="disabled" onclick="addQueue(this.form.name);" />
+                                <label><?php if ($editvideo['rs_editupload']->filepath == "FFmpeg") { echo $editvideo['rs_editupload']->videourl; }?></label>
+                                <input type="hidden" name="mode" value="video_ffmpeg" />
+							</form>
+						</div>
+						<div id="f5-upload-progress" style="display: none">
+							<table>
+								<tr>
+									<td><img id="f5-upload-image" style="float: left;"
+										src="components/com_hdflvplayer/images/empty.gif"
+										alt="Uploading" /></td>
+									<td><span style="float: left; clear: none; font-weight: bold;"
+										id="f5-upload-filename">&nbsp;</span>
+									</td>
+									<td><span id="f5-upload-message" style="float: left;width:300px"> </span>
+										<label id="f5-upload-status" style="float: left;"> &nbsp; </label>
+									</td>
+									<td><span id="f5-upload-cancel"> <a
+											style="float: left; font-weight: bold"
+											href="javascript:cancelUpload('ffmpegvideoform');"
+											name="submitcancel">Cancel</a> </span></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+	</fieldset>
 </div>
 
-
-
+<!-- General Video content form here -->
 <form action="index.php?option=com_hdflvplayer&task=uploadvideos" method="post" name="adminForm" id="adminForm" enctype="multipart/form-data">
-        <div class="width-60 fltlft">
-    <fieldset class="adminform">
-        <legend>Video Info</legend>
-        <table class="adminlist">
-                        <thead>
-                            <tr>
-                                <th>
-        					Settings
-                                </th>
-                                <th>
-        					Value
-                                </th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2">&#160;
-                                </td>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-            <tr class="<?php echo "row$k"; ?>">
-            <tr><td>Title</td><td><input type="text" name="title"  id="title" style="width:300px" maxlength="250" value="<?php echo $editvideo['rs_editupload']->title; ?>" /></td></tr>
-            <tr><td>Description</td><td><?php echo $editor->display('description', $editvideo['rs_editupload']->description, '40', '15', '40', '15'); ?></td></tr>
-            <script language="JavaScript">
-                var user = new Array(<?php echo count($editvideo['rs_play']); ?>);
+	<div class="width-60 fltlft">
+		<fieldset class="adminform">
+			<legend>Video Info</legend>
+			<table class="adminlist">
+
+				<!-- Table header here -->
+				<thead>
+					<tr>
+						<th>Settings</th>
+						<th>Value</th>
+					</tr>
+				</thead>
+
+				<!-- Table footer here -->
+				<tfoot>
+					<tr>
+						<td colspan="2">&#160;</td>
+					</tr>
+				</tfoot>
+
+				<!-- Table body here -->
+				<tbody>
+
+					<!-- Enter Video Title -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Enter Video Title', 'Title','', 'Title');?></td>
+						<td><input type="text" name="title" id="title" style="width: 300px" maxlength="250" value="<?php echo $editvideo['rs_editupload']->title; ?>" /></td>
+					</tr>
+
+					<!-- Enter Video Description -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Enter Video Description', 'Description','', 'Description');?></td>
+						<td><?php echo $editor->display('description', $editvideo['rs_editupload']->description, '450px', '250px', '0', '0'); ?>
+						</td>
+					</tr>
+
+					<!-- Playlist Filter here -->
+
+					<tr>
+						<td><?php echo JHTML::tooltip('Select whether All or Most recently added playlist, alphabets to Filter playlist', 'Playlist Filter','', 'Playlist Filter');?></td>
+
+						<td>
+						<input type="radio" style="float: none;" name="playliststart" id='playliststart0' value="0z"  <?php echo 'checked'; ?> onchange="select_alphabet('0z')" />All&nbsp;&nbsp;
+						<input type="radio" style="float: none;" name="playliststart" id="playliststart1" value="AF" onchange="select_alphabet('AF')" />A-F
+                                                    <input type="radio" style="float: none;" name="playliststart" id='playliststart2' value="GL" onchange="select_alphabet('GL')" />G-L
+                                                    <input type="radio" style="float: none;" name="playliststart" id='playliststart3' value="MR" onchange="select_alphabet('MR')" />M-R
+                                                    <input type="radio" style="float: none;" name="playliststart" id='playliststart4' value="SV" onchange="select_alphabet('SV')" />S-V
+                                                    <input type="radio" style="float: none;" name="playliststart" id='playliststart5' value="WZ" onchange="select_alphabet('WZ')" />W-Z
+                                                    <input type="radio" style="float: none;" name="playliststart" id='playliststart6' value="09"  onchange="select_alphabet('09')" />0-9&nbsp;&nbsp;
+                       </td>
+                    </tr>
+
+                    <!-- Select playlist here -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Select the Playlist', 'Playlist Name','', 'Playlist Name');?></td>
+						<td><select name="playlistid" id="playlistid">
+						
+						<?php
+						$count = count($editvideo['rs_play']);
+						if ($count >= 1) {
+							for ($j = 0; $j < $count; $j++) {
+								$row_play = &$editvideo['rs_play'][$j];
+								?>
+								<option value="<?php echo $row_play->id; ?>" <?php if($editvideo['rs_editupload']->playlistid==$row_play->id){ echo 'selected'; }?>> <?php echo $row_play->name ?></option>
+								<?php
+							}
+						}?>
+						</select>
+						</td>
+					</tr>
+
+					<!-- Choose Access level here -->
+					<tr id="access1">
+						<td><?php echo JHTML::tooltip('Acces level group that is allowed to view this item', 'Access','', 'Access');?></td>
+						<td><select name="access" id="access" size="3">
+						<?php
+						$access_count = count($editvideo['rs_access']);
+						if ($access_count >= 1) {
+							for ($k = 0; $k < $access_count; $k++) {
+								$row_access = &$editvideo['rs_access'][$k];
+									?>
+								<option value="<?php echo $row_access->id; ?>" <?php if($editvideo['rs_editupload']->access==$row_access->id){ echo 'selected'; }?>>
+									<?php
+                                                                        if (version_compare(JVERSION, '1.6.0', 'ge')) {
+                                                                        echo $row_access->title;
+                                                                        }
+                                                                        else {
+                                                                            echo $row_access->name;
+                                                                        }
+                                                                        ?>
+								</option>
+								<?php
+								}
+							}
+						?>
+						</select>
+						</td>
+					</tr>
+
+					<!-- Enter the sorting order here -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Enter the sorting order', 'Ordering','', 'Ordering');?></td>
+						<td><input type="text" name="ordering" id="ordering" style="width: 50px" maxlength="250" value="<?php echo $editvideo['rs_editupload']->ordering; ?>" /></td>
+					</tr>
+
+					<!-- Post-roll ADs selection here -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Whether or not the post-roll Ads have to be enable', 'Post-roll Ads','', 'Post-roll Ads');?></td>
+
+						<td><?php
+						$postrollchkyes = $postrollchkno='';
+						if ($editvideo['rs_editupload']->postrollads == '1') {
+
+							{
+								$postrollchkyes = 'checked="checked" ';
+							}
+
+						}
+						else if ($editvideo['rs_editupload']->postrollads == '0' || $editvideo['rs_editupload']->postrollads == '') {
+							$postrollchkno = 'checked="checked" ';
+						}
+						?>
+						<input type="radio" style="float: none;" name="postrollads" id="postrollads" <?php echo $postrollchkyes; ?> value="1" onclick="postroll('1');" />Enable
+						<input type="radio" style="float: none;" name="postrollads" id="postrollads" <?php echo $postrollchkno; ?> value="0" onclick="postroll('0');" />Disable
+						</td>
+					</tr>
+
+					<tr id="postroll">
+						<td><?php echo JHTML::tooltip('Select the Post-roll AD to play after Video', 'Post-roll Name','', 'Post-roll Name');?></td>
+						<td><select name="postrollid" id="postrollid">
+								<option value="0">None</option>
+								<?php
+								$count = count($editvideo['rs_ads']);
+								if ($count >= 1) {
+									for ($n = 0; $n < $count; $n++) {
+										$row_ads = &$editvideo['rs_ads'][$n];
+										?>
+								<option value="<?php echo $row_ads->id; ?>" <?php if($editvideo['rs_editupload']->postrollid==$row_ads->id){ echo 'selected'; }?>>
+									<?php echo $row_ads->adsname; ?>
+								</option>
+								<?php
+									}
+								}
+								?>
+						</select>
+						</td>
+					</tr>
+
+					<!-- Pre-roll ADs selection here -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Whether or not the Pre-roll Ads have to be enable', 'Pre-roll Ads','', 'Pre-roll Ads');?></td>
+						<?php
+						$prerollyeschk = $prerollnochk = '';
+
+						if ($editvideo['rs_editupload']->prerollads == '1') {
+							$prerollyeschk =  'checked="checked" ';
+						}
+						else if ($editvideo['rs_editupload']->prerollads == '0' || $editvideo['rs_editupload']->prerollads == '') {
+							$prerollnochk = 'checked="checked" ';
+						}
+						?>
+						<td><input type="radio" style="float: none;" name="prerollads" id="prerolladsyes" <?php echo $prerollyeschk; ?> value="1" onclick="preroll('1');" />Enable
+                            <input type="radio" style="float: none;" name="prerollads" id="prerolladsno" 	<?php echo $prerollnochk; ?> value="0" onclick="preroll('0');" />Disable
+                        </td>
+					</tr>
+
+					<tr id="preroll">
+						<td><?php echo JHTML::tooltip('Select the Pre-roll AD to play before Video', 'Pre-roll Name','', 'Pre-roll Name');?></td>
+						<td><select name="prerollid" id="prerollid">
+								<option value="0">None</option>
+								<?php $ads_count = count($editvideo['rs_ads']);
+								if ($ads_count >= 1) {
+									for ($v = 0; $v < $ads_count; $v++) {
+										$row_ads = &$editvideo['rs_ads'][$v];
+										?>
+								<option value="<?php echo $row_ads->id; ?>" <?php if($editvideo['rs_editupload']->prerollid==$row_ads->id){ echo 'selected'; }?>><?php echo $row_ads->adsname; ?></option>
+								<?php
+									}
+								}
+								?>
+						</select>
+						</td>
+					</tr>
+
+					<!-- mid-roll ADs selection here -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Whether or not the Mid-roll Ads have to be enable', 'Mid-roll Ads','', 'Mid-roll Ads');?></td>
+						<?php
+						if ($editvideo['rs_editupload']->midrollads == '1') {
+							$midrollyeschk = 'checked="checked" ';
+						}
+						else{
+							$midrollnochk = 'checked="checked" ';
+						}
+						?>
+
+						<td><input type="radio" style="float: none;" name="midrollads" id="midrollads" <?php echo $midrollyeschk; ?> value="1" />Enable
+                            <input type="radio" style="float: none;" name="midrollads" id="midrollads" <?php echo $midrollnochk;?> value="0" />Disable
+                        </td>
+					</tr>
+
+					<tr>
+						<td><?php echo JHTML::tooltip('Note:Not supported for YouTube and streamer videos', 'Download Video','', 'Download Video');?></td>
+                                                <?php
+                                                $downloadyeschk = '';
+                                                if ($editvideo['rs_editupload']->download == '1' || $editvideo['rs_editupload']->download == '') {
+                                                	$downloadyeschk = 'checked="checked" ';
+                                                }
+                                                else{
+                                                	$downloadnochk = 'checked="checked" ';
+                                                }
+                                                ?>
+						<td><input type="radio" style="float: none;" name="download" id="download" <?php echo $downloadyeschk; ?> value="1" />Enable
+                            <input type="radio" style="float: none;" name="download" id="download" <?php echo $downloadnochk; ?> value="0" />Disable
+                       </td>
+					</tr>
+
+					<!-- Set status here -->
+					<tr>
+						<td><?php echo JHTML::tooltip('Set publication status', 'Status','', 'Status');?></td>
+
+						<td>
+							<select name="published" id="published">
+								<option value="1" <?php if(isset($editvideo['rs_editupload']->published) && $editvideo['rs_editupload']->published == 1) echo 'selected';?>>Published</option>
+								<option value="0" <?php if(isset($editvideo['rs_editupload']->published) && $editvideo['rs_editupload']->published == 0) echo 'selected';?>>Unpublished</option>
+								<option value="-2" <?php if(isset($editvideo['rs_editupload']->published) && $editvideo['rs_editupload']->published == -2) echo 'selected';?>>Trashed</option>
+							</select>
+						</td>
+					</tr>
 
 
-<?php
-                       for ($i = 0; $i < count($editvideo['rs_play']); $i++) {
-                           $playlistnames = $editvideo['rs_play'][$i];
-?>
-                   user[<?php echo $i; ?>]= new Array(2);
-                   user[<?php echo $i; ?>][1]= "<?php echo $playlistnames->id; ?>";
-                   user[<?php echo $i; ?>][0]= "<?php echo $playlistnames->name; ?>";
-<?php
-                       }
-?>
-                       </script>
-                       <tr><td>Display Playlist</td>
-                           <td>
-                               <input type="radio"  style="float:none;" name="displayplaylist"  id="displayplaylist1"  <?php echo 'checked="checked" '; ?> value="1" />All
-                    <input type="radio"  style="float:none;" name="displayplaylist"  id="displayplaylist2" value="2"   />Most Recently Added(Up to 25 Playlist Names)
-                </td>
-            </tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+	<input type="hidden" name="id" id="id" value="<?php echo $editvideo['rs_editupload']->id; ?>" />
+    <input type="hidden" name="task" value="" />
 
-                        <?php //print_r($playlistnames_arr);?>
-            <tr><td class="key">Playlist</td><td>
-                    <input type="radio"  style="float:none;" name="playliststart" id="playliststart1" value="AF"  <?php echo 'checked'; ?> onchange="select_alphabet('AF')" />&nbsp;&nbsp;A-F
-                    <input type="radio"  style="float:none;" name="playliststart" id='playliststart2' value="GL"  <?php echo 'checked'; ?> onchange="select_alphabet('GL')" />&nbsp;&nbsp;G-L
-                    <input type="radio"  style="float:none;" name="playliststart" id='playliststart3' value="MR"  <?php echo 'checked'; ?> onchange="select_alphabet('MR')" />&nbsp;&nbsp;M-R
-                    <input type="radio"  style="float:none;" name="playliststart" id='playliststart4' value="SV"  <?php echo 'checked'; ?> onchange="select_alphabet('SV')" />&nbsp;&nbsp;S-V
-                    <input type="radio"  style="float:none;" name="playliststart" id='playliststart5' value="WZ"  <?php echo 'checked'; ?> onchange="select_alphabet('WZ')" />&nbsp;&nbsp;W-Z
+	<!-- The below code is to check wether the particular video ,thumbimages,previewimages & HD is edited or not -->
+		<input type="hidden" name="newupload" id="newupload" value="1">
+        <input type="hidden" name="fileoption" id="fileoption" value="<?php echo $editvideo['rs_editupload']->filepath; ?>" />
+        <input type="hidden" name="normalvideoform-value" id="normalvideoform-value" value="" />
+        <input type="hidden" name="hdvideoform-value" id="hdvideoform-value" value="" />
+        <input type="hidden" name="thumbimageform-value" id="thumbimageform-value" value="<?php echo $editvideo['rs_editupload']->thumburl;?>" />
+        <input type="hidden" name="previewimageform-value" id="previewimageform-value" value="<?php echo $editvideo['rs_editupload']->previewurl;?>" />
+        <input type="hidden" name="ffmpegform-value" id="ffmpegform-value" value="" />
+        <input type="hidden" name="videourl-value" id="videourl-value" value="" />
+        <input type="hidden" name="thumburl-value" id="thumburl-value" value="" />
+        <input type="hidden" name="previewurl-value" id="previewurl-value" value="" />
+		<input type="hidden" name="hdurl-value" id="hdurl-value" value="" />
+        <input type="hidden" name="midrollid" id="hid-midrollid" value="" />
+        <input type="hidden" name="streameroption-value" id="streameroption-value" value="<?php echo $editvideo['rs_editupload']->streameroption; ?>" />
+		<input type="hidden" name="streamerpath-value" id="streamerpath-value" value="" />
+        <input type="hidden" name="islive-value" id="islive-value" value="" />
 
-            <tr><td class="key">Playlist Name</td><td>
+	<!-- form validation error variables -->
 
-                    <select name="playlistid" id="playlistid" >
+		<input type="hidden" name="upload_error" id="upload_error" value="<?php echo JText::_('You must Upload a file', true); ?>">
+        <input type="hidden" name="title_error" id="title_error" value="<?php echo JText::_('You must provide a Title', true); ?>">
+        <input type="hidden" name="progress_error" id="progress_error" value="<?php echo JText::_('Upload in Progress', true); ?>">
+        <input type="hidden" name="url_error" id="url_error" value="<?php echo JText::_('You must provide a Video Url', true); ?>">
+		<input type="hidden" name="mode1" id="mode1" value="<?php echo $editvideo['rs_editupload']->filepath; ?>" />
 
-                    <?php
-                        $n = count($editvideo['rs_play']);
-
-                        if ($n >= 1) {
-                            for ($i = 0; $i < $n; $i++) {
-                                $row_play = &$editvideo['rs_play'][$i];
-                    ?>
-                                    <option value="<?php echo $row_play->id; ?>" id="<?php echo $row_play->id; ?>"><?php echo $row_play->name ?></option>
-                        <?php
-                            }
-                        }
-                        ?>
-                    </select>
-
-                        <?php
-                        if ($editvideo['rs_editupload']->playlistid) {
-
-                            echo '<script>document.getElementById("' . $editvideo['rs_editupload']->playlistid . '").selected="selected"</script>';
-                        }
-                        ?>
-
-                </td></tr>
-
-            <tr id="access1"><td class="key">Access</td><td>
-                    <select name="access" id="access" size="3" >
-                    <?php
-                        $n = count($editvideo['rs_access']);
-
-                        if ($n >= 1) {
-                            for ($i = 0; $i < $n; $i++) {
-                                $row_access = &$editvideo['rs_access'][$i];
-                    ?>
-                                    <option value="<?php echo $row_access->id; ?>" id="7<?php echo $row_access->id; ?>" name="<?php echo $row_access->id; ?>" ><?php echo $row_access->title; ?></option>
-<?php
-                            }
-                        }
-?>
-                        </select>
-                    <?php
-                        if ($editvideo['rs_editupload']->access) {
-
-                            echo '<script>document.getElementById("7' . $editvideo['rs_editupload']->access . '").selected="selected"</script>';
-                        }
-                    ?>
-
-                </td></tr>
-            <tr>
-                <td>Order</td>
-                <td><input type="text" name="ordering"  id="ordering" style="width:50px" maxlength="250" value="<?php echo $editvideo['rs_editupload']->ordering; ?>"/></td>
-            </tr>
-
-            <tr><td>Postroll ads</td>
-                <td>
-
-                    <input type="radio" style="float:none;"  name="postrollads"  id="postrollads"  <?php
-                        if ($editvideo['rs_editupload']->postrollads == '1') {
-                            echo "inside "; {
-                                echo 'checked="checked" ';
-                            }
-                        } ?> value="1"  onclick="postroll('1');"/>Enable
-                    <input type="radio"  style="float:none;"  name="postrollads"  id="postrollads" <?php
-                        if ($editvideo['rs_editupload']->postrollads == '0' || $editvideo['rs_editupload']->postrollads == '') {
-                            echo 'checked="checked" ';
-                        } ?> value="0" onclick="postroll('0');"/>Disable
-                    </td></tr>
-                <tr id="postroll"><td class="key">Postroll Name</td><td>
-                        <select name="postrollid" id="postrollid" >
-                            <option value="0" id="50">Default Ads</option>
-                    <?php
-                        $n = count($editvideo['rs_ads']);
-
-                        if ($n >= 1) {
-                            for ($i = 0; $i < $n; $i++) {
-                                $row_ads = &$editvideo['rs_ads'][$i];
-                    ?>
-                             <option value="<?php echo $row_ads->id; ?>" id="5<?php echo $row_ads->id; ?>" name="<?php echo $row_ads->id; ?>" ><?php echo $row_ads->adsname; ?></option>
-                    <?php
-                            }
-                        }
-                    ?>
-                    </select>
-<?php
-                        if ($editvideo['rs_editupload']->postrollid) {
-
-                            echo '<script>document.getElementById("5' . $editvideo['rs_editupload']->postrollid . '").selected="selected"</script>';
-                        }
-?>
-                </td></tr>
-            <tr><td>Preroll ads</td>
-                <td>
-                    <input type="radio"  style="float:none;" name="prerollads"  id="prerollads"  <?php
-                        if ($editvideo['rs_editupload']->prerollads == '1') {
-                            echo 'checked="checked" ';
-                        }
-?>  value="1"  onclick="preroll('1');"/>Enable
-                        <input type="radio"  style="float:none;" name="prerollads"  id="prerollads" <?php
-                        if ($editvideo['rs_editupload']->prerollads == '0' || $editvideo['rs_editupload']->prerollads == '') {
-                            echo 'checked="checked" ';
-                        } ?> value="0"  onclick="preroll('0');"/>Disable
-                    </td></tr>
-                <tr id="preroll"><td class="key">Preroll Name</td><td>
-                        <select name="prerollid" id="prerollid" >
-                            <option value="0" id="60">Default Ads</option>
-<?php
-                        $n = count($editvideo['rs_ads']);
-                        if ($n >= 1) {
-                            for ($v = 0; $v < $n; $v++) {
-                                $row_ads = &$editvideo['rs_ads'][$v];
-?>
-                                    <option value="<?php echo $row_ads->id; ?>" id="6<?php echo $row_ads->id; ?>" name="<?php echo $row_ads->id; ?>"><?php echo $row_ads->adsname; ?></option>
-<?php
-                            }
-                        }
-?>
-                    </select>
-                    <?php
-                        if ($editvideo['rs_editupload']->prerollid) {
-
-                            echo '<script>document.getElementById("6' . $editvideo['rs_editupload']->prerollid . '").selected="selected"</script>';
-                        }
-                    ?>
-
-                </td></tr>
-            <tr><td>MidRoll ads</td>
-                <td>
-                    <input type="radio" style="float:none;"  name="midrollads"  id="midrollads"  <?php
-                        if ($editvideo['rs_editupload']->midrollads == '1') {
-                            echo 'checked="checked" ';
-                        }
-                    ?>  value="1"/>Enable
-                                <input type="radio"  style="float:none;"  name="midrollads"  id="midrollads" <?php
-                        if ($editvideo['rs_editupload']->midrollads == '0' || $editvideo['rs_editupload']->midrollads == '') {
-                            echo 'checked="checked" ';
-                        } ?> value="0"  />Disable
-                    </td></tr>
-
-                <tr><td>Download</td>
-                    <td>
-                        <input type="radio"  style="float:none;" name="download"  id="download"  <?php
-                        if ($editvideo['rs_editupload']->download == '1' || $editvideo['rs_editupload']->download == '') {
-                            echo 'checked="checked" ';
-                        }
-                    ?>  value="1" />Yes
-                    <input type="radio"  style="float:none;" name="download"  id="download" <?php
-                        if ($editvideo['rs_editupload']->download == '0') {
-                            echo 'checked="checked" ';
-                        }
-                    ?>  value="0" />No
-
-
-                </td>
-            </tr>
-
-<?php $baseUrl = JURI::base() . "components/com_hdflvplayer/"; ?>
-
-            <tr><td>Published</td>
-                <td>
-                    <input type="radio"  style="float:none;" name="published"  id="published"  <?php
-                        if ($editvideo['rs_editupload']->published == '1' || $editvideo['rs_editupload']->published == '') {
-                            echo 'checked="checked" ';
-                        }
-?>  value="1" />Yes
-                    <input type="radio"  style="float:none;" name="published"  id="published" <?php
-                        if ($editvideo['rs_editupload']->published == '0') {
-                            echo 'checked="checked" ';
-                        }
-?>  value="0" />No
-
-
-                </td>
-            </tr>
-        </tbody>
-        </table>
-    </fieldset>
-        </div>
-    <input type="hidden" name="id" id="id" value="<?php echo $editvideo['rs_editupload']->id; ?>" />
-    <input type="hidden" name="task" value=""/>
-    <!-- The below code is to check wether the particular video ,thumbimages,previewimages & hd is edited or not Starts-->
-    <input type="hidden" name="newupload" id="newupload" value="1">
-    <input type="hidden" name="fileoption" id="fileoption" value="<?php echo $editvideo['rs_editupload']->filepath; ?>" />
-
-    <input type="hidden" name="normalvideoform-value" id="normalvideoform-value" value="" />
-    <input type="hidden" name="hdvideoform-value" id="hdvideoform-value" value="" />
-    <input type="hidden" name="thumbimageform-value" id="thumbimageform-value" value="" />
-    <input type="hidden" name="previewimageform-value" id="previewimageform-value" value="" />
-    <input type="hidden" name="ffmpegform-value" id="ffmpegform-value" value="" />
-
-    <input type="hidden" name="videourl-value" id="videourl-value" value="" />
-    <input type="hidden" name="thumburl-value" id="thumburl-value" value="" />
-    <input type="hidden" name="previewurl-value" id="previewurl-value" value="" />
-    <input type="hidden" name="hdurl-value" id="hdurl-value" value="" />
-    <input type="hidden" name="midrollid" id="hid-midrollid"  value="" />
-    <input type="hidden" name="streameroption-value" id="streameroption-value" value="<?php echo $editvideo['rs_editupload']->streameroption; ?>" />
-    <input type="hidden" name="streamerpath-value" id="streamerpath-value" value="" />
-    <input type="hidden" name="islive-value" id="islive-value" value="" />
-
-    <!-- form validation error variables -->
-
-    <input type="hidden" name="upload_error" id="upload_error" value="<?php echo JText::_('You must Upload a file', true); ?>" >
-    <input type="hidden" name="title_error" id="title_error" value="<?php echo JText::_('You must provide a Title', true); ?>">
-    <input type="hidden" name="progress_error" id="progress_error" value="<?php echo JText::_('Upload in Progress', true); ?>" >
-    <input type="hidden" name="url_error" id="url_error" value="<?php echo JText::_('You must provide a Video Url', true); ?>" >
-
-    <input type="hidden" name="mode1" id="mode1" value="<?php echo $editvideo['rs_editupload']->filepath; ?>" />
-
-
-    <!-- Ends -->
-    <input type="hidden" name="submitted" value="true" id="submitted">
-
-
-
-
-
-
+	<!-- Ends -->
+	<input type="hidden" name="submitted" value="true" id="submitted">
 </form>
-<?php
 
-JHTML::_('script', JURI::base() . 'components/com_hdflvplayer/js/videoformvalid_1.js', false, true);
-
-?>
+<script type="text/javascript" src="components/com_hdflvplayer/js/videoformvalid_1.js"></script>

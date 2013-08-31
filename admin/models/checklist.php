@@ -1,52 +1,68 @@
 <?php
 /**
- * @version		$Id: checklist.php 1.5,  28-Feb-2011 $
- * @package		Joomla
- * @subpackage	hdflvplayer
- * @copyright Copyright (C) 2011 Contus Support
- * @license GNU/GPL http://www.gnu.org/copyleft/gpl.html
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 //No direct acesss
 defined('_JEXEC') or die();
 
+// importing default joomla components
 jimport('joomla.application.component.model');
 
+/*
+ * HDFLV player Model class to fetching checklist info.
+ */
 class hdflvplayerModelchecklist extends JModel {
-
-
+	
+	//Function to check the allow_url_fopen,file_uploads and Videos,Uploads folder permission 
 	function checklistmodel()
-    {
-            $allow_status=0;
-            $per_video=0;
-            $per_upload=0;
-            $allow_fileuploads=0;
-            $allow_youtube=0;
-            if(ini_get('allow_url_fopen')==1)
-            $allow_status=1;
-
-            if(ini_get('file_uploads')==1)
-            $allow_fileuploads=1;
-
-            $videopathw=VPATH1."/";
-            $uploadpathw=FVPATH."/images/uploads/";
-
-
-            $youtubepath=YOUTUBEPATH."/youtubeurl.php";
-
-            //echo "youtube ".$youtubepath;
-
-            if(is_writable("$videopathw"))
-            $per_video=1;
-
-            if(is_writable("$uploadpathw"))
-            $per_upload=1;
-            
-            $checklist1 = array('allow_status' => $allow_status,'per_video'=>$per_video,'per_upload'=>$per_upload,'allow_fileuploads'=>$allow_fileuploads);
-           
-            return $checklist1;
-
-
+	{
+		$allow_status 		= 0;
+		$per_video			= 0;
+		$per_upload			= 0;
+		$allow_fileuploads	= 0;
+		
+		//check whether file operations will allow the current hosting server or not
+		if(ini_get('allow_url_fopen') == 1)
+		{
+			$allow_status = 1;
+		}
+		
+		//check whether file uploads possible or not
+		if(ini_get('file_uploads') == 1) 
+		{
+			$allow_fileuploads = 1;
+		}
+		$videopath 		= VPATH."/";
+		$uploadpath 	= FVPATH."/images/uploads/";
+		
+		//Check whether the video upload file path writable or not
+		if(is_writable($videopath))
+		{
+		$per_video = 1;
+		}
+		
+		//check whether image upload writeable or not
+		if(is_writable($uploadpath))
+		{
+			$per_upload = 1;
+		}
+		
+		//Assigns info and return results
+		$checklist = array('allow_status' 		=> $allow_status,
+							'per_video'			=> $per_video,
+							'per_upload'		=> $per_upload,
+							'allow_fileuploads'	=> $allow_fileuploads);
+		return $checklist;
 	}
-    
 }
 ?>

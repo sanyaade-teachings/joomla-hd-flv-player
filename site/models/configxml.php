@@ -1,13 +1,17 @@
 <?php
 
 /**
- * @version  $Id: configxml.php 1.5,  2011-Mar-11 $
- * @package	Joomla.Framework
- * @subpackage  HDFLV Player
- * @component   com_hdflvplayer
- * @author      contus support interactive
- * @copyright	Copyright (c) 2011 Contus Support - support@hdflvplayer.net. All rights reserved.
- * @license     http://www.gnu.org/copyleft/gpl.html GNU General Public License version 2 or later;
+ * @name 	        hdflvplayer
+ * @version	        2.0
+ * @package	        Apptha
+ * @since	        Joomla 1.5
+ * @subpackage	        hdflvplayer
+ * @author      	Apptha - http://www.apptha.com/
+ * @copyright 		Copyright (C) 2011 Powered by Apptha
+ * @license 		http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @abstract      	com_hdflvplayer installation file.
+ * @Creation Date	23-2-2011
+ * @modified Date	15-11-2012
  */
 // To execute the files outside joomla
 defined('_JEXEC') or die();
@@ -15,195 +19,160 @@ defined('_JEXEC') or die();
 // importing default joomla component
 jimport('joomla.application.component.model');
 jimport('joomla.application.component.modellist');
-jimport( 'joomla.html.parameter' );
+jimport('joomla.html.parameter');
 
-// generating player configuration file
-class hdflvplayerModelconfigxml extends JModelList {
+/*
+ * Class for generating player configuration xml
+ */
 
-    var $current_path = "/";
-    var $base;
+class hdflvplayerModelconfigxml extends JModel {
 
+    //Function to get player settings
     function configgetrecords() {
-        global $mainframe;
         $base = JURI::base();
-        $playid = 0;
-        $playid_playlistname = 0;
-        $mid = 0;
-        $moduleid = 0;
-        $comppid = 0;
-        $this->$base = str_replace('components/com_hdflvplayer/models/', '', $base);
-        $db = & JFactory::getDBO();
-        $query = "select * from #__hdflvplayersettings";
+        $playid = $playid_playlistname = $mid = $moduleid = $comppid = 0;
+        $rs_moduleparams = '';
+
+        $db = JFactory::getDBO();
+        $query = 'SELECT `id`, `published`, `buffer`, `normalscale`, `fullscreenscale`, `autoplay`,
+						 `volume`, `logoalign`, `logoalpha`, `skin_autohide`, `stagecolor`, `skin`,
+						 `embedpath`, `fullscreen`, `zoom`, `width`, `height`, `uploadmaxsize`, `ffmpegpath`,
+						 `ffmpeg`, `related_videos`, `timer`, `logopath`, `logourl`, `nrelated`, `shareurl`,
+						 `playlist_autoplay`, `hddefault`, `ads`, `prerollads`, `postrollads`, `random`, `midrollads`,
+						 `midbegin`, `midinterval`, `midrandom`, `googleanalyticsID`, `googleana_visible`, `midadrotate`,
+						 `playlist_open`, `licensekey`, `vast`, `vast_pid`, `api`, `description`, `urllink`, `scaletohide`,
+						 `title_ovisible`, `description_ovisible`, `playlist_dvisible`, `embedcode_visible`, `viewed_visible`,
+						  `playlistrandom`, `vquality` FROM `#__hdflvplayersettings`';
         $db->setQuery($query);
-        $settingsrows = $db->loadObjectList();
-         $midrollads=true;
+        $settingsrows = $db->loadObject();
 
-       
+        $midrollads = true;
 
-        //Playlist name id
+        //Playlist id
         $playid_playlistname = JRequest::getvar('playid', '', 'get', 'var');
-        if ($playid_playlistname)
-            $playid_playlistname = $playid_playlistname;
+
         // Video id;
         $id = JRequest::getvar('id', '', 'get', 'int');
-        if ($id)
+        if ($id) {
             $playid = $id;
+        }
+
         // Module video id
         $videoid = JRequest::getvar('videoid', '', 'get', 'int');
-        if ($videoid)
+        if ($videoid) {
             $playid = $videoid;
-        $comppid1 = JRequest::getvar('compid', '', 'get', 'int');
-        if ($comppid1) {
-            $comppid = $comppid1;
         }
-        $itemid = 0;
-        $rs_modulesettings = "";
+
+        //fetch playlist id from URL parameter
+        $comppid = JRequest::getvar('compid', '', 'get', 'int');
+
+        //Fetch module id and the parameter settings
         $moduleid = JRequest::getvar('mid', '', 'get', 'int');
-        if ($moduleid) {
+         if ($moduleid) {
             $moduleid = $moduleid;
             $query = "SELECT id,params FROM `#__modules`
                 where id=$moduleid and module='mod_hdflvplayer'";
             $db->setQuery($query);
-            $rs_modulesettings = $db->loadObjectList();
+            $rs_moduleparams = $db->loadObjectList();
                   $midrollads=false;
 
         }
 
+        $current_path = 'components/com_hdflvplayer/videos/';
 
-        $current_path = "components/com_hdflvplayer/videos/";
-        $hdvideo = "";
-        $video = "";
-        $previewimage = "";
-        $hd_bol = "false";
-       // echo $midadssrows[0]->midrollads;
-
-
-       
-
-
-        $this->configxml($rs_modulesettings, $settingsrows, $video, $previewimage, $hdvideo, $hd_bol, $playid, $itemid, $playid_playlistname, $moduleid, $comppid, $this->$base, $midrollads);
+        $this->configxml($rs_moduleparams, $settingsrows, $playid, $playid_playlistname, $moduleid, $comppid, $base, $midrollads);
     }
 
-      function configxml($rs_modulesettings, $settingsrows, $video, $previewimage, $hdvideo, $hd_bol, $playid, $itemid, $playid_playlistname, $moduleid, $comppid, $base, $allowmidrollads) {
-        global $mainframe;
-        $skin = $base . "/components/com_hdflvplayer/hdflvplayer/skin/" . $settingsrows[0]->skin;
-        $playerdb = & JFactory::getDBO();
-        $query = "select * from #__hdflvplayerupload where id=$playid";
-        $playerdb->setQuery($query);
-        $midadssrows = $playerdb->loadObjectList();
+    //function to generate configxml
+    function configxml($rs_moduleparams, $settingsrows, $playid, $playid_playlistname, $moduleid, $comppid, $base, $allowmidrollads) {
 
-//        echo $playid.$settingsrows[0]->midrollads.'----'.$midadssrows[0]->midrollads.$midadssrows[0]->midrollid;
-//        exit();
+        //Declaration here
+        $skin = $base . 'components/com_hdflvplayer/hdflvplayer/skin/' . $settingsrows->skin;
+        $playerdb = JFactory::getDBO();
+        $playlist_open = $postrollads = $prerollads = $ads = $vast = $autoplay = $zoom = $fullscreen = $skin_autohide = $timer = $share = $playlist_autoplay = $hddefault = $playlist = false;
+        $playlistxml = $vquality = $videoid = '';
+        $vast_pid = $playid_playlistname = 0;
 
-if($allowmidrollads==true)
-{
-   
-       if(($settingsrows[0]->midrollads==0))
-       {
-           $midrollads="false";
-       }
-       else
-       {
-           $midrollads="true";
-       }
-       
-}
-else
-{ 
-    
-       $midrollads="false";
-}
-       $stagecolor = "0x" . $settingsrows[0]->stagecolor;
-         if ($settingsrows[0]->autoplay == 1)
-            $autoplay = "true";
-        else
-            $autoplay="false";
-        if ($settingsrows[0]->zoom == 1)
-            $zoom = "true";
-        else
-            $zoom="false";
-        if ($settingsrows[0]->fullscreen == 1)
-            $fullscreen = "true";
-        else
-            $fullscreen="false";
-        if ($settingsrows[0]->skin_autohide == 1)
-            $skin_autohide = "true";
-        else
-            $skin_autohide="false";
-        if ($settingsrows[0]->timer == 1)
-            $timer = "true";
-        else
-            $timer="false";
-        if ($settingsrows[0]->shareurl == 1)
-            $share = "true";
-        else
-            $share="false";
-        if ($settingsrows[0]->playlist_autoplay == 1)
-            $playlist_autoplay = "true";
-        else
-            $playlist_autoplay="false";
-        if ($settingsrows[0]->hddefault == 1)
-            $hddefault = "true";
-        else
-            $hddefault="false";
-        $playlistxml = "";
-        $playlist = "false";
-        if ($settingsrows[0]->related_videos == "1" || $settingsrows[0]->related_videos == "3") {
-            $playlist = "true";
+        //Check whether the mid-roll ad enabled or not.
+        if ($allowmidrollads == 'true') {
+            if (($settingsrows->midrollads == 0)) {
+                $midrollads = 'false';
+            } else {
+                $midrollads = 'true';
+            }
+        } else {
+            $midrollads = 'false';
         }
-        $license = "";
-        if ($settingsrows[0]->licensekey != '')
-            $license = $settingsrows[0]->licensekey;
-        else
-            $license="";
-        $api = "php";
-        ($settingsrows[0]->api == 0) ? $api = "php" : $api = "flash";
-        $buffer = $settingsrows[0]->buffer;
-        $normalscale = $settingsrows[0]->normalscale;
-        $fullscreenscale = $settingsrows[0]->fullscreenscale;
-        $volume = $settingsrows[0]->volume;
-        $video1 = "";
-        $playlist_open = "false";
-        $postrollads = "false";
-        $prerollads = "false";
-        //$midrollads= "false";
-        $ads = "false";
-        $vast = "false";
-        $vast_pid = 0;
-        $vquality = "small";
-        ($settingsrows[0]->playlist_open == 1) ? $playlist_open = "true" : $playlist_open = "false";
-        ($settingsrows[0]->postrollads == 0) ? $postrollads = "false" : $postrollads = "true";
-        ($settingsrows[0]->prerollads == 0) ? $prerollads = "false" : $prerollads = "true";
-        ($settingsrows[0]->ads == 0) ? $ads = "false" : $ads = "true";
-        ($settingsrows[0]->vast == 0) ? $vast = "false" : $vast = "true";
-        
-        ($settingsrows[0]->scaletohide == 0) ? $scaletohide = "false" : $scaletohide = "true";
-        ($settingsrows[0]->embedcode_visible == 0) ? $embedcode_visible = "false" : $embedcode_visible = "true";
-        ($settingsrows[0]->vquality == 1) ? $vquality = "small" : $vquality = "medium";
-        $vast_pid = $settingsrows[0]->vast_pid;
-        if ($rs_modulesettings != "") {
+
+        //Fetch Player settings and assigns into variable.
+        $stagecolor = "0x" . $settingsrows->stagecolor;
+
+        ($settingsrows->autoplay == 1) ? $autoplay = 'true' : $autoplay = 'false';
+
+        ($settingsrows->zoom == 1) ? $zoom = 'true' : $zoom = 'false';
+
+        ($settingsrows->fullscreen == 1) ? $fullscreen = 'true' : $fullscreen = 'false';
+
+        ($settingsrows->skin_autohide == 1) ? $skin_autohide = 'true' : $skin_autohide = 'false';
+
+        ($settingsrows->timer == 1) ? $timer = 'true' : $timer = 'false';
+
+        ($settingsrows->shareurl == 1) ? $share = 'true' : $share = 'false';
+
+        ($settingsrows->playlist_autoplay == 1) ? $playlist_autoplay = 'true' : $playlist_autoplay = 'false';
+
+        ($settingsrows->hddefault == 1) ? $hddefault = 'true' : $hddefault = 'false';
+
+        ($settingsrows->related_videos == '1' || $settingsrows->related_videos == '3') ? $playlist = 'true' : $playlist = 'false';
+
+        ($settingsrows->licensekey != '') ? $license = $settingsrows->licensekey : $license = '';
+
+        ($settingsrows->playlist_open == 1) ? $playlist_open = 'true' : $playlist_open = 'false';
+
+        ($settingsrows->postrollads == 0) ? $postrollads = 'false' : $postrollads = 'true';
+
+        ($settingsrows->prerollads == 0) ? $prerollads = 'false' : $prerollads = 'true';
+
+        ($settingsrows->ads == 0) ? $ads = 'false' : $ads = 'true';
+
+        ($settingsrows->vast == 0) ? $vast = 'false' : $vast = 'true';
+
+        ($settingsrows->midrollads == 0) ? $midrollads = 'false' : $midrollads = 'true';
+
+        ($settingsrows->scaletohide == 0) ? $scaletohide = 'false' : $scaletohide = 'true';
+
+        ($settingsrows->embedcode_visible == 0) ? $embedcode_visible = 'false' : $embedcode_visible = 'true';
+
+        ($settingsrows->vquality == 1) ? $vquality = 'small' : $vquality = 'medium';
+
+        $api = 'php';
+        ($settingsrows->api == 0) ? $api = 'php' : $api = 'flash';
+
+        //Fetch buffer,screen scale, volume
+        $buffer = $settingsrows->buffer;
+        $normalscale = $settingsrows->normalscale;
+        $fullscreenscale = $settingsrows->fullscreenscale;
+        $volume = $settingsrows->volume;
+
+        $vast_pid = $settingsrows->vast_pid;
+
+        $playlistxml = $base . 'components/com_hdflvplayer/models/playxml.php';
+        if ($rs_moduleparams != '') {
             $app = JFactory::getApplication();
             $params = $app->getParams('mod_hdflvplayer');
-           
-            $aparams = new JParameter($rs_modulesettings[0]->params,'');
+            $aparams = new JParameter($rs_moduleparams[0]->params,'');
             $params->merge($aparams);
-             
+
+
             $playlist = $params->get('enablexml');
-            ($playlist == 0) ? $playlist = "false" : $playlist = "true";
-            $video1 = "";
-            $videoid = "";
-            $playid_playlistname = 0;
-             $videocat = $params->get('videocat');
-             $videoId = $params->get('videoid');
-             $playlistId = $params->get('playlistid');
-            ($videocat['videocat'] == 1) ? $videoid =$videoId['videoid'] : $playid_playlistname =$playlistId['playlistid'];
-           
-           
-           
+            ($playlist == 0) ? $playlist = 'false' : $playlist = 'true';
+
+            //Getting admin param settings
+            $videocat = $params->get('videocat');
+            $videoId = $params->get('videoid');
+            $playlistId = $params->get('playlistid');
             $autoplay = $params->get('autoplay');
-            ($autoplay == 0) ? $autoplay = "false" : $autoplay = "true";
-            $playlistauto = $params->get('playlistauto');
-            ($playlistauto == 0) ? $playlist_autoplay = "false" : $playlist_autoplay = "true";
+            $playlist_autoplay = $params->get('playlistauto');
             $buffer = $params->get('buffer');
             $height = $params->get('height');
             $width = $params->get('width');
@@ -211,75 +180,76 @@ else
             $fullscreenscale = $params->get('fullscrenscale');
             $volume = $params->get('volume');
             $skinautohide = $params->get('skinautohide');
-            ($skinautohide == 0) ? $skin_autohide = "false" : $skin_autohide = "true";
-            $stagecolor = "0x" . $params->get('stagecolor');
             $fullscreen = $params->get('fullscreen');
-            ($fullscreen == 0) ? $fullscreen = "false" : $fullscreen = "true";
             $zoom = $params->get('zoom');
-            ($zoom == 0) ? $zoom = "false" : $zoom = "true";
             $timer = $params->get('timer');
-            ($timer == 0) ? $timer = "false" : $timer = "true";
             $share = $params->get('share');
-            ($share == 0) ? $share = "false" : $share = "true";
             $playlistopen = $params->get('playlist_open');
-            ($playlistopen == 0) ? $playlist_open = "false" : $playlist_open = "true";
-        }
-        $playlistxml ="index.php?option=com_hdflvplayer&task=playxml";
-        if ($moduleid != "") {
-            if ($playid != "")
-                $playlistxml = "index.php?option=com_hdflvplayer&task=playxml&id=$playid&mid=$moduleid";
-            else
-                
-               $playlistxml="index.php?option=com_hdflvplayer&task=playxml&playid=$playid_playlistname&mid=$moduleid";
-        }
-        elseif ($playid_playlistname != "" && $playid != 0) {
-            $playlistxml =  "index.php?option=com_hdflvplayer&task=playxml&playid=$playid_playlistname&id=$playid";
-        } elseif ($playid != 0) {
-            $playlistxml =  "index.php?option=com_hdflvplayer&task=playxml&id=$playid";
+            $stagecolor = "0x" . $params->get('stagecolor');
+
+            ($videocat['videocat'] == 1) ? $videoid = $videoId['videoid'] : $playid_playlistname = $playlistId['playlistid'];
+
+            ($autoplay == 0) ? $autoplay = "false" : $autoplay = 'true';
+
+            ($playlist_autoplay == 0) ? $playlist_autoplay = 'false' : $playlist_autoplay = 'true';
+
+            ($skinautohide == 0) ? $skin_autohide = 'false' : $skin_autohide = 'true';
+
+            ($fullscreen == 0) ? $fullscreen = 'false' : $fullscreen = 'true';
+
+            ($zoom == 0) ? $zoom = 'false' : $zoom = 'true';
+
+            ($timer == 0) ? $timer = 'false' : $timer = 'true';
+
+            ($share == 0) ? $share = 'false' : $share = 'true';
+
+            ($playlistopen == 0) ? $playlist_open = 'false' : $playlist_open = 'true';
         }
 
-        if ($playid_playlistname == "true" && $moduleid == "") {
-            $playlistxml =  "index.php?option=com_hdflvplayer&task=playxml&id=$playid&playid=true";
+        $playlistxml = $base . 'index.php?option=com_hdflvplayer&task=playxml';
+
+        if ($moduleid != '') {
+            if ($playid != '') {
+                $playlistxml = $base . 'index.php?option=com_hdflvplayer&task=playxml&id=' . $playid . '&mid=' . $moduleid;
+            } else {
+                $playlistxml = $base . 'index.php?option=com_hdflvplayer&task=playxml&playid=' . $playid_playlistname . '&mid=' . $moduleid;
+            }
+        } elseif ($playid_playlistname != '' && $playid != 0) {
+            $playlistxml = $base . 'index.php?option=com_hdflvplayer&task=playxml&playid=' . $playid_playlistname . '&id=' . $playid;
+        } elseif ($playid != 0) {
+            $playlistxml = $base . 'index.php?option=com_hdflvplayer&task=playxml&id=' . $playid;
+        }
+
+        if ($playid_playlistname == 'true' && $moduleid == '') {
+            $playlistxml = $base . 'index.php?option=com_hdflvplayer&task=playxml&id=' . $playid . '&playid=true';
         }
         if ($comppid != '') {
-            $playlistxml = "index.php?option=com_hdflvplayer&task=playxml&compid=$comppid&id=$playid";
+            $playlistxml = $base . 'index.php?option=com_hdflvplayer&task=playxml&compid=' . $comppid . '&id=' . $playid;
         }
-   
 
-// mid ads
+        $midadsxml = $base . 'index.php?option=com_hdflvplayer&task=midrollxml';
 
+        $emailpath = $base . 'components/com_hdflvplayer/hdflvplayer/email.php';
+        $logopath = $base . 'components/com_hdflvplayer/videos/' . $settingsrows->logopath;
+        $languagexml = $base . 'index.php?option=com_hdflvplayer&task=languagexml';
+        $adsxml = $base . 'index.php?option=com_hdflvplayer&task=adsxml';
 
-         $midadsxml = "index.php?option=com_hdflvplayer&task=midrollxml";
-       
-
-
-
-
-
-
-
-
-//compid=$comppid&id=$playid&
-        $emailpath = $base . "components/com_hdflvplayer/hdflvplayer/email.php";
-        $logopath = $base . "/components/com_hdflvplayer/videos/" . $settingsrows[0]->logopath;
-        $languagexml = "index.php?option=com_hdflvplayer&task=languagexml";
-        $adsxml = "index.php?option=com_hdflvplayer&task=adsxml";
-        //$midadsxml = $base . "index.php?option=com_hdflvplayer&task=midrollxml";
-        $videoshareurl = "index.php?option=com_hdflvplayer&task=videourl";
-        $locaiton = $base . "index.php?option=com_hdflvplayer";
-        $cssurl = $base . "components/com_hdflvplayer/hdflvplayer/css/midrollformat.css";
+        $videoshareurl = $base . 'index.php?option=com_hdflvplayer&task=videourl';
+        $locaiton = $base . 'index.php?option=com_hdflvplayer';
+        $cssurl = $base . 'components/com_hdflvplayer/hdflvplayer/css/midrollformat.css';
         $language = JRequest::getVar('lang');
         $app = JFactory::getApplication();
         $router = $app->getRouter();
         $sefURL = $router->getMode();
-        if($sefURL!=1)
-        {
+
+        //Check whether SEF enabled or not
+        if ($sefURL != 1) {
             if ($language != '') {
-           $language ='&lang='. $language;
+                $language = '&lang=' . $language;
             }
         }
 
-        //ob_clean();
+        //Generates configxml here
         header("content-type:text/xml;charset=utf-8");
         echo '<?xml version="1.0" encoding="utf-8"?>';
         echo '<config
@@ -291,22 +261,22 @@ else
               normalscale="' . $normalscale . '"
               fullscreenscale="' . $fullscreenscale . '"
               logopath="' . $logopath . '"
-              logo_target="' . $settingsrows[0]->logourl . '"
-              logoalign="' . $settingsrows[0]->logoalign . '"
-              Volume="' . $settingsrows[0]->volume . '"
+              logo_target="' . $settingsrows->logourl . '"
+              logoalign="' . $settingsrows->logoalign . '"
+              Volume="' . $settingsrows->volume . '"
               preroll_ads="' . $prerollads . '"
               midroll_ads="' . $midrollads . '"
               postroll_ads="' . $postrollads . '"
               HD_default="' . $hddefault . '"
               Download="false"
-              logoalpha="' . $settingsrows[0]->logoalpha . '"
+              logoalpha="' . $settingsrows->logoalpha . '"
               skin_autohide="' . $skin_autohide . '"
               stagecolor="' . $stagecolor . '"
               skin="' . $skin . '"
               embed_visible="' . $embedcode_visible . '"
               playlistXML="' . $playlistxml . '"
               adXML="' . JRoute::_($adsxml) . '"
-              midrollXML="' .JRoute::_($midadsxml). '"
+              midrollXML="' . $midadsxml . '"
               languageXML="' . JRoute::_($languagexml) . '"
               cssURL="' . $cssurl . '"
               debug="true"
@@ -315,9 +285,8 @@ else
               showPlaylist="' . $playlist . '"
                vast_partnerid="' . $vast_pid . '"
               vast="' . $vast . '"
-              location="' . $locaiton . '"
               UseYouTubeApi="' . $api . '"
-              registerpage="' . $settingsrows[0]->urllink . '"
+              registerpage="' . $settingsrows->urllink . '"
               scaleToHideLogo="' . $scaletohide . '"
               suggestedquality="' . $vquality . '"
               location="' . $locaiton . '">';
@@ -328,5 +297,7 @@ else
         echo '</config>';
         exit();
     }
+
 }
+
 ?>
