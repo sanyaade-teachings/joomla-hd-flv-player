@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="package" version="3.0">
+     <name>HD FLV Player package</name>
+     <author>Apptha</author>
+     <creationDate>Nov 2012</creationDate>
+     <packagename>HDFLVplayerpackage</packagename>
+     <copyright>Copyright (C) 2012 Apptha - All rights reserved.</copyright>
+     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+     <version>2.0</version>
+     <url>http://www.apptha.com/</url>
+     <packager>Apptha Team</packager>
+     <packagerurl>http://www.apptha.com/</packagerurl>
+     <description>Thank you for installing HD FLV Player by hdflvplayer.net, the powerful Video Player Component To Play  Online Videos.</description>
+     <update>http://www.apptha.com</update>
+         <files folder="packages">
+           <file type="component" id="com_hdflvplayer" >com_hdflvplayer.zip</file>
+           <file type="module" id="mod_hdflvplayer" client="site">mod_hdflvplayer.zip</file>
+           <file type="plugin" id="hdflvplayer" group="content">plugin_hdflvplayer.zip</file>
+         </files>
+ </extension>
